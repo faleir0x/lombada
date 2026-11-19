@@ -1,14 +1,16 @@
 # lombada
 
-Um app para sair da ressaca literária. Você escreve o que está com vontade de ler, ou um livro que amou, e um fantasma te dá um baralho de capas: ♥ guarda na estante, ✕ passa, e cada escolha melhora o próximo lote.
+An app for getting out of a reading slump. Type the mood you're in, or a book you loved, and a ghost deals you a deck of covers: ♥ puts a book on your shelf, ✕ passes, and every choice makes the next batch better.
 
-- **Design:** [`DESIGN.md`](DESIGN.md) e o protótipo em [`design-explorations/prototipo.html`](design-explorations/prototipo.html).
-- **Aplicação:** [`docs/roadmap-app.md`](docs/roadmap-app.md). Stack em [`docs/adr/0001-stack.md`](docs/adr/0001-stack.md).
-- **IA (busca, embeddings, avaliação):** [`ROADMAP.md`](ROADMAP.md).
+The app itself is Brazilian Portuguese only, and so are the project docs and code comments.
 
-## Rodar o app
+- **Design:** [`DESIGN.md`](DESIGN.md) and the prototype in [`design-explorations/prototipo.html`](design-explorations/prototipo.html).
+- **App roadmap:** [`docs/roadmap-app.md`](docs/roadmap-app.md). Stack decision in [`docs/adr/0001-stack.md`](docs/adr/0001-stack.md): React + TypeScript + Vite as a PWA, with Capacitor for the Android build.
+- **AI roadmap (search, embeddings, evaluation) and API contract:** [`ROADMAP.md`](ROADMAP.md).
 
-Precisa de Node 26 e pnpm 11.
+## Running the app
+
+Requires Node 26 and pnpm 11.
 
 ```bash
 cd app
@@ -16,19 +18,21 @@ pnpm install
 pnpm dev
 ```
 
-| Comando | O que faz |
+| Command | What it does |
 | --- | --- |
-| `pnpm dev` | servidor de desenvolvimento |
-| `pnpm build` | confere os tipos e gera `dist/` |
-| `pnpm lint` | Biome (lint e formatação) |
-| `pnpm test` | testes de lógica (Vitest) |
-| `pnpm e2e` | testes no navegador com axe (Playwright); na primeira vez, `pnpm exec playwright install chromium` |
-| `pnpm check` | tudo acima, na ordem do CI |
+| `pnpm dev` | development server |
+| `pnpm build` | type-checks and builds into `dist/` |
+| `pnpm lint` | Biome (lint and formatting) |
+| `pnpm test` | unit and API contract tests (Vitest) |
+| `pnpm e2e` | browser tests with axe (Playwright); first time, run `pnpm exec playwright install chromium` |
+| `pnpm check` | all of the above, in CI order |
 
-## Ver o protótipo
+Until the real API exists, the app runs on a fake one. URL parameters (names in Portuguese) put it in any state: `?cenario=sem-resultado|erro|lento|offline` (no results, error, slow, offline), `?estado=vazio|exemplo` (empty or sample data) and `?latencia=0` (no simulated delay).
+
+## Viewing the prototype
 
 ```bash
 python3 -m http.server 8765 --directory design-explorations
 ```
 
-Depois abra `http://localhost:8765/prototipo.html`.
+Then open `http://localhost:8765/prototipo.html`.
