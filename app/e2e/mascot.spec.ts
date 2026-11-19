@@ -13,6 +13,19 @@ async function openMascot(page: Page) {
   await button(page, 'Mascote: Fantasma. Trocar').click();
   await expect(page).toHaveURL(/\/voce\/mascote/);
   await expect(page.getByRole('region', { name: 'Mascote' })).toBeFocused();
+  // Espera a Paralaxe terminar: medir o palco no meio da entrada dá coordenadas fora da tela.
+  await expect
+    .poll(() =>
+      page.locator('.mp').evaluate(
+        (el) =>
+          el.getAnimations().length +
+          (el.parentElement
+            ?.querySelector('.you-main')
+            ?.getAnimations()
+            .filter((a) => a.playState === 'running').length ?? 0),
+      ),
+    )
+    .toBe(0);
 }
 
 test.describe('página Mascote', () => {
