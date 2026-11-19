@@ -7,6 +7,7 @@ describe('rotas', () => {
     ['/estante', { name: 'estante' }],
     ['/estante/', { name: 'estante' }],
     ['/voce', { name: 'voce' }],
+    ['/voce/mascote', { name: 'mascote' }],
     ['/vitrine', { name: 'vitrine' }],
     ['/baralho/s_12', { name: 'baralho', sessionId: 's_12' }],
   ];

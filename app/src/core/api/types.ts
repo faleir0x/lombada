@@ -47,6 +47,20 @@ export interface User {
   token: string;
 }
 
+/** Mascotes do motor, na ordem da página Mascote (DESIGN.md §6). */
+export type MascotId = 'coruja' | 'barba' | 'corvo' | 'fantasma' | 'traca';
+export const MASCOTS: readonly MascotId[] = ['coruja', 'barba', 'corvo', 'fantasma', 'traca'];
+
+/** Preferências da pessoa (GET /me). */
+export interface Me {
+  user_id: string;
+  mascot: MascotId;
+}
+
+export interface MePatch {
+  mascot?: MascotId;
+}
+
 export interface IdeasResponse {
   title: string;
   ideas: Idea[];

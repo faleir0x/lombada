@@ -5,6 +5,7 @@ import type {
   CreatedSession,
   CreateSessionInput,
   Iso,
+  MascotId,
   Rating,
   Result,
   SessionDetail,
@@ -12,6 +13,7 @@ import type {
   SessionSummary,
   ShelfOrigin,
 } from '../api/types';
+import { MASCOTS } from '../api/types';
 import { type KeyValueStore, memoryStore } from '../storage';
 import { CATALOG, catalogBook, PROTOTYPE_DECK, publicBook } from './catalog';
 import { IDEA_SETS, NEARBY, SEED_SESSIONS } from './seed';
@@ -85,6 +87,8 @@ interface StoredShelfEntry {
 
 interface FakeState {
   version: 1;
+  /** Preferência da pessoa; estados salvos antes dela não têm o campo (vale o fantasma). */
+  mascot?: MascotId;
   seq: number;
   ideas_turn: number;
   sessions: StoredSession[];
@@ -278,6 +282,25 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
     },
 
     createUser: () => run('createUser', () => ({ user_id: 'u_exemplo', token: 'token-de-exemplo' })),
+
+    getMe: () => run('getMe', () => ({ user_id: 'u_exemplo', mascot: state.mascot ?? 'fantasma' })),
+
+    updateMe: (patch) =>
+      run('updateMe', () => {
+        if (patch.mascot !== undefined) {
+          if (!MASCOTS.includes(patch.mascot)) throw badRequest(`Mascote desconhecido: ${patch.mascot}`);
+          state.mascot = patch.mascot;
+        }
+        save();
+      }),
+
+    deleteSessions: () =>
+      run('deleteSessions', () => {
+        state.sessions = [];
+        // A estante fica como está, inclusive "Da busca …"; só não há mais julgamento para desfazer.
+        for (const e of state.shelf) e.via_judgment = null;
+        save();
+      }),
 
     getIdeas: () =>
       run('getIdeas', () => {

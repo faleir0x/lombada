@@ -4,6 +4,8 @@ import type {
   CreateSessionInput,
   IdeasResponse,
   Iso,
+  Me,
+  MePatch,
   Result,
   SessionDetail,
   SessionId,
@@ -18,6 +20,10 @@ import type {
 export interface Api {
   /** POST /users */
   createUser(): Promise<User>;
+  /** GET /me: preferências (o mascote escolhido). */
+  getMe(): Promise<Me>;
+  /** PATCH /me */
+  updateMe(patch: MePatch): Promise<void>;
   /** GET /ideas. Chamar de novo traz outras três. */
   getIdeas(): Promise<IdeasResponse>;
   /** POST /sessions. A mesma idempotencyKey devolve a mesma busca. */
@@ -32,6 +38,8 @@ export interface Api {
   listSessions(cursor?: string | null): Promise<SessionPage>;
   /** GET /sessions/{id} */
   getSession(sessionId: SessionId): Promise<SessionDetail>;
+  /** DELETE /sessions: "Apagar buscas". Apaga o histórico e os vistos; a estante fica. */
+  deleteSessions(): Promise<void>;
   /** GET /shelf */
   getShelf(): Promise<Shelf>;
   /** PUT /shelf/{book_id}: ♥ cheio no resumo. */

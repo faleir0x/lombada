@@ -32,19 +32,6 @@
   color: var(--color-text-muted);
   letter-spacing: 0.02em;
 }
-.y-masc {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 60px;
-  padding: 0 20px;
-  font-size: 0.9375rem;
-}
-.y-m {
-  width: 52px;
-  height: 52px;
-  flex: none;
-}
 .slist {
   list-style: none;
   margin: 0;
@@ -94,6 +81,213 @@
   font-size: 0.875rem;
 }
 
+/* Topo: o mascote comenta os números; tocar nele ou no nome abre a página Mascote */
+.you-main {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.y-head .p-bub {
+  margin-bottom: 84px;
+}
+.y-mcol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+}
+.y-mbtn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+}
+.y-mbtn .p-m {
+  display: block;
+}
+.y-chg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 36px;
+  margin-top: -4px;
+  padding: 0 6px 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.y-chg .ico {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+}
+.y-empty:focus {
+  outline: none;
+}
+
+/* Apagar buscas, com confirmação no mesmo lugar */
+.y-del {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 0 0 28px 12px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+.y-del .ico {
+  width: 18px;
+  height: 18px;
+}
+.y-conf {
+  margin: 0 20px 28px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 1px var(--color-line);
+}
+.y-conf p {
+  margin: 0 0 10px;
+  font-size: 0.9375rem;
+}
+.y-conf div {
+  display: flex;
+  gap: 8px;
+}
+.y-conf button {
+  flex: 1;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.y-conf .y-no {
+  border: 1px solid var(--color-line);
+  background: none;
+}
+.y-conf .y-yes {
+  border: 0;
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* Página Mascote ("Palco") */
+.mp-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 0 24px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.mp-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.mp-nav {
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--color-line);
+}
+.mp-nav:disabled {
+  opacity: 0.3;
+}
+.a-stage.mp-fig {
+  width: 200px;
+  height: 200px;
+}
+.mp-m,
+.mp-mm {
+  width: 100%;
+  height: 100%;
+}
+.mp-bub {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - 26px);
+  width: max-content;
+  max-width: 240px;
+  transform: translateX(-50%);
+  padding: 9px 12px 10px;
+  border-radius: var(--radius-lg);
+  background: var(--color-bubble);
+  color: var(--color-on-bubble);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: pretty;
+  z-index: 2;
+}
+.mp-bub::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  transform: rotate(45deg);
+  border-radius: 0 0 3px 0;
+  background: inherit;
+}
+.mp-nm {
+  margin: 6px 0 0;
+  font: 450 1.75rem / 1.1 var(--font-book);
+  letter-spacing: -0.015em;
+}
+.mp-cur {
+  min-height: 20px;
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.mp-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.mp-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  opacity: 0.45;
+  transition:
+    opacity 200ms ease,
+    transform 200ms var(--ease-out);
+}
+.mp-dots i.on {
+  opacity: 1;
+  background: var(--color-text);
+  transform: scale(1.2);
+}
+.mp-foot {
+  display: flex;
+  padding: 12px 20px 30px;
+}
+.mp-foot .btn-primary {
+  flex: 1;
+}
+.mp-foot .btn-primary:disabled {
+  opacity: 1;
+  background: var(--color-line);
+  color: var(--color-text-muted);
+}
+
 /* Folha de uma busca antiga */
 .ss-h {
   display: flex;
@@ -132,5 +326,16 @@
   .y-wrap {
     max-width: 640px;
     margin-inline: auto;
+  }
+  .mp-foot {
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-dots i {
+    transition: none;
   }
 }

@@ -27,7 +27,9 @@ test.describe('página Você', () => {
     await openYou(page);
     await expect(page.locator('.y-stats')).toContainText('30vistos');
     await expect(page.locator('.y-stats')).toContainText('3na estante');
-    await expect(page.locator('.y-masc')).toContainText('Fantasma');
+    await expect(page.locator('.y-stats')).toContainText('3buscas');
+    await expect(page.locator('.y-head .p-bub')).toHaveText('30 vistos, 3 ficaram. Exigente, hein.');
+    await expect(button(page, 'Mascote: Fantasma. Trocar')).toBeVisible();
     await expect(rows(page).locator('.s-tx b')).toHaveText([
       'Igual Torto Arado',
       'Curto e devastador',
@@ -41,6 +43,31 @@ test.describe('página Você', () => {
     await openYou(page, 'vazio');
     await expect(page.locator('.y-empty')).toHaveText('Suas buscas aparecem aqui.');
     await expect(page.locator('.y-stats')).toContainText('0vistos');
+    await expect(page.locator('.y-head .p-bub')).toHaveText('Nenhuma busca ainda. Bora começar?');
+    await expect(button(page, 'Apagar buscas')).toHaveCount(0);
+  });
+
+  test('"Apagar buscas": confirma no lugar, limpa o histórico e mantém a estante', async ({ page }) => {
+    await openYou(page);
+    const del = button(page, 'Apagar buscas');
+    await del.click();
+    const confirm = page.getByRole('group', { name: 'Apagar buscas' });
+    await expect(confirm).toContainText('Apagar 3 buscas? A estante fica como está.');
+    await expect(button(page, 'Cancelar')).toBeFocused();
+    await expectNoA11yViolations(page);
+    await button(page, 'Cancelar').click();
+    await expect(del).toBeFocused();
+    await del.click();
+    await button(page, 'Apagar').click();
+    await expect(page.locator('.y-empty')).toBeFocused();
+    await expect(page.locator('.y-head .p-bub')).toHaveText('Histórico limpo. A estante continua com 3.');
+    await expect(page.locator('[data-announcer]')).toHaveText('Histórico limpo. A estante continua com 3.');
+    await expect(page.locator('.y-stats')).toContainText('0vistos');
+    await expect(page.locator('.y-stats')).toContainText('3na estante');
+    await page.waitForTimeout(300);
+    await page.reload();
+    await expect(page.locator('.y-stats')).toContainText('0buscas');
+    await expect(page.locator('.y-stats')).toContainText('3na estante');
   });
 
   test('uma busca nova entra no histórico depois do primeiro card julgado', async ({ page }) => {

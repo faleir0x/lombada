@@ -62,6 +62,20 @@ export function runContractSuite(name: string, makeApi: () => Api | Promise<Api>
       });
     });
 
+    describe('preferências', () => {
+      it('o mascote começa no fantasma e a escolha fica salva', async () => {
+        const api = await makeApi();
+        expect((await api.getMe()).mascot).toBe('fantasma');
+        await api.updateMe({ mascot: 'corvo' });
+        expect((await api.getMe()).mascot).toBe('corvo');
+      });
+
+      it('mascote desconhecido é bad_request', async () => {
+        const api = await makeApi();
+        await expectError(api.updateMe({ mascot: 'dragao' as never }), 'bad_request');
+      });
+    });
+
     describe('busca', () => {
       it('devolve dez livros diferentes, todos com cor de capa', async () => {
         const s = await start(await makeApi());
@@ -271,6 +285,21 @@ export function runContractSuite(name: string, makeApi: () => Api | Promise<Api>
         const all = [...first.sessions, ...second.sessions].map((x) => x.session_id);
         expect(new Set(all).size).toBe(22);
         expect(second.next_cursor).toBeNull();
+      });
+
+      it('"Apagar buscas" limpa o histórico e os vistos, e a estante fica', async () => {
+        const api = await makeApi();
+        const s = await start(api);
+        await api.judge(s.session_id, bookAt(s, 0), 'love', JUDGED_AT);
+        await api.judge(s.session_id, bookAt(s, 1), 'pass', JUDGED_AT);
+        await api.deleteSessions();
+        expect((await api.listSessions()).sessions).toEqual([]);
+        const shelf = (await api.getShelf()).books;
+        expect(shelf.map((b) => b.id)).toEqual([bookAt(s, 0)]);
+        expect(shelf[0]?.from?.query).toBe(s.query);
+        await api.deleteSessions(); // de novo: nada muda, sem erro
+        const again = await start(api);
+        expect(again.books.length).toBeGreaterThan(0);
       });
 
       it('busca que não existe é not_found', async () => {

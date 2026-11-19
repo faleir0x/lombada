@@ -1,11 +1,15 @@
 /* Tipos do motor copiado de design-explorations/mascote.js (ver engine.js). */
 
-export type MascotKind = 'coruja' | 'barba' | 'corvo' | 'fantasma' | 'traca';
+import type { MascotId } from '../../core/api/types';
+
+export type MascotKind = MascotId;
 export type MascotMood = 'idle' | 'listen' | 'read' | 'happy' | 'roll' | 'doubt' | 'surprise' | 'sleep';
 
 export class Mascot {
   constructor(host: HTMLElement, kind: MascotKind);
   readonly mood: MascotMood;
+  /** Mascote desenhado agora. */
+  readonly key: MascotKind;
   /** Campo que o olhar acompanha no humor "listen". */
   attn: HTMLInputElement | HTMLTextAreaElement | null | undefined;
   setMood(mood: MascotMood): void;

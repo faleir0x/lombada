@@ -56,10 +56,11 @@ export function navigate(route: Route, options: { replace?: boolean; transition?
   update();
 }
 
-/** Voltar: desfaz a última navegação dentro do app; se a página foi aberta direto, vai para a home. */
+/** Voltar: desfaz a última navegação dentro do app; se a página foi aberta direto, vai para a de cima
+    (a Mascote volta para a Você; o resto, para a home). */
 export function goBack() {
   if (current.idx > 0) history.back();
-  else navigate({ name: 'home' }, { replace: true });
+  else navigate(current.route.name === 'mascote' ? { name: 'voce' } : { name: 'home' }, { replace: true });
 }
 
 const subscribe = (l: () => void) => {

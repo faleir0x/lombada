@@ -78,6 +78,19 @@ Result = "love" | "pass" | "read_loved" | "read_disliked"
 - `cover.color` sempre vem: é a cor da capa gerada e da lombada na estante.
 - **Capa que chega depois:** `cover.url` pode vir `null` e aparecer numa leitura seguinte (`GET /sessions/{id}`, `GET /shelf`). O front desenha a capa gerada na hora (cor, título, autor) e põe a foto por cima em 200ms quando a imagem carrega; se a foto falhar, fica a gerada. A API nunca segura uma resposta esperando capa.
 
+**Preferências**
+
+```http
+GET /me
+→ { "user_id": "u_1", "mascot": "fantasma" }   // coruja | barba | corvo | fantasma | traca
+
+PATCH /me
+{ "mascot": "corvo" }
+→ 204
+```
+
+- O mascote escolhido na página Mascote vale para o app inteiro e em qualquer aparelho. O front guarda uma cópia no aparelho para desenhar o mascote certo já no primeiro quadro, e manda a troca pela fila de escritas.
+
 **Ideias e busca**
 
 ```http
@@ -127,6 +140,13 @@ GET /sessions/{session_id}          // resumo do fim do baralho e da folha de um
 → { "session_id": "s_123", "query": "...", "created_at": "...", "continues": null,
     "books": [ Book + { "result": Result | null, "on_shelf": true } ×10 ] }   // na ordem do baralho
 ```
+
+```http
+DELETE /sessions                    // "Apagar buscas" na página Você
+→ 204
+```
+
+- Apaga o histórico e os vistos (todos os julgamentos). A estante fica como está, inclusive "Da busca …" de cada livro; só deixa de haver julgamento para desfazer.
 
 - **♥ sempre quer dizer "está na estante".** `on_shelf` é o estado atual da estante, não o julgamento: um livro tirado pela lixeira do detalhe aparece com ♥ vazio no resumo da busca de onde veio.
 - `loved` conta os julgados que estão na estante agora; `passed`, os julgados que não estão. O resumo lista só os livros com `result` diferente de `null`, e marca "já lido" quando `result` começa com `read_`.

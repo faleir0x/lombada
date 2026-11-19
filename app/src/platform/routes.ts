@@ -4,6 +4,8 @@ export type Route =
   | { name: 'home' }
   | { name: 'estante' }
   | { name: 'voce' }
+  /** Página Mascote, por cima da Você. */
+  | { name: 'mascote' }
   | { name: 'baralho'; sessionId: string }
   /** Vitrine de estados, só em desenvolvimento e nos testes de ponta a ponta. */
   | { name: 'vitrine' };
@@ -13,6 +15,7 @@ export function parseRoute(pathname: string): Route | null {
   if (path === '/') return { name: 'home' };
   if (path === '/estante') return { name: 'estante' };
   if (path === '/voce') return { name: 'voce' };
+  if (path === '/voce/mascote') return { name: 'mascote' };
   if (path === '/vitrine') return { name: 'vitrine' };
   const deck = path.match(/^\/baralho\/([^/]+)$/);
   if (deck?.[1]) {
@@ -31,6 +34,8 @@ export function routePath(route: Route): string {
       return '/';
     case 'baralho':
       return `/baralho/${encodeURIComponent(route.sessionId)}`;
+    case 'mascote':
+      return '/voce/mascote';
     default:
       return `/${route.name}`;
   }

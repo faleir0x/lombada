@@ -1,4 +1,5 @@
 import { type Ref, type RefObject, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useMascotKind } from '../../platform/mascot';
 import { Mascot as Engine, type MascotKind, type MascotMood } from './engine.js';
 import './mascot.css';
 
@@ -9,6 +10,7 @@ export interface MascotHandle {
 }
 
 interface MascotProps {
+  /** Sem kind, usa o mascote escolhido pela pessoa. */
   kind?: MascotKind;
   mood?: MascotMood;
   /** Campo que o olhar segue quando o humor é "listen". */
@@ -18,19 +20,27 @@ interface MascotProps {
 }
 
 /* O motor desenha dentro do div por conta própria; o React só cria, troca o humor e desmonta. */
-export function Mascot({ kind = 'fantasma', mood = 'idle', attn, className, ref }: MascotProps) {
+export function Mascot({ kind, mood = 'idle', attn, className, ref }: MascotProps) {
+  const chosen = useMascotKind();
+  const shape = kind ?? chosen;
   const host = useRef<HTMLDivElement>(null);
+  const first = useRef(shape);
   const [engine, setEngine] = useState<Engine | null>(null);
 
+  // O motor nasce uma vez; trocar de mascote é setShape (mantém humor e molas, sem piscar).
   useEffect(() => {
     if (!host.current) return;
-    const e = new Engine(host.current, kind);
+    const e = new Engine(host.current, first.current);
     setEngine(e);
     return () => {
       e.destroy();
       setEngine(null);
     };
-  }, [kind]);
+  }, []);
+
+  useEffect(() => {
+    if (engine && engine.key !== shape) engine.setShape(shape);
+  }, [engine, shape]);
 
   useEffect(() => {
     engine?.setMood(mood);

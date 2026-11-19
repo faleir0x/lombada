@@ -17,7 +17,14 @@ function pageFor(route: Route, transition: PageTransition): PageSpec | null {
     case 'estante':
       return { key: 'estante', transition, onBack: goBack, content: <ShelfPage titleId="estante-title" /> };
     case 'voce':
-      return { key: 'voce', transition, onBack: goBack, content: <YouPage titleId="voce-title" /> };
+    case 'mascote':
+      // A página Mascote abre por cima da Você, dentro da mesma página.
+      return {
+        key: 'voce',
+        transition,
+        onBack: goBack,
+        content: <YouPage titleId="voce-title" mascotOpen={route.name === 'mascote'} />,
+      };
     case 'baralho':
       // Uma chave só: "Mais dez" troca a busca dentro da mesma página, sem reabrir.
       return {
