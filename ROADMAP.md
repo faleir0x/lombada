@@ -2,46 +2,55 @@
 
 Um app para sair da ressaca literária. A pessoa descreve o que sente ou o último livro que amou, recebe um baralho de capas, gira o card para ver a sinopse e dá swipe (♥ / ✕). Cada swipe melhora as próximas recomendações.
 
-Este arquivo cobre a parte de **AI Engineering** (dados, embeddings, busca, LLM, avaliação, produção). A parte visual (baralho, giro, swipe) conversa com ela pelo **contrato da API** abaixo.
+Este arquivo cobre a parte de **AI Engineering** (dados, embeddings, busca, LLM, avaliação, demo pública). A parte visual (baralho, giro, swipe) conversa com ela pelo **contrato da API** abaixo.
+
+**Objetivo do projeto (2026-11-19):** aprender AI Engineering e mostrar o resultado (amigos, LinkedIn). Não haverá produção de verdade. Por isso, quando houver escolha, vale o caminho que ensina mais e gera números para o estudo de caso: por exemplo, hospedar um modelo pequeno (SLM) além de chamar uma API.
 
 ## Ordem de trabalho
 
 1. **Primeiro, a parte visual**, nesta máquina: front em React + Vite (`docs/adr/0001-stack.md`) com uma API falsa que segue o contrato abaixo e usa dados de exemplo.
-2. **Depois, a parte técnica** (fases 0 a 10), num computador mais forte. Ao trocar de máquina, refaça a tabela de restrições abaixo, porque ela decide o modelo de embedding e o tamanho do recorte.
+2. **Depois, a parte técnica** (fases 0 a 10), no PC com GPU (tabela abaixo). Na fase 0, meça de novo a tabela de restrições nesse PC, porque ela decide os modelos e o tamanho do recorte.
 3. Por fim, trocar a API falsa pela real, sem mexer no front.
 
 ## Princípios
 
 1. **Medir antes de melhorar.** Toda mudança (modelo, texto do embedding, prompt) é comparada no golden set. Números entram no estudo de caso.
 2. **Buscar sem LLM primeiro.** O LLM entra só depois que a busca vetorial funciona sozinha. Assim dá para saber o que cada peça acrescenta.
-3. **Grátis por padrão.** Dados abertos, embeddings locais e planos gratuitos. O único gasto previsto são centavos de LLM.
+3. **Grátis por padrão.** Dados abertos, modelos locais e planos gratuitos. O único gasto previsto são centavos de LLM por API (linha de base e professor do SLM).
 4. **Respeitar termos.** Dumps para dados em massa, APIs só para consultas pontuais, crédito às fontes, nada de scraper.
 
-## Restrições da máquina (medidas em 2026-11-18, na máquina da parte visual; refazer na máquina da parte técnica)
+## Máquinas
+
+**PC da parte técnica** (informado em 2026-11-19; medir na fase 0 com `nvidia-smi`, `free -h` e `df -h`):
 
 | Recurso | Valor | Consequência |
 |---|---|---|
-| CPU | 4 núcleos, sem GPU | Modelos de embedding pequenos ou médios; o grande (`bge-m3`) fica lento |
-| RAM | 11 GB (pouco livre em uso normal) | Processar dados em lotes, não tudo na memória |
-| Disco livre | ~27 GB | Não baixar o dump inteiro de edições: consultar o Parquet remoto com DuckDB e baixar só as colunas necessárias |
-| Já instalado | Docker, Python 3.14, uv, Node 26, pnpm, psql, git | Falta só o DuckDB (vem via `uv`) |
+| CPU | Intel Core i5 de 13ª geração | Ingestão e DuckDB folgados |
+| RAM | 32 GB | Dá para carregar o recorte inteiro na memória |
+| GPU | NVIDIA RTX 3060, 12 GB de VRAM | Embeddings grandes (`bge-m3`) rápidos; SLM de 7 a 9B quantizado (Q4) inteiro na GPU; fine-tuning QLoRA de modelos de 3 a 8B |
+| Disco | SSD (espaço livre a medir) | Decide se baixa o dump ou consulta o Parquet remoto |
+
+**Máquina da parte visual** (medida em 2026-11-18): 4 núcleos sem GPU, 11 GB de RAM, ~27 GB livres. Só para o front; nada de modelo pesado aqui.
 
 ## Stack proposta
 
 | Camada | Escolha | Por quê |
 |---|---|---|
 | Dados e ingestão | Python + DuckDB + Parquet | Padrão da área; DuckDB lê Parquet remoto com SQL |
-| Banco | Postgres + pgvector (Docker local; Supabase ou Neon no deploy) | Vetores, full-text e metadados no mesmo lugar |
-| Embeddings | Modelo multilíngue local (ex.: `multilingual-e5-small/base`), comparado com uma API | Grátis; pergunta em PT e descrição em EN funcionam sem tradução |
+| Banco | Postgres + pgvector (Docker no PC; Neon se a demo for toda na Cloudflare) | Vetores, full-text e metadados no mesmo lugar |
+| Embeddings | Modelo multilíngue local, escolhido na fase 4 entre `multilingual-e5` (small/base), `bge-m3` e BitNet-embedding (0.6B/270M) | Grátis; pergunta em PT e descrição em EN funcionam sem tradução |
 | Serviço de busca (API) | Python + FastAPI | Onde mora a IA; mesmo modelo de embedding da ingestão |
-| LLM | Claude ou DeepSeek, com saída estruturada | Vibe → filtros; "por que combina" |
+| LLM | API (Claude ou DeepSeek) como linha de base e professor; SLM de 7 a 9B auto-hospedado na RTX 3060, comparado no golden set e ajustado por fine-tuning | Vibe → filtros; "por que combina"; aprender a servir e treinar um modelo, não só chamá-lo |
+| Servir o SLM | Ollama ou llama.cpp para começar; vLLM depois (no Windows, via WSL2) | API no formato da OpenAI: o FastAPI troca de provedor sem mudar o resto |
 | Avaliação | Scripts Python + golden set em arquivo versionado | Reproduzível a cada mudança |
 | Observabilidade | Langfuse | Traces, custo e latência por etapa |
 | Front | React + TypeScript + Vite, SPA/PWA; Capacitor para o APK (`docs/adr/0001-stack.md`) | Consome a API abaixo; hospedado no Cloudflare Workers (Static Assets) |
 
-**Decisão em aberto (fase 0):** como o embedding da *pergunta* roda em produção. Opções: (a) o mesmo modelo local dentro do FastAPI, hospedado num serviço barato; (b) uma API de embeddings para ingestão e consulta. A escolha sai da fase 4, com números.
+**Demo pública (decidir na fase 9, com números):** o front fica no Cloudflare Workers (grátis). Para a IA, dois caminhos:
+- **(a) O próprio PC como servidor**, exposto pelo Cloudflare Tunnel (sem abrir porta no roteador): FastAPI, Postgres, embedding e SLM rodando na 3060. Quando o PC estiver desligado, a API cai para um plano B (LLM por API e embedding pelo Workers AI, que só funciona se o mesmo modelo, ex. `bge-m3`, foi usado na ingestão).
+- **(b) Tudo na Cloudflare:** FastAPI num Python Worker, embedding pelo Workers AI (`bge-m3`), Postgres + pgvector no Neon via Hyperdrive, LLM por API. A conferir: o limite de 10 ms de CPU por pedido do plano grátis e se o pgvector funciona pelo Hyperdrive.
 
-**Preferência de hospedagem (2026-11-19):** ecossistema da Cloudflare. Isso puxa a decisão acima para a opção (b): um Python Worker não roda modelo local (sem PyTorch, 128 MB de memória), então o embedding viria do Workers AI (`bge-m3`, multilíngue), que precisa entrar na comparação da fase 4. A API seria FastAPI num Python Worker, e o Postgres + pgvector ficaria no Neon, ligado pelo Hyperdrive. A conferir na fase 0: o limite de 10 ms de CPU por pedido do plano grátis, e se o driver de Postgres e o pgvector funcionam pelo Hyperdrive. Plano B: Workers Paid (US$ 5/mês), que sobe a CPU para 30 s e libera Containers para rodar o FastAPI em Docker como está.
+Preferência do usuário: ecossistema da Cloudflare.
 
 ## Contrato da API (versão 0, alinhada ao `DESIGN.md` em 2026-11-19)
 
@@ -189,7 +198,7 @@ Os prazos são estimativas para meio período. Se apertar, corte escopo, nunca a
 ### Fase 4: Golden set e avaliação (2 dias), o coração do projeto
 - 25 a 40 vibes de teste escritas por você, cada uma com livros que *deveriam* aparecer e livros que *não* deveriam.
 - Métricas: precisão@10 (quantos dos 10 fazem sentido, julgados por você), recall dos esperados, latência.
-- Experimentos: 2 ou 3 modelos de embedding × 2 ou 3 formas de montar o documento (só descrição; + assuntos; + resumo da Wikipedia).
+- Experimentos: modelos de embedding (`multilingual-e5` small/base, `bge-m3`, BitNet-embedding 0.6B/270M) × 2 ou 3 formas de montar o documento (só descrição; + assuntos; + resumo da Wikipedia). Anotar também tempo de ingestão e memória na 3060.
 - **Entrega:** `eval/` + tabela de resultados versionada; decisão do modelo de produção.
 - **Aprende:** avaliação offline, que é o que separa um AI Engineer de quem só chama API.
 
@@ -199,12 +208,20 @@ Os prazos são estimativas para meio período. Se apertar, corte escopo, nunca a
 - Medir de novo no golden set.
 - **Aprende:** quando palavras-chave ganham de embeddings ("livros sobre xadrez") e vice-versa.
 
-### Fase 6: LLM (3 dias)
+### Fase 6: LLM (5 a 7 dias)
+
+Três passos, com as mesmas tarefas (abaixo) e o mesmo golden set:
+
+1. **Linha de base pela API** (Claude ou DeepSeek), com saída estruturada. Deixa traces e avaliação funcionando de ponta a ponta e serve de professor para o passo 3.
+2. **SLM auto-hospedado na RTX 3060:** modelo de 7 a 9B com bom português (família e versão escolhidas na hora, porque esse cenário muda rápido), quantizado em GGUF. JSON garantido por gramática (decodificação restrita). Comparar com a API em qualidade, latência (tokens por segundo, tempo até o primeiro token) e custo.
+3. **Fine-tuning por destilação (QLoRA, na própria 3060):** o modelo da API gera exemplos de "vibe → filtros", você revisa, o SLM aprende. Medir de novo. Se o modelo pequeno treinado empatar com a API, essa é a melhor história do estudo de caso.
+
+Tarefas:
 - **Entender a vibe:** texto livre → JSON validado por schema (assuntos, faixa de páginas, livro-semente, resto da vibe), com nova tentativa em caso de erro. Os filtros não aparecem na tela (o baralho não mostra o que foi entendido); vão para o trace e para o golden set.
 - **Buscas vizinhas:** quando a busca não acha nada, três buscas próximas com o motivo de cada uma (`nearby`). O mesmo formato serve às ideias do balão (`GET /ideas`).
 - **"Por que combina":** uma linha por livro, gerada só a partir da descrição, sem inventar. Checagem por LLM-como-juiz numa amostra.
 - Gerar sob demanda (só o card do topo) e em streaming.
-- **Aprende:** saída estruturada, prompts com contexto (RAG em pequena escala), controle de alucinação, custo por requisição.
+- **Aprende:** saída estruturada, prompts com contexto (RAG em pequena escala), controle de alucinação, custo por requisição; e, no SLM, quantização, KV cache, decodificação restrita, servir modelo (Ollama, llama.cpp, vLLM) e fine-tuning com LoRA.
 
 ### Fase 7: Swipe que aprende (2–3 dias)
 - Sinais: julgamentos da busca e das anteriores ligadas por "Mais dez", ♥ mudado depois no resumo, estante e notas de "Depois de ler".
@@ -216,14 +233,16 @@ Os prazos são estimativas para meio período. Se apertar, corte escopo, nunca a
 - Resumos de enredo da Wikipedia (CC BY-SA) usados **só no embedding**, nunca exibidos (spoilers).
 - Ganho medido no golden set; mantém só se melhorar.
 
-### Fase 9: Produção (2–3 dias)
+### Fase 9: Demo pública (2–3 dias)
 - Langfuse: um trace por requisição, com etapas de embedding, busca, LLM, tokens, custo e latência; swipes enviados como feedback.
 - Cache, limite de requisições por IP, teto de gasto na conta do LLM, chaves só no servidor.
 - Proteção básica contra prompt injection: texto do usuário separado das instruções, saída validada, nenhuma ferramenta perigosa.
-- Deploy da API e do banco.
+- Escolher entre o PC como servidor (Cloudflare Tunnel, com plano B) e tudo na Cloudflare (ver "Demo pública" acima), com os números das fases 4 e 6, e registrar numa ADR.
+- Deploy do front, da API e do banco.
 
 ### Fase 10: História (1–2 dias)
-- Estudo de caso: o problema (ressaca literária), as decisões e por quê, a tabela de avaliação antes e depois, o que deu errado (com traces), próximos passos.
+- Estudo de caso: o problema (ressaca literária), as decisões e por quê, a tabela de avaliação antes e depois, API × SLM × SLM com fine-tuning, o que deu errado (com traces), próximos passos.
+- Material para mostrar: um vídeo curto do app, o link da demo e um post para o LinkedIn.
 
 ## Quem faz o quê
 
@@ -234,7 +253,7 @@ Os prazos são estimativas para meio período. Se apertar, corte escopo, nunca a
 | Colocar as chaves de API no `.env` (nunca colar no chat) | Escrever `.env.example`, o código que lê as chaves, os scripts |
 | **Escrever e julgar o golden set**: só você sabe o que tira *você* da ressaca | Rascunhar vibes candidatas, montar a ferramenta de rotular, calcular as métricas |
 | Rodar comandos de login (`vercel login`, etc.) e aprovar o deploy | Escrever a configuração de deploy e o checklist |
-| Dizer o quanto quer escrever você mesmo | Escrever, explicar e revisar código; rodar ingestão, embeddings e avaliações nesta máquina; pesquisar documentação e termos |
+| Dizer o quanto quer escrever você mesmo | Escrever, explicar e revisar código; rodar ingestão, embeddings, avaliações e treinos no PC da parte técnica; pesquisar documentação e termos |
 
 ## Fontes de dados
 
