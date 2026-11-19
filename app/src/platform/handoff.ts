@@ -28,3 +28,20 @@ export function takeSearchFocus(): boolean {
   focusSearch = false;
   return v;
 }
+
+export interface PendingSearch {
+  query: string;
+  seedBookId: string | null;
+}
+
+let pendingSearch: PendingSearch | null = null;
+
+/** "Buscar parecidos" (detalhe do livro): volta para a home e busca "Igual …" com o livro-semente. */
+export function requestSearch(search: PendingSearch) {
+  pendingSearch = search;
+}
+export function takePendingSearch(): PendingSearch | null {
+  const s = pendingSearch;
+  pendingSearch = null;
+  return s;
+}

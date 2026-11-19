@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo, useRef } from 'react';
 import { DeckPage } from './pages/deck/DeckPage';
 import { Home } from './pages/home/Home';
 import { PlaceholderPage } from './pages/Placeholder';
+import { ShelfPage } from './pages/shelf/ShelfPage';
 import { requestSearchFocus } from './platform/handoff';
 import { goBack, type PageTransition, useLocation } from './platform/router';
 import { isPage, type Route } from './platform/routes';
@@ -20,7 +21,7 @@ function pageFor(route: Route, transition: PageTransition): PageSpec | null {
   });
   switch (route.name) {
     case 'estante':
-      return spec('estante', 'Sua estante');
+      return { key: 'estante', transition, onBack: goBack, content: <ShelfPage titleId="estante-title" /> };
     case 'voce':
       return spec('voce', 'Você');
     case 'baralho':

@@ -29,7 +29,8 @@ export function Sheet({
     const focus = setTimeout(() => ref.current?.focus({ preventScroll: true }), 40);
     return () => {
       clearTimeout(focus);
-      returnFocus(opener);
+      // Se quem abriu sumiu (livro tirado da estante), quem fechou decide para onde o foco vai.
+      if (opener?.isConnected) returnFocus(opener);
       setSheetOpen(id, false);
     };
   }, [open, id, setSheetOpen, returnFocus]);

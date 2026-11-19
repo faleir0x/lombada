@@ -1,0 +1,338 @@
+/* Estante ("Prateleiras", DESIGN.md §6) e detalhe do livro. Portado de design-explorations/prototipo.html. */
+
+.shelf {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.shelf .p-body {
+  padding: 0;
+}
+.p-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 96px 18px 0;
+}
+.p-bub {
+  position: relative;
+  max-width: 210px;
+  padding: 9px 12px 10px;
+  border-radius: var(--radius-lg);
+  background: var(--color-bubble);
+  color: var(--color-on-bubble);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  margin-bottom: 46px;
+  text-wrap: pretty;
+}
+.p-bub::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  right: -5px;
+  bottom: 14px;
+  transform: rotate(45deg);
+  border-radius: 0 3px 0 0;
+  background: inherit;
+}
+.a-stage.p-stage {
+  --ls: 0.5;
+  --lgap: 34px;
+}
+.p-m {
+  width: 112px;
+  height: 112px;
+}
+.p-shelves {
+  padding: 4px 12px 28px;
+}
+.p-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 0 6px;
+  min-height: 150px;
+}
+.p-plank {
+  height: 11px;
+  margin: 0 0 22px;
+  border-radius: 2px;
+  background: var(--color-plank);
+  box-shadow: 0 10px 14px -10px rgb(0 0 0 / 0.45);
+}
+
+/* Lombadas */
+.spine {
+  position: relative;
+  flex: none;
+  width: var(--sw);
+  height: var(--sh);
+  padding: 12px 0;
+  border: 0;
+  border-radius: 2px 2px 0 0;
+  background: var(--c);
+  color: var(--t);
+  display: flex;
+  justify-content: center;
+  box-shadow: inset -3px 0 0 rgb(0 0 0 / 0.14);
+  transition: transform 250ms var(--ease-out);
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.spine::before,
+.spine::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.4;
+}
+.spine::before {
+  top: 6px;
+}
+.spine::after {
+  bottom: 6px;
+}
+.spine span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font: 500 12.5px / 1.15 var(--font-book);
+  max-height: 100%;
+  text-align: start;
+}
+@media (hover: hover) and (pointer: fine) {
+  .spine:hover {
+    transform: translateY(-6px);
+  }
+}
+.spine:focus-visible {
+  transform: translateY(-6px);
+}
+.spine.press {
+  transform: scale(0.95);
+  transition: transform 400ms linear;
+}
+.spine.hole {
+  background: none;
+  color: transparent;
+  box-shadow: none;
+  outline: 1.5px dashed var(--color-slot);
+  outline-offset: -1.5px;
+}
+.spine.hole::before,
+.spine.hole::after {
+  display: none;
+}
+.spine.ghost {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  transition: none;
+  box-shadow:
+    inset -3px 0 0 rgb(0 0 0 / 0.14),
+    0 22px 30px -12px rgb(0 0 0 / 0.5);
+}
+.slot {
+  flex: none;
+  width: 30px;
+  height: var(--sh);
+  border: 1.5px dashed var(--color-slot);
+  border-bottom: 0;
+  border-radius: 2px 2px 0 0;
+}
+
+/* Estante vazia */
+.p-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 28px 32px;
+}
+.p-empty h3 {
+  margin: 0;
+  font: 500 1.3125rem / 1.25 var(--font-book);
+}
+.p-empty p {
+  margin: 6px 0 18px;
+  max-width: 30ch;
+  color: var(--color-text-muted);
+}
+
+/* Detalhe do livro (folha) */
+.grab {
+  width: 36px;
+  height: 4px;
+  margin: 0 auto 14px;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+.d-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.d-head {
+  min-width: 0;
+}
+.d-head h3 {
+  margin: 2px 0 0;
+  font: 500 1.3125rem / 1.25 var(--font-book);
+}
+.d-head p {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+.d-head .d-meta {
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.d-syn {
+  margin: 16px 0 0;
+  font: 400 1rem / 1.5 var(--font-book);
+  text-wrap: pretty;
+}
+.d-info {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.d-info li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.d-info .ico {
+  width: 16px;
+  height: 16px;
+}
+.d-info li.d-pos {
+  min-height: 44px;
+}
+.d-move {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+.d-mv {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: none;
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+}
+.d-mv .ico {
+  width: 18px;
+  height: 18px;
+}
+.d-mv:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.d-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-line);
+}
+.d-rate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.d-rate span {
+  margin-right: 4px;
+}
+.d-rb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+  background: none;
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.d-rb .ico {
+  width: 20px;
+  height: 20px;
+}
+.d-rb[aria-pressed="true"] {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: transparent;
+}
+.d-act {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+.d-ib {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-line);
+  background: none;
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+}
+.d-ib .ico {
+  width: 20px;
+  height: 20px;
+}
+.d-ib.d-go {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: transparent;
+}
+
+/* Desktop: a mesma página, com o conteúdo numa coluna de até 880px (DESIGN.md §5). */
+@container app (min-width: 900px) {
+  .p-head,
+  .p-shelves,
+  .p-empty {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+  .a-stage.p-stage {
+    --ls: 0.6;
+    --lgap: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spine,
+  .spine.press,
+  .d-rb {
+    transition: none;
+  }
+}

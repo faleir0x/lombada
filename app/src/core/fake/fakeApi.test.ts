@@ -46,6 +46,16 @@ describe('estado inicial', () => {
     ]);
   });
 
+  it('"cheia" tem os 40 livros da estante do protótipo', async () => {
+    const shelf = (await make({ seed: 'cheia' }).getShelf()).books;
+    expect(shelf).toHaveLength(40);
+    expect(shelf.slice(0, 3).map((b) => b.title)).toEqual([
+      'Torto Arado',
+      'A hora da estrela',
+      'O avesso da pele',
+    ]);
+  });
+
   it('"vazio" começa sem estante e sem histórico', async () => {
     const api = make({ seed: 'vazio' });
     expect((await api.getShelf()).books).toEqual([]);

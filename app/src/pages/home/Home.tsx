@@ -3,7 +3,7 @@ import { isApiError } from '../../core/api/errors';
 import type { CreatedSession, Idea } from '../../core/api/types';
 import { ANNOUNCED, createVoice, noResultLine, type VoiceKey } from '../../core/voice';
 import { api, newIdempotencyKey, rememberDeck } from '../../platform/appApi';
-import { setDeckOrigin, takeSearchFocus } from '../../platform/handoff';
+import { setDeckOrigin, takePendingSearch, takeSearchFocus } from '../../platform/handoff';
 import { navigate } from '../../platform/router';
 import { useTheme } from '../../platform/theme';
 import { firstOpenOfSession, markOnboardingSeen, onboardingSeen } from '../../platform/visit';
@@ -351,7 +351,7 @@ export function Home({ covered }: { covered: boolean }) {
   );
 
   const search = useCallback(
-    (text?: string) => {
+    (text?: string, seedBookId: string | null = null) => {
       touch();
       const s = S.current;
       if (s.busy) return;
@@ -391,7 +391,7 @@ export function Home({ covered }: { covered: boolean }) {
       }, SEARCH_SLOW);
       api
         .createSession(
-          { query, seed_book_id: null, continues: null },
+          { query, seed_book_id: seedBookId, continues: null },
           { idempotencyKey: newIdempotencyKey() },
         )
         .then((session) => {
@@ -404,7 +404,7 @@ export function Home({ covered }: { covered: boolean }) {
           if (!S.current.alive) return;
           clear();
           if (!isApiError(e)) console.error(e);
-          failed(() => search(S.current.query));
+          failed(() => search(S.current.query, seedBookId));
         });
     },
     [clear, failed, fly, later, noResult, result, setMood, speak, touch],
@@ -476,6 +476,15 @@ export function Home({ covered }: { covered: boolean }) {
       if (!S.current.busy) setMood('idle');
     }, 1400);
   }, [clear, later, setMood, speak, theme, toggle, touch]);
+
+  // "Buscar parecidos", vindo da estante, chega quando a home volta a ficar à vista.
+  useEffect(() => {
+    if (covered) return;
+    const pending = takePendingSearch();
+    if (!pending) return;
+    setValue(pending.query);
+    search(pending.query, pending.seedBookId);
+  }, [covered, search]);
 
   // Campo que cresce até 4 linhas e depois rola.
   // biome-ignore lint/correctness/useExhaustiveDependencies: recalcula a cada mudança do texto.

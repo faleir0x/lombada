@@ -23,7 +23,7 @@ import { IDEA_SETS, NEARBY, SEED_SESSIONS } from './seed';
    que a pessoa nunca julgou, depois os do baralho do protótipo, depois numa ordem que depende do texto. */
 
 export type FakeScenario = 'normal' | 'sem-resultado' | 'erro' | 'lento' | 'offline';
-export type FakeSeed = 'exemplo' | 'vazio';
+export type FakeSeed = 'exemplo' | 'vazio' | 'cheia';
 export type FakeOperation = keyof Api;
 
 export const FAKE_SCENARIOS: readonly FakeScenario[] = [
@@ -131,6 +131,20 @@ function seedState(seed: FakeSeed): FakeState {
         });
       }
     });
+  }
+  if (seed === 'cheia') {
+    // Estante cheia (DESIGN.md §7): os 40 livros da estante do protótipo.
+    const on = new Set(state.shelf.map((e) => e.book_id));
+    for (const b of CATALOG.slice(0, 40)) {
+      if (on.has(b.id)) continue;
+      state.shelf.push({
+        book_id: b.id,
+        added_at: '2026-11-17T20:00:00.000Z',
+        rating: null,
+        from: null,
+        via_judgment: null,
+      });
+    }
   }
   return state;
 }
