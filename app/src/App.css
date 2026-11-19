@@ -1,0 +1,12 @@
+.a0-top {
+  display: flex;
+  align-items: center;
+  height: 62px;
+  padding: 0 var(--space-16);
+}
+.a0-top h1 {
+  margin: 0;
+}
+.a0-main {
+  padding: var(--space-16);
+}

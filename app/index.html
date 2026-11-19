@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Um baralho de capas para sair da ressaca literária." />
+    <meta name="theme-color" content="#ece9e4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141412" media="(prefers-color-scheme: dark)" />
+    <title>lombada</title>
+    <script>
+      // Aplica o tema escolhido antes do primeiro quadro, para não piscar. Sem escolha, segue o sistema.
+      try {
+        const t = localStorage.getItem('lombada-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

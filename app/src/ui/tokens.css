@@ -1,0 +1,134 @@
+/* Tokens da lombada. Fonte da verdade: DESIGN.md §2 (cor), §3 (tipografia) e §4 (forma, espaço, movimento).
+   Componentes usam só os semânticos (--color-*, --mascot-*), nunca as primitivas. */
+
+:root {
+  /* Primitivas: luminosidade OKLCH × 1000 */
+  --neutral-975: #f8f7f4;
+  --neutral-935: #ece9e4;
+  --neutral-865: #d6d2ca;
+  --neutral-670: #99958c;
+  --neutral-500: #66635c;
+  --neutral-300: #2f2e2a;
+  --neutral-240: #201f1d;
+  --neutral-190: #141412;
+  --marker-430: #8c2716;
+  --marker-525: #b53a25;
+  --marker-610: #d5523b;
+  --marker-655: #e66048;
+  --marker-710: #f07a64;
+  --lamp-bulb: #ffebc8;
+
+  /* Semânticos: dia */
+  color-scheme: light;
+  --color-bg: var(--neutral-935);
+  --color-surface: var(--neutral-975);
+  --color-text: var(--neutral-190);
+  --color-text-muted: var(--neutral-500);
+  --color-line: var(--neutral-865);
+  --color-accent: var(--marker-525);
+  --color-on-accent: var(--neutral-975);
+  --color-bubble: var(--neutral-190);
+  --color-on-bubble: var(--neutral-975);
+  --color-accent-on-bubble: var(--marker-710);
+  --color-lamp-shade: var(--neutral-300);
+  --color-lamp-bulb: var(--neutral-865);
+  --color-lamp-glow: transparent;
+  --color-scrim: rgb(20 20 18 / 0.36);
+  --color-plank: var(--neutral-300);
+  --color-slot: var(--neutral-865);
+  --mascot-body: var(--marker-610);
+  --mascot-eye: var(--neutral-190);
+  --mascot-side: var(--marker-430);
+
+  /* Tipografia */
+  --font-book: "Newsreader Variable", Georgia, serif;
+  --font-ui: "Hanken Grotesk Variable", system-ui, sans-serif;
+
+  /* Espaço: só estes passos */
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+
+  /* Raios */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Sombra: só o que flutua sobre a cena */
+  --shadow-float: 0 0 0 1px var(--color-line), 0 10px 24px -14px rgb(0 0 0 / 0.5);
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-speech: 200ms;
+  --dur-theme: 600ms;
+  --dur-lamp: 700ms;
+  --dur-flicker: 220ms;
+  --dur-fly: 480ms;
+  --dur-sheet-open: 420ms;
+  --dur-sheet-close: 280ms;
+  --dur-step: 280ms;
+  --dur-press: 200ms;
+  --dur-tap: 120ms;
+  --dur-hover: 150ms;
+  --dur-flip: 420ms;
+  --dur-card: 280ms;
+}
+
+/* Semânticos: noite. O mesmo bloco aparece duas vezes: seguindo o sistema e escolhido à mão.
+   tokens.test.ts confere que os dois são iguais. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: var(--neutral-190);
+    --color-surface: var(--neutral-240);
+    --color-text: var(--neutral-935);
+    --color-text-muted: var(--neutral-670);
+    --color-line: var(--neutral-300);
+    --color-accent: var(--marker-655);
+    --color-on-accent: var(--neutral-190);
+    --color-bubble: var(--neutral-935);
+    --color-on-bubble: var(--neutral-190);
+    --color-accent-on-bubble: var(--marker-525);
+    --color-lamp-shade: var(--neutral-300);
+    --color-lamp-bulb: var(--lamp-bulb);
+    --color-lamp-glow: rgb(255 235 200 / 0.17);
+    --color-scrim: rgb(0 0 0 / 0.5);
+    --color-plank: #3a3631;
+    --color-slot: var(--neutral-300);
+    --mascot-body: var(--neutral-935);
+    --mascot-eye: var(--neutral-190);
+    --mascot-side: var(--neutral-670);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: var(--neutral-190);
+  --color-surface: var(--neutral-240);
+  --color-text: var(--neutral-935);
+  --color-text-muted: var(--neutral-670);
+  --color-line: var(--neutral-300);
+  --color-accent: var(--marker-655);
+  --color-on-accent: var(--neutral-190);
+  --color-bubble: var(--neutral-935);
+  --color-on-bubble: var(--neutral-190);
+  --color-accent-on-bubble: var(--marker-525);
+  --color-lamp-shade: var(--neutral-300);
+  --color-lamp-bulb: var(--lamp-bulb);
+  --color-lamp-glow: rgb(255 235 200 / 0.17);
+  --color-scrim: rgb(0 0 0 / 0.5);
+  --color-plank: #3a3631;
+  --color-slot: var(--neutral-300);
+  --mascot-body: var(--neutral-935);
+  --mascot-eye: var(--neutral-190);
+  --mascot-side: var(--neutral-670);
+}

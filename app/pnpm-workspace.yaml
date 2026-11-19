@@ -1,0 +1,3 @@
+# Só dependências publicadas há pelo menos duas semanas (20160 minutos), inclusive as indiretas.
+minimumReleaseAge: 20160
+saveExact: true

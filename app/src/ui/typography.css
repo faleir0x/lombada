@@ -1,0 +1,40 @@
+/* Papéis tipográficos do DESIGN.md §3. Um papel por classe. */
+
+.t-brand {
+  font: 400 1.6875rem / 1 var(--font-book);
+  letter-spacing: -0.01em;
+}
+.t-title {
+  font: 450 1.75rem / 1.15 var(--font-book);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.t-heading {
+  font: 500 1.3125rem / 1.25 var(--font-book);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.t-input {
+  font: 400 1.0625rem / 1.3 var(--font-book);
+}
+.t-suggestion {
+  font: 500 1rem / 1.2 var(--font-book);
+}
+.t-body {
+  font: 400 1rem / 1.5 var(--font-ui);
+  text-wrap: pretty;
+}
+.t-speech {
+  font: 400 0.9375rem / 1.4 var(--font-ui);
+  text-wrap: pretty;
+}
+.t-label {
+  font: 500 0.875rem / 1.3 var(--font-ui);
+}
+.t-caption {
+  font: 400 0.8125rem / 1.3 var(--font-ui);
+}
+.t-count {
+  font: 700 0.6875rem / 1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
