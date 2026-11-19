@@ -33,6 +33,9 @@
   --color-lamp-shade: var(--neutral-300);
   --color-lamp-bulb: var(--neutral-865);
   --color-lamp-glow: transparent;
+  /* Poeira no feixe e lâmpada ligada: estão no protótipo, ainda não no DESIGN.md §2. */
+  --color-lamp-mote: transparent;
+  --lamp-on: 0;
   --color-scrim: rgb(20 20 18 / 0.36);
   --color-plank: var(--neutral-300);
   --color-slot: var(--neutral-865);
@@ -103,6 +106,8 @@
     --color-lamp-shade: var(--neutral-300);
     --color-lamp-bulb: var(--lamp-bulb);
     --color-lamp-glow: rgb(255 235 200 / 0.17);
+    --color-lamp-mote: rgb(255 240 215 / 0.5);
+    --lamp-on: 1;
     --color-scrim: rgb(0 0 0 / 0.5);
     --color-plank: #3a3631;
     --color-slot: var(--neutral-300);
@@ -128,6 +133,8 @@
   --color-lamp-shade: var(--neutral-300);
   --color-lamp-bulb: var(--lamp-bulb);
   --color-lamp-glow: rgb(255 235 200 / 0.17);
+  --color-lamp-mote: rgb(255 240 215 / 0.5);
+  --lamp-on: 1;
   --color-scrim: rgb(0 0 0 / 0.5);
   --color-plank: #3a3631;
   --color-slot: var(--neutral-300);

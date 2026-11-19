@@ -1,0 +1,516 @@
+/* Home: cena do abajur, balão de ideias, barra de busca, texto voando e onboarding.
+   Portado de design-explorations/prototipo.html. */
+
+.home {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.home[data-onb="true"] > .a-top,
+.home[data-onb="true"] > .a-scene,
+.home[data-onb="true"] > .a-dock {
+  visibility: hidden;
+}
+
+.a-say {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.bubble[data-hidden="true"] {
+  opacity: 0;
+  transform: scale(0.9) translateY(6px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  pointer-events: none;
+}
+
+/* Abajur preso ao mascote: a cúpula fica 150px acima dele (170px no desktop) e o fio sobe até o teto. */
+.a-stage {
+  position: relative;
+  --ls: 1;
+  --lgap: 150px;
+}
+.a-lampwrap {
+  position: absolute;
+  left: 50%;
+  top: calc(-1 * (var(--lgap) + 115px * var(--ls)));
+  width: calc(380px * var(--ls));
+  height: calc(600px * var(--ls));
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: -1;
+}
+.a-lampwrap::before {
+  content: "";
+  position: absolute;
+  left: calc(50% - 1px);
+  bottom: calc(100% - 60px * var(--ls));
+  width: 2px;
+  height: 1600px;
+  background: var(--color-lamp-shade);
+}
+.a-lamp {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.a-shade {
+  fill: var(--color-lamp-shade);
+}
+.a-bulb {
+  fill: var(--color-lamp-bulb);
+  transition: fill var(--dur-lamp);
+}
+.a-cone {
+  filter: blur(7px);
+  opacity: var(--lamp-on);
+  transition: opacity var(--dur-lamp);
+}
+.a-motes {
+  position: absolute;
+  left: 50%;
+  top: calc(150px * var(--ls));
+  width: calc(240px * var(--ls));
+  height: calc(340px * var(--ls));
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: var(--lamp-on);
+  transition: opacity var(--dur-lamp);
+}
+.a-motes i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-lamp-mote);
+  animation: drift 11s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  to {
+    transform: translate(18px, -46px);
+  }
+}
+.a-pull {
+  position: absolute;
+  top: calc(58px * var(--ls));
+  left: 50%;
+  width: calc(80px * var(--ls));
+  height: calc(56px * var(--ls));
+  transform: translateX(-50%);
+  border: 0;
+  background: none;
+  border-radius: var(--radius-md);
+  pointer-events: auto;
+}
+
+/* Balão de ideias */
+.bubble.wide {
+  width: 300px;
+  max-width: 100%;
+  padding: 12px 8px 6px;
+}
+.bubble.wide .b-line {
+  padding: 0 6px 6px;
+  font-weight: 500;
+}
+.b-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.b-row {
+  width: 100%;
+  min-height: 52px;
+  padding: 7px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  text-align: left;
+}
+.b-row:focus-visible {
+  background: color-mix(in srgb, var(--color-on-bubble) 8%, transparent);
+}
+.b-row .ico {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent-on-bubble);
+}
+.b-row b {
+  display: block;
+  font: 500 1rem / 1.2 var(--font-book);
+}
+.b-row small {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--color-on-bubble) 70%, transparent);
+}
+.b-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 2px;
+  padding-top: 4px;
+  border-top: 1px solid color-mix(in srgb, var(--color-on-bubble) 14%, transparent);
+}
+
+/* Barra de busca, na zona do polegar */
+.a-dock {
+  position: relative;
+  z-index: 3;
+  padding: 8px 14px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.a-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 6px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-float);
+  transition: background-color var(--dur-theme);
+}
+.a-form:focus-within {
+  box-shadow:
+    0 0 0 2px var(--color-accent),
+    0 10px 24px -14px rgb(0 0 0 / 0.5);
+}
+.a-ask {
+  flex: none;
+  width: 44px;
+  height: 46px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-accent);
+  display: grid;
+  place-items: center;
+  transition: background-color var(--dur-hover) ease;
+}
+.a-ask:focus-visible {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+.a-form textarea {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  max-height: calc(1.0625rem * 1.3 * 4 + 24px);
+  padding: 12px 2px;
+  border: 0;
+  background: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  color: var(--color-text);
+  scrollbar-width: thin;
+}
+.a-form textarea::placeholder {
+  color: var(--color-text-muted);
+}
+.a-send {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  display: grid;
+  place-items: center;
+  background: var(--color-line);
+  color: var(--color-text-muted);
+  transition:
+    background-color var(--dur-press) ease,
+    color var(--dur-press) ease;
+}
+.a-form[data-ready="true"] .a-send {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .a-ask:hover {
+    background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  }
+  .b-row:hover {
+    background: color-mix(in srgb, var(--color-on-bubble) 8%, transparent);
+  }
+}
+
+/* Texto da busca voando até o livro do mascote */
+.fly {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  top: 0;
+  max-width: 260px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: 400 1.0625rem / 1.3 var(--font-book);
+  color: var(--color-text);
+  pointer-events: none;
+  transform-origin: 0 50%;
+}
+
+/* Capa gerada */
+.cover {
+  width: var(--w, 48px);
+  aspect-ratio: 2 / 3;
+  flex: none;
+  border-radius: 2px 5px 5px 2px;
+  background: var(--c);
+  color: var(--t);
+  padding: calc(var(--w, 48px) * 0.1) calc(var(--w, 48px) * 0.09);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow:
+    inset 3px 0 0 rgb(0 0 0 / 0.2),
+    0 6px 14px -8px rgb(0 0 0 / 0.55);
+  overflow: hidden;
+}
+.cover b {
+  font: 500 calc(var(--w, 48px) * 0.16) / 1.1 var(--font-book);
+  overflow-wrap: break-word;
+}
+.cover small {
+  font-size: calc(var(--w, 48px) * 0.085);
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+/* Onboarding */
+.a-onb {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  touch-action: pan-y;
+}
+.o-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 12px 0 22px;
+}
+.o-skip {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.o-art {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 24px 12px;
+}
+.o-m {
+  width: 220px;
+  height: 220px;
+  transition:
+    width 0.4s var(--ease-out),
+    height 0.4s var(--ease-out);
+}
+.o-art[data-prop="pill"] .o-m,
+.o-art[data-prop="cards"] .o-m {
+  width: 170px;
+  height: 170px;
+}
+.o-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: min(300px, 100%);
+  padding: 6px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-float);
+}
+.o-pill .ico {
+  color: var(--color-accent);
+  margin: 0 8px;
+}
+.o-pill span {
+  flex: 1;
+  font: 400 1.0625rem / 1.3 var(--font-book);
+}
+.o-pill i {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  display: grid;
+  place-items: center;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.o-pill i .ico {
+  color: inherit;
+  margin: 0;
+}
+.o-cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding-top: 6px;
+  margin-bottom: 14px;
+}
+.o-card {
+  position: relative;
+}
+.o-card.l {
+  transform: rotate(-8deg) translateX(6px);
+}
+.o-card.r {
+  transform: rotate(7deg) translateX(-6px);
+}
+.o-tag {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  margin-left: -16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 10px -4px rgb(0 0 0 / 0.45);
+}
+.o-tag .ico {
+  width: 18px;
+  height: 18px;
+}
+.o-card.l .o-tag {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.o-card.r .o-tag {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.o-text {
+  padding: 6px 28px 0;
+}
+.o-text h2 {
+  margin: 0;
+  font: 450 1.75rem / 1.15 var(--font-book);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.o-text p {
+  margin: 10px 0 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.o-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 22px calc(28px + env(safe-area-inset-bottom, 0px));
+}
+.o-dots {
+  display: flex;
+  gap: 6px;
+}
+.o-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-text-muted);
+  transition:
+    width 0.3s var(--ease-out),
+    background-color 0.3s;
+}
+.o-dots i[data-on="true"] {
+  width: 20px;
+  background: var(--color-text);
+}
+.o-next {
+  min-height: 52px;
+  padding: 0 18px 0 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.o-next .ico {
+  width: 18px;
+  height: 18px;
+}
+
+/* Desktop: abajur 20% maior, mascote 244px, busca centrada com até 620px (DESIGN.md §5). */
+@container app (min-width: 900px) {
+  .a-stage {
+    --ls: 1.2;
+    --lgap: 170px;
+  }
+  .a-scene {
+    padding-bottom: 8px;
+  }
+  .a-dock {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 10px 0 36px;
+  }
+  .o-top {
+    padding: 24px 24px 0 36px;
+  }
+  .o-art,
+  .o-text,
+  .o-foot {
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+  .o-m {
+    width: 240px;
+    height: 240px;
+  }
+  .o-foot {
+    padding-bottom: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-motes i {
+    animation: none;
+  }
+  .a-cone,
+  .a-motes,
+  .a-bulb,
+  .a-send,
+  .o-m,
+  .o-dots i,
+  .bubble[data-hidden="true"] {
+    transition: none;
+  }
+}

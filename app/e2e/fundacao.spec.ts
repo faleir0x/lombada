@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { expectNoA11yViolations } from './a11y';
+import { expect, test } from './fixtures';
 
 const BG = { light: 'rgb(236, 233, 228)', dark: 'rgb(20, 20, 18)' } as const;
 

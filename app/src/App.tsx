@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo, useRef } from 'react';
-import { Home } from './pages/Home';
+import { Home } from './pages/home/Home';
 import { PlaceholderPage } from './pages/Placeholder';
 import { goBack, type PageTransition, useLocation } from './platform/router';
 import { isPage, type Route } from './platform/routes';
@@ -40,7 +40,7 @@ export function App() {
         <Vitrine />
       </Suspense>
     ) : (
-      <Home />
+      <Home covered={page !== null} />
     );
   return <Shell home={home} page={page} />;
 }

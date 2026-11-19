@@ -1,5 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { expectNoA11yViolations } from './a11y';
+import { expect, test } from './fixtures';
 
 /* Fase A2: peças da fundação visual, pela vitrine (/vitrine) e pela home provisória. */
 
@@ -71,7 +72,7 @@ test.describe('folha (R7)', () => {
 test.describe('páginas e Paralaxe', () => {
   test('a estante abre por cima da home e o Voltar devolve o foco', async ({ page }) => {
     await page.goto('/');
-    const shelf = button(page, 'Estante');
+    const shelf = button(page, /^Estante/);
     await shelf.click();
     await expect(page).toHaveURL(/\/estante$/);
     const region = page.getByRole('region', { name: 'Sua estante' });
@@ -91,7 +92,7 @@ test.describe('páginas e Paralaxe', () => {
     await expect(page.getByRole('region', { name: 'Você' })).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page).toHaveURL(/\/$/);
-    await button(page, 'Estante').click();
+    await button(page, /^Estante/).click();
     await expect(page.getByRole('region', { name: 'Sua estante' })).toBeVisible();
     await page.goBack();
     await expect(page.getByRole('region', { name: 'Sua estante' })).toBeHidden();
@@ -117,7 +118,7 @@ test.describe('páginas e Paralaxe', () => {
   test('com movimento reduzido, a página só aparece em fade', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await button(page, 'Estante').click();
+    await button(page, /^Estante/).click();
     const kinds = await page
       .locator('.a-page')
       .evaluate((el) =>
