@@ -101,11 +101,16 @@ Versões (as mais altas publicadas até 2026-11-05, pelo menos duas semanas ante
 | `idb` | 8.0.4 |
 | `@capacitor/core`, `@capacitor/cli` (depois) | 8.6.0 |
 
+Instaladas depois, pela mesma regra (o pnpm recusa qualquer versão com menos de duas semanas, `app/pnpm-workspace.yaml`): `vite-plugin-pwa` 2.0.0, `idb` 8.0.4, `@biomejs/biome` 2.6.5, `vitest` 5.1.0, `@playwright/test` 1.64.1, `@axe-core/playwright` 4.14.0.
+
+**Atualizar versões (2026-11-19):** tudo fica travado na versão exata. Antes de subir qualquer uma (TypeScript 7, Vite 8 e `vite-plugin-pwa` 2.0 são linhas novas), rodar `pnpm check` inteiro e o build do PWA (`pnpm build`, conferindo o `sw.js` e o manifesto). Se um plugin não acompanhar a versão nova, ele fica para trás e isso é registrado aqui, com o motivo.
+
 Para comparação, as versões que as outras opções usariam: `next` 16.4.5; `expo` 58.0.23, `react-native` 0.88.1, `react-native-web` 0.21.4, `react-native-reanimated` 4.7.1, `react-native-svg` 15.16.0, `react-native-gesture-handler` 3.4.0; `@sveltejs/kit` 3.1.1, `svelte` 5.57.3.
 
 ## Consequências
 
 - **Melhora:** o protótipo vira o app por migração, não por reescrita; R1–R13 continuam testáveis com as mesmas ferramentas do navegador; um deploy estático grátis; o front não tem servidor para manter.
-- **Piora:** sem renderização no servidor (aceitável: nada no app precisa de SEO); no celular, a sensação é de WebView, não de app nativo; iOS limita PWA (sem instalação automática, armazenamento que o sistema pode limpar em app pouco usado), o que reforça mandar a fila offline assim que a conexão volta.
+- **Piora:** sem renderização no servidor (aceitável: nada no app precisa de SEO); no celular, a sensação é de WebView, não de app nativo.
+- **Só Android (2026-11-19):** o usuário não tem iPhone; os limites do PWA no Safari e um app iOS ficam fora do projeto.
 - **Muda no `ROADMAP.md`:** "front em Next.js" vira "front em React + Vite (ADR 0001)" na ordem de trabalho e na tabela da stack.
 - **Revisitar se:** o mascote ou o arrasto não segurarem 60 fps num Android de entrada com o Capacitor; ou o produto precisar de páginas públicas indexáveis (estante compartilhada, por exemplo). No primeiro caso, o caminho é a opção A só para o app móvel, reaproveitando `src/core/`. No segundo, uma página pública pequena à parte, sem migrar o app.

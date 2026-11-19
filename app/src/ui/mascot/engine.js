@@ -2,7 +2,8 @@
    a fonte. Mudanças na cópia, todas mecânicas, sem mexer no desenho nem nas molas:
    - módulo ES (export) em vez do global window.Mascote;
    - IDs de SVG com o prefixo "mascote-" (R8: únicos por instância e sem colidir com outros SVGs);
-   - destroy(), para o React desmontar o mascote.
+   - destroy(), para o React desmontar o mascote;
+   - paused (mascote coberto por uma página não anima) e nada anima com a aba escondida (document.hidden).
    Tipos em engine.d.ts. Formatação original preservada: o Biome ignora este arquivo. */
 const f=n=>(+n).toFixed(2);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -234,6 +235,6 @@ class Mascot{
   }
 }
 let last=performance.now();
-function loop(now){const dt=Math.min(.033,(now-last)/1000);last=now;for(const m of all)if(m.vis)m.tick(now,dt);requestAnimationFrame(loop)}
+function loop(now){const dt=Math.min(.033,(now-last)/1000);last=now;if(!document.hidden)for(const m of all)if(m.vis&&!m.paused)m.tick(now,dt);requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 export{Mascot,S,ORDER,ML,MD,all};

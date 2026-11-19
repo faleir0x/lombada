@@ -301,7 +301,7 @@ export function YouPage({ titleId, mascotOpen = false }: { titleId: string; masc
                     aria-label={`Mascote: ${name}. Trocar`}
                     onClick={() => navigate({ name: 'mascote' })}
                   >
-                    <Mascot className="p-m" mood={mood} />
+                    <Mascot className="p-m" mood={mood} paused={mpShown} />
                   </button>
                 </div>
                 <button

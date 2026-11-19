@@ -123,6 +123,10 @@ Prazos estimados para meio período. Cada fase termina com tudo verde no CI e co
 
 - Passada completa de R1 a R13: axe em todas as telas e estados, teclado do começo ao fim, leitor de tela (Orca no Linux, TalkBack no Android).
 - Desempenho: mascote, arrasto e estante com a CPU 4× mais lenta no DevTools, mirando 60 quadros por segundo.
+  Primeira medição (2026-11-19, servidor de desenvolvimento, CPU 4× mais lenta): um mascote custa ~5 ms por quadro,
+  e 20 a 30% dos quadros passaram de 20 ms. Já feito: mascote coberto por uma página não anima (`paused`), nada
+  anima com a aba escondida, e páginas fechadas desmontam o mascote. Se pesar no aparelho, o próximo passo é
+  baixar a taxa de quadros dos mascotes que não estão em foco (30 fps parado).
 - Comparação final com o protótipo, tela a tela, nos dois temas e nas duas larguras.
 - **Pronto quando:** nenhuma pendência de R1 a R13 e nenhum quadro acima de 16 ms no caminho principal.
 
@@ -133,6 +137,10 @@ Prazos estimados para meio período. Cada fase termina com tudo verde no CI e co
 - Botão voltar do Android fazendo o mesmo que Esc: fecha a folha, depois a página, depois sai.
 - Áreas seguras, cor da barra de status por tema, ícone e tela de abertura.
 - APK de debug instalado num celular de verdade, de preferência um Android barato.
+- Medir o mascote no aparelho e no WebView do Capacitor: CPU, quadros perdidos e bateria (Chrome DevTools
+  remoto e `adb shell dumpsys gfxinfo`). Conferir também o arrasto da estante por toque (segurar e mover na
+  vertical), que só dá para validar num aparelho.
+- Só Android: o usuário não tem iPhone, então os limites do PWA no Safari e o app iOS ficam fora.
 - **Pronto quando:** o app abre sem internet, faz o caminho principal inteiro e passa no teste de desempenho no aparelho.
 
 ### B · API real sem IA (4 a 5 dias)
@@ -143,11 +151,13 @@ Pode começar depois da A1, em paralelo com as telas, porque o contrato já est�
 - Tabelas: pessoas, buscas, livros da busca, julgamentos, estante (com posição e nota), escritas já aplicadas (para a fila offline).
 - Todos os endpoints do contrato, menos a escolha dos livros: a busca devolve um recorte fixo de exemplo até a fase 3 da IA plugar a busca vetorial no mesmo lugar.
 - A bateria de testes de contrato da A1 rodando contra esta API.
+- Tipos gerados, não mantidos à mão: os tipos de `src/core/api/types.ts` passam a sair do OpenAPI que o FastAPI
+  publica (com `openapi-typescript`), e a `fakeApi` usa os mesmos tipos. O CI gera de novo e falha se o
+  resultado mudar sem commit, para Python e TypeScript nunca se separarem.
 - **Pronto quando:** o front troca `fakeApi` por `httpApi` e todos os testes de ponta a ponta continuam passando.
 
 ## Depois
 
 - Fases 0 a 10 do `ROADMAP.md` trocam a busca de exemplo pela real, sem mexer no front.
 - Hospedagem (Cloudflare, ver `ROADMAP.md`).
-- iOS pelo mesmo Capacitor, se e quando fizer sentido.
 - Troca de mascote na página Você (o motor já tem cinco).

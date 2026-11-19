@@ -16,11 +16,13 @@ interface MascotProps {
   /** Campo que o olhar segue quando o humor é "listen". */
   attn?: RefObject<HTMLTextAreaElement | HTMLInputElement | null>;
   className?: string;
+  /** Coberto por outra página: para de animar até voltar à vista. */
+  paused?: boolean;
   ref?: Ref<MascotHandle>;
 }
 
 /* O motor desenha dentro do div por conta própria; o React só cria, troca o humor e desmonta. */
-export function Mascot({ kind, mood = 'idle', attn, className, ref }: MascotProps) {
+export function Mascot({ kind, mood = 'idle', attn, className, paused = false, ref }: MascotProps) {
   const chosen = useMascotKind();
   const shape = kind ?? chosen;
   const host = useRef<HTMLDivElement>(null);
@@ -45,6 +47,10 @@ export function Mascot({ kind, mood = 'idle', attn, className, ref }: MascotProp
   useEffect(() => {
     engine?.setMood(mood);
   }, [engine, mood]);
+
+  useEffect(() => {
+    if (engine) engine.paused = paused;
+  }, [engine, paused]);
 
   useEffect(() => {
     if (engine) engine.attn = attn?.current ?? null;

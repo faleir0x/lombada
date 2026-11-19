@@ -10,6 +10,8 @@ export class Mascot {
   readonly mood: MascotMood;
   /** Mascote desenhado agora. */
   readonly key: MascotKind;
+  /** Coberto por uma página: o motor não gasta quadro com ele. */
+  paused?: boolean;
   /** Campo que o olhar acompanha no humor "listen". */
   attn: HTMLInputElement | HTMLTextAreaElement | null | undefined;
   setMood(mood: MascotMood): void;

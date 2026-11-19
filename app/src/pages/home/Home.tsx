@@ -589,7 +589,7 @@ export function Home({ covered }: { covered: boolean }) {
         <div className="a-stage">
           <Lamp ref={lamp} onPull={switchLamp} />
           <div ref={mascotWrap}>
-            <Mascot ref={mascot} className="a-m" mood={mood} attn={input} />
+            <Mascot ref={mascot} className="a-m" mood={mood} attn={input} paused={covered} />
           </div>
         </div>
       </main>

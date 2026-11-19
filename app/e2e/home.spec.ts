@@ -143,6 +143,19 @@ test.describe('home', () => {
   });
 });
 
+test('o mascote da home para de animar enquanto uma página a cobre', async ({ page }) => {
+  await page.goto('/');
+  const paused = () =>
+    page
+      .locator('.a-m')
+      .evaluate((el) => (el as HTMLElement & { _m?: { paused?: boolean } })._m?.paused ?? null);
+  expect(await paused()).toBe(false);
+  await page.getByRole('button', { name: /^Estante/ }).click();
+  await expect.poll(paused).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect.poll(paused).toBe(false);
+});
+
 test.describe('primeira visita', () => {
   test.use({ visit: { onboardingSeen: false, openedThisSession: false } });
 
