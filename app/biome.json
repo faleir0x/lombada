@@ -38,5 +38,25 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/core/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "react": "O núcleo não importa React (docs/roadmap-app.md, princípio 3).",
+                  "react-dom": "O núcleo não importa React DOM."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

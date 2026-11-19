@@ -22,6 +22,7 @@ lombada/
     src/core/             tipos do contrato, cliente da API, API falsa, fila offline, regras do baralho
     src/ui/               tokens, fontes, movimento, mascote, ícones, componentes do DESIGN.md §6
     src/pages/            home, baralho, estante, você
+    src/platform/         o que depende do navegador: localStorage, URL, qual Api o app usa
     src/dev/              vitrine de estados (como os botões do protótipo), só em desenvolvimento
     e2e/                  testes de ponta a ponta e acessibilidade
     android/              projeto do Capacitor (fase A9)
@@ -60,7 +61,7 @@ Prazos estimados para meio período. Cada fase termina com tudo verde no CI e co
 - Tipos do contrato em `src/core/api/types.ts`.
 - Interface `Api` e duas implementações: `fakeApi` (agora) e `httpApi` (fase B).
 - `fakeApi`: dados de exemplo com os 40 títulos reais do protótipo, latência simulada de 1 a 6 s na busca, estado salvo no aparelho para a estante sobreviver ao recarregar.
-- Cenários por parâmetro na URL (`?cenario=sem-resultado|erro|lento|offline`), para chegar em qualquer estado da §7 sem depender de sorte.
+- Cenários por parâmetro na URL (`?cenario=sem-resultado|erro|lento|offline`, `?estado=vazio|exemplo`, `?latencia=0`), para chegar em qualquer estado da §7 sem depender de sorte.
 - Testes de contrato em Vitest: a mesma bateria vai rodar contra a API real.
 - **Pronto quando:** todas as regras do contrato têm teste (♥ é "está na estante", "já li e amei" entra com 👍, desfazer tira da estante, busca só entra no histórico com julgamento, posição da estante).
 

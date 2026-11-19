@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Sem DOM e sem Node: o núcleo precisa rodar em qualquer lugar (navegador, testes, React Native).
+    "lib": ["es2023"],
+    "types": []
+  },
+  "include": ["src/core"],
+  "exclude": ["src/core/**/*.test.ts", "src/core/**/*.suite.ts"]
+}
