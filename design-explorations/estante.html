@@ -1,0 +1,226 @@
+<!-- lombada · estante como página (revisão D2/D3) · fonte: DESIGN.md · 2026-11-18 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estante da Lombada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho com quantidade de livros e tema; três telas de celular lado a lado (prateleiras, capas de frente, pilha); nota de decisão */
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-430:#8C2716;--marker-525:#B53A25;--marker-610:#D5523B;--marker-655:#E66048;--marker-710:#F07A64;--lamp-bulb:#FFEBC8;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);
+  --color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);--color-bubble:var(--neutral-190);--color-on-bubble:var(--neutral-975);
+  --color-lamp-shade:var(--neutral-300);--color-lamp-bulb:var(--neutral-865);--color-lamp-glow:rgba(255,235,200,0);--lamp-on:0;--color-plank:var(--neutral-300);--color-slot:var(--neutral-865);
+  --mascot-body:var(--marker-610);--mascot-eye:var(--neutral-190);--mascot-side:var(--marker-430);--mascot-shadow:rgba(20,20,30,.14);--color-scrim:rgba(20,20,18,.36);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+  --radius-sm:10px;--radius-md:12px;--radius-lg:14px;--radius-xl:18px;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);--ease-drawer:cubic-bezier(0.32,0.72,0,1);--dur-sheet-open:420ms;--dur-sheet-close:280ms;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);--color-lamp-bulb:var(--lamp-bulb);--color-lamp-glow:rgba(255,235,200,.17);--lamp-on:1;--color-plank:#3A3631;--color-slot:var(--neutral-300);--mascot-body:var(--neutral-935);--mascot-side:var(--neutral-670);--mascot-shadow:rgba(0,0,0,.4);--color-scrim:rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme="dark"]{--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);--color-lamp-bulb:var(--lamp-bulb);--color-lamp-glow:rgba(255,235,200,.17);--lamp-on:1;--color-plank:#3A3631;--color-slot:var(--neutral-300);--mascot-body:var(--neutral-935);--mascot-side:var(--neutral-670);--mascot-shadow:rgba(0,0,0,.4);--color-scrim:rgba(0,0,0,.5);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1320px;margin:0 auto;padding-block:36px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:space-between;align-items:flex-end}
+.top>div{min-width:0;max-width:720px}
+h1{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em}
+.sub{margin:8px 0 0;color:var(--color-text-muted);font-size:.9375rem;max-width:68ch}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--color-line);border-radius:var(--radius-md);background:var(--color-surface)}
+.seg button{min-height:40px;min-width:48px;padding:0 12px;border:0;border-radius:9px;background:none;font-weight:500;font-size:.875rem;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+.seg button[aria-pressed="true"]{background:var(--color-text);color:var(--color-bg)}
+.tbtn{min-height:46px;padding:0 14px;border-radius:var(--radius-md);border:1px solid var(--color-line);background:var(--color-surface);font-weight:500;font-size:.875rem}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr));gap:48px 24px;margin-top:36px}
+.dir{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dir-head{display:flex;gap:12px;align-items:baseline}
+.letter{flex:none;width:32px;height:32px;border-radius:50%;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center;font-weight:700;font-size:.875rem;transform:translateY(-3px)}
+.dir-head h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.dir-head p{margin:2px 0 0;font-size:.875rem;color:var(--color-text-muted)}
+.analysis{margin:0;font-size:.875rem;color:var(--color-text-muted);max-width:60ch}
+.analysis b{color:var(--color-text)}
+.phone{position:relative;width:100%;max-width:390px;height:844px;margin:0 auto;border-radius:46px;overflow:hidden;box-shadow:0 0 0 1px var(--color-line),0 40px 70px -40px rgba(0,0,0,.35);isolation:isolate}
+.note{margin-top:64px;padding:24px 28px;border:1px solid var(--color-line);border-radius:22px;background:var(--color-surface)}
+.note h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.note p{margin:8px 0 0;color:var(--color-text-muted);max-width:72ch}
+
+/* mascote */
+.msvg{width:100%;height:100%;display:block;overflow:visible}
+.ml{fill:var(--m-side)}.mface{fill:var(--m-body)}.mshadow{fill:var(--m-shadow)}
+.mell{fill:var(--m-eye)}.mshine{fill:var(--m-body)}
+.marc,.mbrow{fill:none;stroke:var(--m-eye);stroke-linecap:round}
+.mmouth{fill:var(--m-eye)}
+.mdl{fill:none;stroke:var(--m-side);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mdf{fill:var(--m-side)}.mdg{fill:none;stroke:var(--m-eye);stroke-width:1.7;stroke-linecap:round}
+.mdk{fill:none;stroke:var(--m-page);stroke-width:1.6;stroke-linecap:round}
+.mbc{fill:var(--m-cover)}.mbp{fill:var(--m-page)}
+.mbl{fill:none;stroke:var(--m-cover);stroke-width:.8;opacity:.45;stroke-linecap:round}
+.mflip{stroke:var(--m-cover);stroke-width:.4}
+.mzt{fill:var(--m-side);font:700 10px var(--f-ui)}
+.ico{width:22px;height:22px;display:block;flex:none}
+
+/* página da estante */
+.pg{position:relative;height:100%;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg);color:var(--color-text);
+  --m-body:var(--mascot-body);--m-eye:var(--mascot-eye);--m-side:var(--mascot-side);--m-cover:var(--color-accent);--m-page:var(--neutral-975);--m-shadow:var(--mascot-shadow)}
+.pg-top{position:relative;z-index:3;display:flex;align-items:center;gap:6px;padding:16px 16px 4px 8px;background:var(--color-bg)}
+.pg-back{width:44px;height:44px;border:0;border-radius:var(--radius-md);background:none;display:grid;place-items:center}
+.pg-top h3{margin:0;font:500 1.3125rem/1.25 var(--f-serif);letter-spacing:-.01em}
+.pg-top span{margin-left:auto;padding-right:10px;font-size:.875rem;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+.pg-body{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.host{display:flex;align-items:flex-end;gap:10px}
+.mslot{width:112px;height:112px;flex:none}
+.bubble{position:relative;max-width:210px;padding:9px 12px 10px;border-radius:var(--radius-lg);background:var(--color-bubble);color:var(--color-on-bubble);font-size:.9375rem;line-height:1.4;margin-bottom:46px}
+.bubble::after{content:"";position:absolute;width:12px;height:12px;right:-5px;bottom:14px;transform:rotate(45deg);border-radius:0 3px 0 0;background:inherit}
+.stage{position:relative;--ls:.5;--lgap:34px}
+.lampwrap{position:absolute;left:50%;top:calc(-1 * (var(--lgap) + 115px * var(--ls)));width:calc(380px * var(--ls));height:calc(600px * var(--ls));transform:translateX(-50%);pointer-events:none;z-index:-1}
+.lampwrap::before{content:"";position:absolute;left:calc(50% - 1px);bottom:calc(100% - 60px * var(--ls));width:2px;height:800px;background:var(--color-lamp-shade)}
+.lampwrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cone{filter:blur(5px);opacity:var(--lamp-on)}
+.cover{width:var(--w,48px);aspect-ratio:2/3;flex:none;border-radius:2px 5px 5px 2px;background:var(--c);color:var(--t);padding:calc(var(--w,48px)*.1) calc(var(--w,48px)*.09);display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 3px 0 0 rgba(0,0,0,.2),0 6px 14px -8px rgba(0,0,0,.55);overflow:hidden;text-align:left}
+.cover b{font:500 calc(var(--w,48px)*.15)/1.1 var(--f-serif);overflow-wrap:break-word}
+.cover small{font-size:calc(var(--w,48px)*.08);line-height:1.2;opacity:.8}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 28px}
+.empty h4{margin:10px 0 0;font:500 1.3125rem/1.25 var(--f-serif)}
+.empty p{margin:6px 0 18px;max-width:30ch;color:var(--color-text-muted)}
+.btn-primary{min-height:48px;padding:0 20px;border:0;border-radius:var(--radius-lg);background:var(--color-accent);color:var(--color-on-accent);font-size:.875rem;font-weight:600}
+.btn-quiet{min-height:48px;padding:0 16px;border:1px solid var(--color-line);border-radius:var(--radius-lg);background:none;font-size:.875rem;font-weight:500}
+
+/* A · prateleiras */
+.a-head{display:flex;justify-content:flex-end;padding:96px 18px 0 18px;position:relative;z-index:1}
+.a-shelves{padding:4px 12px 28px}
+.a-row{display:flex;align-items:flex-end;gap:3px;padding:0 6px;min-height:150px}
+.a-plank{height:11px;margin:0 0 22px;border-radius:2px;background:var(--color-plank);box-shadow:0 10px 14px -10px rgba(0,0,0,.45)}
+.spine{position:relative;flex:none;width:var(--sw);height:var(--sh);padding:12px 0;border:0;border-radius:2px 2px 0 0;background:var(--c);color:var(--t);display:flex;justify-content:center;box-shadow:inset -3px 0 0 rgba(0,0,0,.14);transition:transform .25s var(--ease-out)}
+.spine::before,.spine::after{content:"";position:absolute;left:5px;right:5px;height:2px;background:currentColor;opacity:.4}
+.spine::before{top:6px}.spine::after{bottom:6px}
+.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font:500 12.5px/1.15 var(--f-serif);max-height:100%;text-align:start}
+@media (hover:hover) and (pointer:fine){.spine:hover{transform:translateY(-6px)}}
+.slot{flex:none;width:30px;height:var(--sh);border:1.5px dashed var(--color-slot);border-bottom:0;border-radius:2px 2px 0 0}
+
+/* B · capas de frente */
+.b-head{display:flex;justify-content:flex-end;padding:96px 18px 6px;position:relative;z-index:1}
+.b-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px;padding:4px 20px 28px}
+.b-cell{display:flex;flex-direction:column;align-items:center;gap:0;padding-top:14px}
+.b-cell button{border:0;padding:0;background:none;border-radius:4px}
+.b-ledge{grid-column:1/-1;height:9px;margin-top:-1px;border-radius:2px;background:var(--color-plank);box-shadow:0 8px 12px -8px rgba(0,0,0,.45)}
+.b-cap{margin:8px 0 2px;font:500 .8125rem/1.25 var(--f-serif);text-align:center;color:var(--color-text);text-wrap:balance}
+
+/* C · pilha */
+.c-wrap{min-height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 18px 26px}
+.c-top{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:center;gap:8px;padding-top:96px}
+.c-pile{display:flex;flex-direction:column;align-items:center}
+.c-book{display:flex;align-items:center;justify-content:space-between;gap:10px;width:var(--bw);min-height:40px;padding:6px 12px;border:0;border-radius:3px;background:var(--c);color:var(--t);text-align:left;transform:translateX(var(--dx)) rotate(var(--r));box-shadow:inset 0 -3px 0 rgba(0,0,0,.14),0 2px 0 rgba(0,0,0,.08)}
+.c-book b{font:500 .9375rem/1.2 var(--f-serif)}
+.c-book small{flex:none;font-size:.6875rem;opacity:.8;max-width:42%;text-align:right;line-height:1.2}
+.c-floor{height:9px;width:100%;margin-top:0;border-radius:2px;background:var(--color-plank)}
+
+/* detalhe */
+.scrim{position:absolute;inset:0;z-index:20;background:var(--color-scrim);opacity:0;pointer-events:none;transition:opacity var(--dur-sheet-close) var(--ease-drawer)}
+.scrim[data-open="true"]{opacity:1;pointer-events:auto;transition-duration:var(--dur-sheet-open)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;max-height:80%;padding:10px 22px 26px;border-radius:22px 22px 0 0;background:var(--color-surface);box-shadow:0 -18px 40px -20px rgba(0,0,0,.5);transform:translateY(102%);visibility:hidden;transition:transform var(--dur-sheet-close) var(--ease-drawer),visibility 0s var(--dur-sheet-close)}
+.sheet[data-open="true"]{transform:none;visibility:visible;transition:transform var(--dur-sheet-open) var(--ease-drawer)}
+.sheet:focus{outline:none}
+.grab{width:36px;height:4px;margin:0 auto 14px;border-radius:2px;background:var(--color-line)}
+.d-row{display:flex;gap:16px;align-items:flex-start}
+.d-row h4{margin:2px 0 0;font:500 1.3125rem/1.25 var(--f-serif)}
+.d-row p{margin:4px 0 0;font-size:.875rem;color:var(--color-text-muted)}
+.d-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+@media (prefers-reduced-motion:reduce){.sheet,.scrim,.spine{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Estante como página</h1>
+      <p class="sub">Revisão D2 e D3. A estante deixa de ser painel e vira uma página, com o fantasma por perto debaixo do abajur. Mude a quantidade de livros para ver o vazio e o cheio. Toque num livro para ver o detalhe. O botão da estante vazia é só texto (D3).</p>
+    </div>
+    <div class="ctl"><div class="seg" role="group" aria-label="Quantidade de livros" id="count"></div><button class="tbtn" id="theme" type="button">Tema: sistema</button></div>
+  </header>
+  <div class="frames">
+    <article class="dir" data-opt="a"><div class="dir-head"><span class="letter">A</span><div><h2>Prateleiras</h2><p>Lombadas em pé, uma prateleira depois da outra.</p></div></div><div class="phone" data-phone></div>
+      <p class="analysis"><b>A favor:</b> é a imagem mais fiel de "estante"; cabem muitos livros por tela. <b>Contra:</b> título de lado é mais difícil de ler, e capas reais (que vêm depois) quase não aparecem.</p></article>
+    <article class="dir" data-opt="b"><div class="dir-head"><span class="letter">B</span><div><h2>Capas de frente</h2><p>Vitrine de livraria: capas viradas para você, três por prateleira.</p></div></div><div class="phone" data-phone></div>
+      <p class="analysis"><b>A favor:</b> mostra as capas, que é como a gente lembra de um livro; títulos legíveis. <b>Contra:</b> cabem menos livros por tela; com 40, é muita rolagem.</p></article>
+    <article class="dir" data-opt="c"><div class="dir-head"><span class="letter">C</span><div><h2>Pilha</h2><p>Livros deitados, empilhados, com o fantasma sentado em cima.</p></div></div><div class="phone" data-phone></div>
+      <p class="analysis"><b>A favor:</b> títulos na horizontal, os mais fáceis de ler; a pilha crescendo é engraçada e mostra progresso. <b>Contra:</b> com 40 vira uma torre que rola; ordem é só "o último em cima".</p></article>
+  </div>
+  <section class="note"><h2>Também muda na home</h2><p>Com a estante como página, o ícone da estante na home passa a abrir esta tela (entrando pela direita, voltando pela esquerda) e o painel lateral some. O detalhe do livro continua como folha de baixo, porque é rápido de abrir e fechar.</p></section>
+</div>
+
+<script src="mascote.js"></script>
+<script src="hugeicons.js"></script>
+<script>
+(()=>{
+document.documentElement.lang='pt-BR';
+const {Mascot}=window.Mascote,HUGE=window.HUGE;
+const I=n=>{const i=HUGE[n];return`<svg class="ico" viewBox="0 0 ${i.w} ${i.h}" aria-hidden="true">${i.b}</svg>`};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RAW=[['Torto Arado','Itamar Vieira Junior',2019],['A hora da estrela','Clarice Lispector',1977],['O avesso da pele','Jeferson Tenório',2020],['Dom Casmurro','Machado de Assis',1899],['Grande sertão: veredas','João Guimarães Rosa',1956],['Vidas secas','Graciliano Ramos',1938],['Capitães da areia','Jorge Amado',1937],['Quarto de despejo','Carolina Maria de Jesus',1960],['Ensaio sobre a cegueira','José Saramago',1995],['Cem anos de solidão','Gabriel García Márquez',1967],['1984','George Orwell',1949],['O conto da aia','Margaret Atwood',1985],['Amada','Toni Morrison',1987],['Kindred','Octavia E. Butler',1979],['A vegetariana','Han Kang',2007],['Pachinko','Min Jin Lee',2017],['O sol é para todos','Harper Lee',1960],['Orgulho e preconceito','Jane Austen',1813],['Frankenstein','Mary Shelley',1818],['O mestre e Margarida','Mikhail Bulgákov',1967],['As cidades invisíveis','Italo Calvino',1972],['O apanhador no campo de centeio','J. D. Salinger',1951],['Middlemarch','George Eliot',1871],['A amiga genial','Elena Ferrante',2011],['Não me abandone jamais','Kazuo Ishiguro',2005],['A estrada','Cormac McCarthy',2006],['O processo','Franz Kafka',1925],['Mrs Dalloway','Virginia Woolf',1925],['O som e a fúria','William Faulkner',1929],['Lavoura arcaica','Raduan Nassar',1975],['Memórias póstumas de Brás Cubas','Machado de Assis',1881],['Macunaíma','Mário de Andrade',1928],['O quinze','Rachel de Queiroz',1930],['Laços de família','Clarice Lispector',1960],['Os Maias','Eça de Queirós',1888],['Duna','Frank Herbert',1965],['O Hobbit','J. R. R. Tolkien',1937],['A mão esquerda da escuridão','Ursula K. Le Guin',1969],['Rebecca','Daphne du Maurier',1938],['Persépolis','Marjane Satrapi',2000]];
+const CLOTH=['#2F4A3F','#7A2E3A','#2E3550','#7A5428','#3E3A5C','#4F5E33','#6E2F2A','#24414F','#5E4E2A','#4A2E3F'];
+const BOOKS=RAW.map(([t,a,y],i)=>({t,a,y,c:CLOTH[i%CLOTH.length],f:'#EDE6D3',h:i*37%11}));
+const cover=(b,w)=>`<span class="cover" style="--c:${b.c};--t:${b.f};--w:${w}px" aria-hidden="true"><b>${esc(b.t)}</b><small>${esc(b.a)}</small></span>`;
+const line=n=>n<5?`${n} ${n===1?'livro':'livros'}. Bom começo.`:n<20?`${n} livros. Tá ficando bonita.`:`${n} livros. Isso já é um sebo.`;
+const lamp=k=>`<div class="lampwrap" aria-hidden="true"><svg viewBox="0 0 380 600"><defs><linearGradient id="lc${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--color-lamp-glow)"/><stop offset="1" stop-opacity="0" style="stop-color:var(--color-lamp-glow)"/></linearGradient></defs><path class="cone" d="M146 112L234 112L330 520L50 520Z" fill="url(#lc${k})"/><rect x="185" y="58" width="10" height="9" rx="2" style="fill:var(--color-lamp-shade)"/><path d="M164 66C170 64 210 64 216 66L242 110C224 116 156 116 138 110Z" style="fill:var(--color-lamp-shade)"/><ellipse cx="190" cy="111" rx="46" ry="4.5" style="fill:var(--color-lamp-bulb)"/></svg></div>`;
+let N=3;
+
+function frame(art){
+  const opt=art.dataset.opt,ph=art.querySelector('[data-phone]');
+  ph.innerHTML=`<div class="pg"><header class="pg-top"><button class="pg-back" type="button" aria-label="Voltar">${I('back')}</button><h3>Sua estante</h3><span data-count></span></header>
+    <div class="pg-body" data-body></div><p class="sr" role="status" data-sr></p>
+    <div class="scrim" data-scrim data-open="false"></div>
+    <section class="sheet" data-sheet data-open="false" role="dialog" aria-modal="true" aria-label="Livro" tabindex="-1"><div class="grab" aria-hidden="true"></div><div data-detail></div></section></div>`;
+  const q=s=>ph.querySelector(s),body=q('[data-body]'),sheet=q('[data-sheet]'),scrim=q('[data-scrim]'),pg=q('.pg');
+  const mhost=document.createElement('div');mhost.className='mslot';const m=new Mascot(mhost,'fantasma');
+  let last=null;
+  const inert=v=>pg.querySelectorAll(':scope > :not([data-sheet]):not([data-scrim])').forEach(n=>n.inert=v);
+  function open(b,from){last=from;q('[data-detail]').innerHTML=`<div class="d-row">${cover(b,96)}<div><h4>${esc(b.t)}</h4><p>${esc(b.a)} · ${b.y}</p></div></div><div class="d-act"><button class="btn-primary" type="button" data-similar>Buscar parecidos</button><button class="btn-quiet" type="button" data-remove>Tirar da estante</button></div>`;
+    inert(true);sheet.dataset.open='true';scrim.dataset.open='true';setTimeout(()=>sheet.focus({preventScroll:true}),40);m.setMood('happy');setTimeout(()=>m.setMood('idle'),1400)}
+  function close(){sheet.dataset.open='false';scrim.dataset.open='false';inert(false);last&&last.focus({preventScroll:true})}
+  scrim.onclick=close;ph.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.dataset.open==='true')close()});
+  ph.addEventListener('click',e=>{const t=e.target;const k=t.closest('[data-book]');if(k){open(BOOKS[+k.dataset.book],k);return}
+    if(t.closest('[data-similar]')){close();m.setMood('read');setTimeout(()=>m.setMood('idle'),1600);return}
+    if(t.closest('[data-remove]')){close();m.setMood('roll');setTimeout(()=>m.setMood('idle'),1600);return}
+    if(t.closest('[data-find]')){m.setMood('listen');setTimeout(()=>m.setMood('idle'),1200)}});
+  function host(n,k){return`<div class="host"><div class="bubble">${n?esc(line(n)):'Nada por aqui ainda.'}</div><div class="stage">${lamp(k)}<div data-mslot></div></div></div>`}
+  function emptyBlock(){return`<div class="empty"><h4>Estante vazia, por enquanto.</h4><p>Livro que você arrastar pra direita vem morar aqui.</p><button class="btn-primary" type="button" data-find>Procurar um livro</button></div>`}
+  function render(){
+    const bs=BOOKS.slice(0,N);q('[data-count]').textContent=N?`${N} ${N===1?'livro':'livros'}`:'';
+    let h='';
+    if(opt==='a'){
+      h=`<div class="a-head">${host(N,opt)}</div><div class="a-shelves">`;
+      const W=390-24-12;let row=[],w=0;const rows=[];
+      bs.forEach((b,i)=>{const sw=b.t.length>20?46:b.t.length>11?36:30;if(w+sw+3>W-20){rows.push(row);row=[];w=0}row.push([b,i,sw]);w+=sw+3});if(row.length)rows.push(row);
+      if(!rows.length)rows.push([]);
+      rows.forEach((r,ri)=>{h+=`<div class="a-row">`+r.map(([b,i,sw])=>`<button class="spine" type="button" data-book="${i}" style="--c:${b.c};--t:${b.f};--sw:${sw}px;--sh:${118+b.h*4+(b.t.length>20?18:0)}px" aria-label="${esc(b.t)}, ${esc(b.a)}"><span>${esc(b.t)}</span></button>`).join('');
+        if(ri===rows.length-1){const free=Math.floor((W-20-r.reduce((s,x)=>s+x[2]+3,0))/34);for(let j=0;j<Math.min(free,N?2:4);j++)h+=`<span class="slot" style="--sh:${126+j*8}px" aria-hidden="true"></span>`}
+        h+=`</div><div class="a-plank" aria-hidden="true"></div>`});
+      h+=`</div>`;if(!N)h+=emptyBlock();
+    }else if(opt==='b'){
+      h=`<div class="b-head">${host(N,opt)}</div>`;
+      if(N){h+=`<div class="b-grid">`;bs.forEach((b,i)=>{h+=`<div class="b-cell"><button type="button" data-book="${i}" aria-label="${esc(b.t)}, ${esc(b.a)}">${cover(b,92)}</button><span class="b-cap" aria-hidden="true">${esc(b.t)}</span></div>`;if(i%3===2||i===bs.length-1)h+=`<div class="b-ledge" aria-hidden="true"></div>`});h+=`</div>`}
+      else h+=`<div class="b-grid"><div class="b-ledge" aria-hidden="true"></div></div>`+emptyBlock();
+    }else{
+      h=`<div class="c-wrap">`;
+      if(!N)h+=`<div class="c-top">${host(0,opt)}</div><div class="c-floor" aria-hidden="true"></div><div style="height:28px"></div>${emptyBlock()}`;
+      else{h+=`<div class="c-top">${host(N,opt)}</div><div class="c-pile">`+bs.slice().reverse().map((b,j)=>{const i=N-1-j;const bw=250+(b.h%5)*12;const dx=((b.h%3)-1)*6;const r=((b.h%4)-1.5)*.5;return`<button class="c-book" type="button" data-book="${i}" style="--c:${b.c};--t:${b.f};--bw:${bw}px;--dx:${dx}px;--r:${r}deg"><b>${esc(b.t)}</b><small>${esc(b.a)}</small></button>`}).join('')+`</div><div class="c-floor" aria-hidden="true"></div>`}
+      h+=`</div>`;
+    }
+    body.innerHTML=h;q('[data-mslot]').replaceWith(mhost);m.setMood(N?'idle':'doubt');
+    q('[data-sr]').textContent=N?line(N):'Estante vazia.';
+    if(opt==='c'&&N)body.scrollTop=body.scrollHeight;else body.scrollTop=0;
+  }
+  return {render};
+}
+const F=[...document.querySelectorAll('[data-opt]')].map(frame);
+const cbox=document.getElementById('count');
+[0,3,12,40].forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.setAttribute('aria-label',`${n} livros`);b.setAttribute('aria-pressed',n===N);b.onclick=()=>{N=n;cbox.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));F.forEach(f=>f.render())};cbox.appendChild(b)});
+F.forEach(f=>f.render());
+const tb=document.getElementById('theme'),TL={system:'sistema',light:'dia',dark:'noite'};let pref='system';
+tb.onclick=()=>{pref={system:'light',light:'dark',dark:'system'}[pref];pref==='system'?delete document.documentElement.dataset.theme:document.documentElement.dataset.theme=pref;tb.textContent='Tema: '+TL[pref]};
+})();
+</script>

@@ -1,0 +1,33 @@
+<!-- Template de playground · lombada · tokens do DESIGN.md (Grafite e marcador, Newsreader + Hanken Grotesk) · 2026-11-18 -->
+<meta charset="utf-8">
+<title>Playground</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-430:#8C2716;--marker-525:#B53A25;--marker-655:#E66048;--marker-710:#F07A64;--lamp-bulb:#FFEBC8;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);
+  --color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);--color-bubble:var(--neutral-190);--color-on-bubble:var(--neutral-975);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);color-scheme:dark}}
+:root[data-theme="dark"]{--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.wrap{max-width:1240px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2{font-family:var(--f-serif);font-weight:450;letter-spacing:-.015em;text-wrap:balance}
+.sub,.meta{color:var(--color-text-muted)}
+.theme-btn{min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--color-line);background:var(--color-surface);color:var(--color-text);font:500 .875rem var(--f-ui);cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+</style>
+<div class="wrap">
+  <header><h1>Título</h1><p class="sub">Subtítulo</p><p class="meta">Data · Fonte · Superfície</p><button class="theme-btn" id="theme" type="button">Tema: sistema</button></header>
+  <main></main>
+</div>
+<script>
+(()=>{const b=document.getElementById('theme'),o=['system','light','dark'],L={system:'sistema',light:'dia',dark:'noite'};let i=0;try{i=Math.max(0,o.indexOf(localStorage.getItem('theme')||'system'))}catch(e){}
+const ap=()=>{const v=o[i];v==='system'?document.documentElement.removeAttribute('data-theme'):document.documentElement.setAttribute('data-theme',v);b.textContent='Tema: '+L[v];try{localStorage.setItem('theme',v)}catch(e){}};ap();b.onclick=()=>{i=(i+1)%3;ap()}})();
+</script>

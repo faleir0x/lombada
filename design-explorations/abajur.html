@@ -1,0 +1,300 @@
+<!-- Abajur · rodada 4: pacote de ícones, botão de pedir ideia, cor do fantasma no claro · fonte: _brand.md · 2026-11-18 -->
+<meta charset="utf-8">
+<title>Abajur da Lombada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..800&family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho, painel (ícones, cor do fantasma no claro), três telas com o botão de ideia em lugares diferentes, nota final */
+:root{
+  --bg:#F3F3F0;--fg:#1B1B19;--muted:#6A6A64;--line:#DCDCD6;--card:#FBFBF9;
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-display:"Archivo",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121211;--fg:#EDEDE8;--muted:#9A9A93;--line:#2C2C29;--card:#1A1A18;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121211;--fg:#EDEDE8;--muted:#9A9A93;--line:#2C2C29;--card:#1A1A18;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--f-ui)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.wrap{max-width:1300px;margin:0 auto;padding-block:40px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end}
+.top>div{min-width:0;max-width:760px}
+h1{font:800 clamp(30px,5.4vw,50px)/1.02 var(--f-display);font-stretch:112%;letter-spacing:-.03em;margin:0}
+.sub{color:var(--muted);margin:12px 0 0;max-width:66ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.theme-btn{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-weight:500}
+
+.panel{margin-top:40px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:28px 36px;padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--card)}
+@media (max-width:860px){.panel{grid-template-columns:minmax(0,1fr)}}
+.panel h2{margin:0 0 4px;font:750 17px/1.2 var(--f-display);font-stretch:110%}
+.panel p.hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:flex;align-items:center;gap:10px;text-align:left;font-size:14px;font-weight:500}
+.opt[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.opt small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.dotsw{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line)}
+.dotsw b{width:5px;height:8px;border-radius:50%}
+.icotable{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:4px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--bg)}
+.icotable figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 2px;font-size:11px;color:var(--muted);text-align:center}
+.icotable .ico{width:24px;height:24px;color:var(--fg)}
+.lic{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr));gap:56px 28px;margin-top:48px}
+.dir{display:flex;flex-direction:column;gap:14px;min-width:0}
+.dir-head{display:flex;gap:12px;align-items:baseline}
+.letter{flex:none;width:34px;height:34px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font:800 15px var(--f-display);transform:translateY(-3px)}
+.dir-head h3{margin:0;font:750 21px/1.15 var(--f-display);font-stretch:110%}
+.dir-head p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.analysis{margin:0;font-size:14px;color:var(--muted);max-width:62ch}
+.analysis b{color:var(--fg)}
+.phone{position:relative;width:100%;max-width:390px;height:844px;margin:0 auto;border-radius:46px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 40px 70px -40px rgba(0,0,0,.35);isolation:isolate}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tool{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);font-size:13px}
+.note{margin-top:64px;padding:24px 28px;border-radius:22px;border:1px solid var(--line);background:var(--card)}
+.note h2{margin:0;font:750 22px/1.2 var(--f-display);font-stretch:110%}
+.note p{margin:8px 0 0;color:var(--muted);max-width:70ch}
+
+/* mascote (motor em mascote.js) */
+.msvg{width:100%;height:100%;display:block;overflow:visible}
+.ml{fill:var(--m-side)}.mface{fill:var(--m-body)}.mshadow{fill:var(--m-shadow)}
+.mell{fill:var(--m-eye)}.mshine{fill:var(--m-body)}
+.marc,.mbrow{fill:none;stroke:var(--m-eye);stroke-linecap:round}
+.mmouth{fill:var(--m-eye)}
+.mdl{fill:none;stroke:var(--m-side);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mdf{fill:var(--m-side)}
+.mdg{fill:none;stroke:var(--m-eye);stroke-width:1.7;stroke-linecap:round}
+.mdk{fill:none;stroke:var(--m-page);stroke-width:1.6;stroke-linecap:round}
+.mbc{fill:var(--m-cover)}.mbp{fill:var(--m-page)}
+.mbl{fill:none;stroke:var(--m-cover);stroke-width:.8;opacity:.45;stroke-linecap:round}
+.mflip{stroke:var(--m-cover);stroke-width:.4}
+.mzt{fill:var(--m-side);font:700 10px var(--f-ui)}
+
+.ico{width:22px;height:22px;flex:none;display:block}
+
+/* tela · abajur */
+.ab{position:relative;display:flex;flex-direction:column;height:100%;background:var(--x-bg);color:var(--x-ink);font-family:var(--f-ui);transition:background-color .6s,color .6s;--m-page:#FBF6EC}
+.ab-lamp{position:absolute;top:0;left:50%;width:380px;height:600px;transform:translateX(-50%);pointer-events:none;z-index:0}
+.ab-cone{filter:blur(7px);transition:opacity .7s}
+.ab-bulb{transition:fill .5s}
+.ab[data-lit="false"] .ab-cone{opacity:0}
+.ab-motes{position:absolute;left:50%;top:150px;width:240px;height:340px;transform:translateX(-50%);pointer-events:none;z-index:0;transition:opacity .7s}
+.ab[data-lit="false"] .ab-motes{opacity:0}
+.ab-motes i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--x-mote);animation:drift 11s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(18px,-46px)}}
+.ab-pull{position:absolute;z-index:4;top:58px;left:50%;width:76px;height:52px;transform:translateX(-50%);border:0;background:none;border-radius:12px}
+.ab-top{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:18px 10px 0 22px}
+.ab-word{font:400 27px/1 var(--f-serif);letter-spacing:-.01em}
+.ab-icons{display:flex;gap:0}
+.ab-ib{position:relative;width:44px;height:44px;border:0;border-radius:12px;background:none;color:var(--x-ink);display:grid;place-items:center}
+.ab-ib:hover{background:color-mix(in srgb,var(--x-ink) 8%,transparent)}
+.ab-badge{position:absolute;top:4px;right:3px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--x-accent);color:var(--x-accInk);font:700 10.5px/18px var(--f-ui);text-align:center;font-variant-numeric:tabular-nums}
+.ab-scene{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px;min-height:0}
+.ab-m{width:204px;height:204px;border:0;padding:0;background:none;display:block;border-radius:40%}
+button.ab-m{cursor:pointer}
+.bubble{position:relative;max-width:270px;padding:10px 14px 11px;border-radius:14px;background:var(--x-bubble);color:var(--x-bubInk);font:400 15.5px/1.4 var(--f-ui);text-wrap:pretty;transform-origin:50% 100%;margin-bottom:-8px;z-index:2;transition:background-color .6s,color .6s}
+.bubble::after{content:"";position:absolute;width:12px;height:12px;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;background:inherit}
+.bubble.pop{animation:pop .32s cubic-bezier(.2,.9,.3,1.3)}
+.bubble[data-hidden="true"]{opacity:0;transform:scale(.9) translateY(6px);transition:opacity .2s,transform .2s}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.94)}}
+.bubble.list{width:300px;max-width:calc(100% - 28px);padding:12px 8px 6px}
+.bubble.list [data-line]{display:block;padding:0 6px 6px;font-weight:500}
+.sg{display:none}
+.bubble.list .sg{display:block}
+.sg-row{width:100%;min-height:52px;padding:7px 8px;display:flex;align-items:center;gap:10px;border:0;border-radius:10px;background:none;color:inherit;text-align:left}
+.sg-row:hover{background:color-mix(in srgb,var(--x-bubInk) 8%,transparent)}
+.sg-row .ico{width:20px;height:20px;color:var(--x-accent-on-bubble)}
+.sg-row b{display:block;font:500 16px/1.2 var(--f-serif)}
+.sg-row small{display:block;margin-top:2px;font-size:12.5px;line-height:1.25;color:color-mix(in srgb,var(--x-bubInk) 66%,transparent)}
+.sg-foot{display:flex;justify-content:space-between;gap:6px;margin-top:2px;padding-top:4px;border-top:1px solid color-mix(in srgb,var(--x-bubInk) 14%,transparent)}
+.sg-foot button{min-height:40px;padding:0 8px;display:flex;align-items:center;gap:6px;border:0;border-radius:9px;background:none;color:inherit;font-size:13.5px;font-weight:500}
+.sg-foot button:hover{background:color-mix(in srgb,var(--x-bubInk) 8%,transparent)}
+.sg-foot .ico{width:18px;height:18px}
+.ab-hint{position:relative;z-index:2;margin:6px 0 0;font-size:12.5px;color:var(--x-muted);display:flex;align-items:center;gap:6px}
+.ab-hint .ico{width:16px;height:16px}
+.ab-dock{position:relative;z-index:3;padding:8px 14px 22px;display:flex;flex-direction:column;gap:8px}
+.ab-ask{align-self:flex-start;min-height:40px;padding:0 13px 0 10px;display:flex;align-items:center;gap:7px;border:1px solid var(--x-line);border-radius:11px;background:color-mix(in srgb,var(--x-surf) 75%,transparent);color:var(--x-ink);font-size:14px;font-weight:500}
+.ab-ask .ico{width:19px;height:19px;color:var(--x-accent)}
+.ab-form{display:flex;align-items:center;gap:4px;min-height:58px;padding:6px 6px 6px 16px;border-radius:18px;background:var(--x-surf);box-shadow:0 0 0 1px var(--x-line),0 10px 24px -14px rgba(0,0,0,.5);transition:background-color .6s}
+.ab-form.has-ask{padding-left:6px}
+.ab-form:focus-within{box-shadow:0 0 0 2px var(--x-accent),0 10px 24px -14px rgba(0,0,0,.5)}
+.ab-form input{flex:1;min-width:0;border:0;background:none;outline:none;font:400 16.5px var(--f-serif);color:var(--x-ink)}
+.ab-form input::placeholder{color:var(--x-muted)}
+.ab-in-ask{flex:none;width:44px;height:44px;border:0;border-radius:12px;background:none;color:var(--x-accent);display:grid;place-items:center}
+.ab-in-ask:hover{background:color-mix(in srgb,var(--x-ink) 7%,transparent)}
+.ab-send{flex:none;width:46px;height:46px;border:0;border-radius:13px;display:grid;place-items:center;background:var(--x-line);color:var(--x-muted);transition:background-color .2s,color .2s}
+.ab-form[data-ready="true"] .ab-send{background:var(--x-accent);color:var(--x-accInk)}
+@media (prefers-reduced-motion:reduce){.ab-motes i,.bubble.pop{animation:none}.ab,.ab-cone,.bubble{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Abajur, rodada 4</h1>
+      <p class="sub">Grafite e marcador, fantasma, Newsreader e lombada estão fixos. Agora: qual pacote de ícones, onde fica o botão de pedir ideia e de que cor o fantasma fica de dia. A ideia não é sorteio: o fantasma responde com três sugestões e diz por quê.</p>
+      <ul class="meta"><li>18 nov 2026</li><li>Rodada 3 em abajur-r3.html</li><li>Telas a 390 × 844</li></ul>
+    </div>
+    <button class="theme-btn" id="theme" type="button">Tema: sistema</button>
+  </header>
+
+  <section class="panel" aria-label="Escolhas">
+    <div><h2>Ícones</h2><p class="hint">Pacotes prontos, nenhum desenhado por mim. Os três primeiros são estilos do Solar.</p><div class="opts" id="icosets"></div><div class="icotable" id="icotable"></div><p class="lic" id="lic"></p></div>
+    <div><h2>Fantasma de dia</h2><p class="hint">À noite ele é claro. Toque no abajur de uma tela (ou mude o tema) para ver o dia.</p><div class="opts" id="mlight"></div></div>
+  </section>
+
+  <div class="frames" id="frames">
+    <article class="dir" data-s="a">
+      <div class="dir-head"><span class="letter">A</span><div><h3>Dentro do campo</h3><p>Um ícone de ideia à esquerda da busca.</p></div></div>
+      <div class="phone"><div class="ab" data-frame></div></div>
+      <div class="tools"><button class="tool" type="button" data-act="reset">Voltar ao início</button><button class="tool" type="button" data-act="ask">Pedir ideia</button></div>
+      <p class="analysis"><b>A favor:</b> sempre à mão, sem ocupar espaço. <b>Contra:</b> só um ícone; tem gente que não vai entender sem testar.</p>
+    </article>
+    <article class="dir" data-s="b">
+      <div class="dir-head"><span class="letter">B</span><div><h3>Acima do campo</h3><p>Um botão com texto, colado na busca.</p></div></div>
+      <div class="phone"><div class="ab" data-frame></div></div>
+      <div class="tools"><button class="tool" type="button" data-act="reset">Voltar ao início</button><button class="tool" type="button" data-act="ask">Pedir ideia</button></div>
+      <p class="analysis"><b>A favor:</b> o mais claro dos três; diz o que faz. <b>Contra:</b> uma linha a mais embaixo, e mais um botão na tela.</p>
+    </article>
+    <article class="dir" data-s="c">
+      <div class="dir-head"><span class="letter">C</span><div><h3>No fantasma</h3><p>Tocar no mascote pede a ideia.</p></div></div>
+      <div class="phone"><div class="ab" data-frame></div></div>
+      <div class="tools"><button class="tool" type="button" data-act="reset">Voltar ao início</button><button class="tool" type="button" data-act="ask">Pedir ideia</button></div>
+      <p class="analysis"><b>A favor:</b> o mascote vira o botão; nenhum elemento extra. <b>Contra:</b> depende da dica embaixo dele; quando ela some, a função fica escondida.</p>
+    </article>
+  </div>
+
+  <section class="note" aria-labelledby="h-n">
+    <h2 id="h-n">Depois desta rodada</h2>
+    <p>Fechando ícones, botão e cor do fantasma, escrevo o DESIGN.md com tudo o que já foi decidido e sigo para onboarding, estante vazia e erro. A troca de mascote fica guardada para a área do usuário (o ícone de perfil no topo já aponta para ela).</p>
+  </section>
+</div>
+
+<script src="mascote.js"></script>
+<script src="icones.js"></script>
+<script>
+(()=>{
+const {Mascot}=window.Mascote,SETS=window.ICONSETS;
+const hx=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))};
+const toHex=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mix=(a,b,t)=>{const A=hx(a),B=hx(b);return toHex(A.map((v,i)=>v+(B[i]-v)*t))};
+const P={
+  d:{bg:'#151413',surf:'#201F1D',ink:'#ECE7DD',muted:'#9A948A',line:'#302E2B',accent:'#E7604A',accInk:'#1C0A06',bubble:'#ECE7DD',bubInk:'#151413','accent-on-bubble':'#B53A22',shade:'#34312D',bulb:'#FFEBC8',glow:'rgba(255,232,196,.17)',mote:'rgba(255,240,215,.5)'},
+  l:{bg:'#ECEAE5',surf:'#F8F7F4',ink:'#1B1A18',muted:'#64605A',line:'#D6D2CA',accent:'#B53A22',accInk:'#FFF6F2',bubble:'#1B1A18',bubInk:'#F8F7F4','accent-on-bubble':'#F07A63',shade:'#34312D',bulb:'#D2CEC6',glow:'rgba(0,0,0,0)',mote:'rgba(0,0,0,0)'}
+};
+const MLIGHT={
+  lencol:{n:'Lençol',d:'branco, como fantasma de desenho',c:{body:'#FFFFFF',eye:'#1B1A18',side:'#C8C2B6'}},
+  tinta:{n:'Tinta',d:'escuro, quase preto',c:{body:'#1B1A18',eye:'#F8F7F4',side:mix('#1B1A18','#ECEAE5',.38)}},
+  marcador:{n:'Marcador',d:'o vermelho da paleta',c:{body:'#D5523B',eye:'#141412',side:'#8C2716'}}
+};
+const ISETS=[['solar-broken','Solar Broken','traço interrompido'],['solar-linedt','Solar Line Duotone','linha com tom'],['solar-bolddt','Solar Bold Duotone','cheio com tom'],['mingcute','MingCute','linha arredondada'],['hugeicons','Hugeicons','linha fina']];
+const LIC={'solar-broken':'Solar, de 480 Design, licença CC BY 4.0: exige crédito em algum lugar do app (tela Sobre, por exemplo).','solar-linedt':'Solar, de 480 Design, licença CC BY 4.0: exige crédito em algum lugar do app (tela Sobre, por exemplo).','solar-bolddt':'Solar, de 480 Design, licença CC BY 4.0: exige crédito em algum lugar do app (tela Sobre, por exemplo).','mingcute':'MingCute, licença Apache 2.0: uso livre, manter o aviso de licença no código.','hugeicons':'Hugeicons (versão gratuita), licença MIT: uso livre, manter o aviso de licença no código.'};
+const ROLES=[['lamp','Dia e noite'],['shelf','Estante'],['user','Perfil'],['send','Buscar'],['idea','Pedir ideia'],['refresh','Outras'],['close','Fechar'],['book','Sugestão'],['down','Abrir']];
+const st={ico:'hugeicons',ml:'marcador'};
+const icon=r=>{const i=SETS[st.ico][r];return`<svg class="ico" viewBox="0 0 ${i.w} ${i.h}" aria-hidden="true">${i.b}</svg>`};
+const renderIcons=()=>document.querySelectorAll('[data-i]').forEach(el=>el.innerHTML=icon(el.dataset.i));
+const I=r=>`<span data-i="${r}" style="display:contents"></span>`;
+
+const night=()=>{const h=new Date().getHours();return h>=18||h<5};
+const SUG=[
+  {h:()=>night()?'Pra hoje à noite, eu iria de:':'Pra hoje, eu iria de:',it:[['Igual Torto Arado','Você curtiu esse'],['Curto e devastador','Cabe numa noite'],['Me faz rir','Pra equilibrar o resto']]},
+  {h:()=>'Se quiser fugir do óbvio:',it:[['Fantasia sem 800 páginas','Mundo novo sem maratona'],['Clássico que não dá sono','Prometo'],['Pra ler numa sentada','Até 150 páginas']]}
+];
+const LINES={idle:'Largou mais um no capítulo 3?',idleC:'Sem ideia? Toca em mim.',listen:'Hm. Continua.',think:'Deixa eu ver o que combina.',read:'Lendo as orelhas.',happy:'Separei dez. Alguns vão doer.',empty:'Escreve qualquer coisa, ou me pede uma ideia.',wake:'Opa. Tô aqui.',night:'Agora sim. Clima de leitura.',day:'Lendo de dia? Respeito.',profile:'Em breve dá pra me trocar por outro mascote. Mas por quê?'};
+
+const root=document.documentElement,dq=matchMedia('(prefers-color-scheme: dark)');
+const pageMode=()=>root.dataset.theme||(dq.matches?'dark':'light');
+const F=[];
+function paint(fr){
+  const mode=fr.mode||pageMode(),t=mode==='dark'?P.d:P.l,el=fr.el;
+  for(const k in t)el.style.setProperty('--x-'+k,t[k]);
+  const m=mode==='dark'?{body:P.d.ink,eye:P.d.bg,side:mix(P.d.ink,P.d.bg,.45)}:MLIGHT[st.ml].c;
+  el.style.setProperty('--m-body',m.body);el.style.setProperty('--m-eye',m.eye);el.style.setProperty('--m-side',m.side);el.style.setProperty('--m-cover',t.accent);
+  el.style.setProperty('--m-shadow',mode==='dark'?'rgba(0,0,0,.4)':'rgba(20,20,30,.14)');
+  el.dataset.lit=mode==='dark';
+  fr.lampBtn.setAttribute('aria-label',mode==='dark'?'Apagar o abajur (modo dia)':'Acender o abajur (modo noite)');
+}
+const paintAll=()=>F.forEach(paint);
+
+function build(art){
+  const s=art.dataset.s,el=art.querySelector('[data-frame]');
+  const mascot=s==='c'?`<button class="ab-m" type="button" data-mascot data-ask aria-label="Pedir uma ideia ao fantasma"></button>`:`<div class="ab-m" data-mascot></div>`;
+  const hint=s==='c'?`<p class="ab-hint" data-hint>${I('idea')}Toque no fantasma para pedir uma ideia</p>`:'';
+  const above=s==='b'?`<button class="ab-ask" type="button" data-ask>${I('idea')}Me dá uma ideia</button>`:'';
+  const inAsk=s==='a'?`<button class="ab-in-ask" type="button" data-ask aria-label="Pedir uma ideia">${I('idea')}</button>`:'';
+  el.innerHTML=`
+    <svg class="ab-lamp" viewBox="0 0 380 600" aria-hidden="true"><defs><linearGradient id="cone${s}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--x-glow)"/><stop offset=".7" stop-opacity=".4" style="stop-color:var(--x-glow)"/><stop offset="1" stop-opacity="0" style="stop-color:var(--x-glow)"/></linearGradient></defs>
+      <path class="ab-cone" d="M146 112L234 112L360 600L20 600Z" fill="url(#cone${s})"/>
+      <line x1="190" y1="0" x2="190" y2="64" style="stroke:var(--x-shade)" stroke-width="2"/><rect x="185" y="58" width="10" height="9" rx="2" style="fill:var(--x-shade)"/>
+      <path d="M164 66C170 64 210 64 216 66L242 110C224 116 156 116 138 110Z" style="fill:var(--x-shade)"/>
+      <ellipse class="ab-bulb" cx="190" cy="111" rx="46" ry="4.5" style="fill:var(--x-bulb)"/></svg>
+    <div class="ab-motes" aria-hidden="true"><i style="left:22%;top:20%"></i><i style="left:64%;top:34%;animation-duration:13s"></i><i style="left:40%;top:58%;animation-duration:9s"></i><i style="left:76%;top:70%;animation-duration:15s"></i><i style="left:12%;top:76%;animation-duration:12s"></i><i style="left:52%;top:12%;animation-duration:10s"></i></div>
+    <button class="ab-pull" type="button" data-lamp tabindex="-1" aria-hidden="true"></button>
+    <div class="ab-top"><span class="ab-word">lombada</span><div class="ab-icons">
+      <button class="ab-ib" type="button" data-lamp data-lampbtn>${I('lamp')}</button>
+      <button class="ab-ib" type="button" aria-label="Estante, 3 livros">${I('shelf')}<span class="ab-badge">3</span></button>
+      <button class="ab-ib" type="button" aria-label="Perfil" data-profile>${I('user')}</button></div></div>
+    <div class="ab-scene">
+      <div class="bubble" data-bubble aria-live="polite"><span data-line></span>
+        <div class="sg" data-sg><div data-rows></div><div class="sg-foot"><button type="button" data-more>${I('refresh')}Outras</button><button type="button" data-close>${I('close')}Fechar</button></div></div></div>
+      ${mascot}${hint}</div>
+    <div class="ab-dock">${above}<form class="ab-form${inAsk?' has-ask':''}" data-form data-ready="false">${inAsk}<input id="in-${s}" type="text" autocomplete="off" placeholder="Conta seu humor, ou um livro" aria-label="Conta seu humor, ou um livro que amou"><button class="ab-send" type="submit" aria-label="Buscar">${I('send')}</button></form></div>`;
+  const q=x=>el.querySelector(x);
+  const fr={el,art,s,lampBtn:q('[data-lampbtn]'),mode:null};
+  const m=fr.m=new Mascot(q('[data-mascot]'),'fantasma');
+  const input=q('input'),form=q('form'),bub=q('[data-bubble]'),line=q('[data-line]'),rows=q('[data-rows]'),hintEl=q('[data-hint]');
+  m.attn=input;let busy=false,timers=[],last=performance.now(),sg=0,open=false;
+  const idleKey=s==='c'?'idleC':'idle';
+  const pop=()=>{bub.dataset.hidden='false';bub.classList.remove('pop');void bub.offsetWidth;bub.classList.add('pop');m.talk()};
+  const say=k=>{open=false;bub.classList.remove('list');line.textContent=LINES[k];pop()};
+  const clear=()=>{timers.forEach(clearTimeout);timers=[]};
+  const showSug=()=>{const S=SUG[sg%SUG.length];open=true;bub.classList.add('list');line.textContent=S.h();
+    rows.innerHTML=S.it.map(([t,w])=>`<button class="sg-row" type="button" data-pick="${t}">${I('book')}<span><b>${t}</b><small>${w}</small></span></button>`).join('');renderIcons();pop();m.setMood('happy');timers.push(setTimeout(()=>{if(open&&!busy)m.setMood('idle')},1500))};
+  const ask=()=>{touch();if(busy)return;clear();if(hintEl)hintEl.hidden=true;m.setMood('read');say('think');timers.push(setTimeout(()=>{if(!busy)showSug()},900))};
+  const touch=()=>{last=performance.now();if(m.mood==='sleep'&&!busy){m.setMood('surprise');say('wake');clear();timers.push(setTimeout(()=>{if(!busy)m.setMood(document.activeElement===input?'listen':'idle')},1300))}};
+  const ready=()=>form.dataset.ready=input.value.trim()?'true':'false';
+  const reset=()=>{clear();busy=false;input.value='';ready();sg=0;if(hintEl)hintEl.hidden=false;m.setMood('idle');say(idleKey);last=performance.now()};
+  const go=()=>{touch();if(busy)return;
+    if(!input.value.trim()){m.setMood('doubt');say('empty');clear();timers.push(setTimeout(()=>{if(!busy){const f=document.activeElement===input;m.setMood(f?'listen':'idle');say(f?'listen':idleKey)}},2800));return}
+    busy=true;input.blur();m.setMood('read');say('read');clear();
+    timers.push(setTimeout(()=>{m.setMood('happy');say('happy')},2600));timers.push(setTimeout(reset,6000))};
+  say(idleKey);bub.classList.remove('pop');
+  form.addEventListener('submit',e=>{e.preventDefault();go()});
+  input.addEventListener('focus',()=>{touch();if(!busy&&!open){m.setMood('listen');say('listen')}});
+  input.addEventListener('blur',()=>{if(!busy&&!input.value&&!open){m.setMood('idle');say(idleKey)}});
+  input.addEventListener('input',()=>{touch();ready();if(open){m.setMood('listen');say('listen')}});
+  el.addEventListener('pointerdown',touch);
+  el.addEventListener('pointermove',()=>{if(m.mood==='sleep'&&performance.now()-last>1500)touch()});
+  el.addEventListener('click',e=>{
+    const p=e.target.closest('[data-pick]');if(p){input.value=p.dataset.pick;ready();go();return}
+    if(e.target.closest('[data-more]')){touch();sg++;showSug();return}
+    if(e.target.closest('[data-close]')){touch();m.setMood('idle');say(idleKey);return}
+    if(e.target.closest('[data-ask]')){ask();return}
+    if(e.target.closest('[data-profile]')){touch();if(busy)return;clear();m.setMood('doubt');say('profile');timers.push(setTimeout(()=>{if(!busy)m.setMood('idle')},2400));return}
+    if(e.target.closest('[data-lamp]')){touch();if(busy)return;const cur=el.dataset.lit==='true';fr.mode=cur?'light':'dark';paint(fr);m.setMood('surprise');say(cur?'day':'night');clear();timers.push(setTimeout(()=>{if(!busy)m.setMood('idle')},1400));return}
+  });
+  setInterval(()=>{if(!busy&&!open&&m.mood==='idle'&&document.activeElement!==input&&performance.now()-last>20000){clear();m.setMood('sleep');bub.dataset.hidden='true'}},1000);
+  fr.reset=reset;fr.ask=ask;
+  art.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>b.dataset.act==='reset'?reset():ask());
+  return fr;
+}
+document.querySelectorAll('.dir').forEach(a=>F.push(build(a)));
+
+function opts(id,list,key,render,after){
+  const box=document.getElementById(id);
+  list.forEach(([k,...rest])=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed',st[key]===k);b.innerHTML=render(k,...rest);
+    b.onclick=()=>{st[key]=k;box.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));after&&after(k)};box.appendChild(b)});
+}
+const table=document.getElementById('icotable');
+table.innerHTML=ROLES.map(([r,l])=>`<figure>${I(r)}<figcaption>${l}</figcaption></figure>`).join('');
+const lic=()=>document.getElementById('lic').textContent=LIC[st.ico];
+opts('icosets',ISETS,'ico',(k,n,d)=>`<span>${n}<small>${d}</small></span>`,()=>{renderIcons();lic()});
+opts('mlight',Object.entries(MLIGHT).map(([k,v])=>[k,v.n,v.d]),'ml',(k,n,d)=>`<span class="dotsw" style="background:${MLIGHT[k].c.body}"><b style="background:${MLIGHT[k].c.eye}"></b></span><span>${n}<small>${d}</small></span>`,paintAll);
+renderIcons();lic();
+
+const tb=document.getElementById('theme'),O=['system','light','dark'],L={system:'sistema',light:'claro',dark:'escuro'};let ti=0;
+try{ti=Math.max(0,O.indexOf(localStorage.getItem('theme')||'system'))}catch(e){}
+const ap=()=>{const v=O[ti];v==='system'?delete root.dataset.theme:root.dataset.theme=v;tb.textContent='Tema: '+L[v];try{localStorage.setItem('theme',v)}catch(e){}F.forEach(fr=>fr.mode=null);paintAll()};
+ap();tb.onclick=()=>{ti=(ti+1)%3;ap()};dq.addEventListener('change',paintAll);
+})();
+</script>

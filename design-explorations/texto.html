@@ -1,0 +1,136 @@
+<!-- lombada · fase 7: texto · versões das falas e do onboarding · fonte: DESIGN.md, skills petergyang/no-ai-slop e hardikpandya/stop-slop · 2026-11-18 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Texto da Lombada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho; cinco blocos, cada um com as versões lado a lado no componente real e a contagem de linhas; resumo das escolhas no fim */
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-525:#B53A25;--marker-655:#E66048;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);
+  --color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);--color-bubble:var(--neutral-190);--color-on-bubble:var(--neutral-975);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);color-scheme:dark}}
+:root[data-theme="dark"]{--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:36px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:space-between;align-items:flex-end}
+.top>div{min-width:0;max-width:740px}
+h1{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em}
+.sub{margin:8px 0 0;color:var(--color-text-muted);font-size:.9375rem;max-width:70ch}
+.tbtn{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--color-line);background:var(--color-surface);font-weight:500;font-size:.875rem}
+.block{margin-top:52px}
+.block h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.why{margin:4px 0 16px;font-size:.875rem;color:var(--color-text-muted);max-width:70ch}
+.why b{color:var(--color-text);font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.opt{display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--color-line);border-radius:16px;background:var(--color-surface);text-align:left;min-width:0}
+.opt[aria-pressed="true"]{border-color:var(--color-text);box-shadow:inset 0 0 0 1px var(--color-text)}
+.tag{display:flex;gap:8px;align-items:center;font-size:.8125rem;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+.tag b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--color-text);color:var(--color-bg);font-size:.75rem}
+.tag em{font-style:normal;padding:1px 7px;border-radius:999px;border:1px solid var(--color-line)}
+.tag em.rec{border:0;background:var(--color-accent);color:var(--color-on-accent)}
+.note{font-size:.8125rem;color:var(--color-text-muted);margin:0}
+.bubble{position:relative;max-width:var(--mw,270px);padding:10px 14px 11px;border-radius:14px;background:var(--color-bubble);color:var(--color-on-bubble);font:400 .9375rem/1.4 var(--f-ui);text-wrap:pretty}
+.bubble::after{content:"";position:absolute;width:12px;height:12px;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;background:inherit}
+.onb{width:100%;max-width:334px}
+.onb h3{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em;text-wrap:balance}
+.onb p{margin:10px 0 0;color:var(--color-text-muted);font-size:1rem;line-height:1.5;text-wrap:pretty}
+.empty{width:100%;max-width:334px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.empty h3{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.empty p{margin:0;color:var(--color-text-muted);max-width:30ch}
+.empty .btn{min-height:44px;padding:0 18px;display:inline-grid;place-items:center;border-radius:14px;background:var(--color-accent);color:var(--color-on-accent);font-size:.875rem;font-weight:600}
+.summary{margin-top:56px;padding:20px 24px;border:1px solid var(--color-line);border-radius:18px;background:var(--color-surface)}
+.summary h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.summary p{margin:6px 0 0;color:var(--color-text-muted)}
+.summary output{display:block;margin-top:10px;font-size:1.125rem;font-weight:600;font-variant-numeric:tabular-nums}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Texto da interface</h1>
+      <p class="sub">Fase 7. O texto fixo já foi revisado (botões, rótulos, nomes para leitor de tela). Aqui ficam as falas que dão a cara do fantasma e as que tinham problema, cada versão no componente de verdade, na largura e no tamanho reais. Marque uma por bloco.</p>
+    </div>
+    <button class="tbtn" id="theme" type="button">Tema: sistema</button>
+  </header>
+  <div id="blocks"></div>
+  <section class="summary" aria-live="polite"><h2>Suas escolhas</h2><p>Escolhido em 2026-11-18 e já aplicado no protótipo: 1A · 2B · 3B · 4B · 5B. A linha abaixo muda se você marcar outra versão.</p><output id="sum"></output></section>
+  <section class="block" aria-labelledby="h-bank"><h2 id="h-bank">Banco de falas do fantasma</h2><p class="why">Cada situação tem várias falas; ele sorteia sem repetir a anterior. Na primeira visita, a primeira fala é sempre a 1.1. <b>Já no protótipo:</b> todas; de 9 a 15 são as do baralho. Para tirar ou trocar alguma, me diga o número (ex.: "tira a 4.2").</p><div id="bank"></div></section>
+</div>
+
+<script>
+(()=>{
+document.documentElement.lang='pt-BR';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const B=[
+  {k:'1',t:'Primeira fala da home',why:'<b>Onde:</b> balão do fantasma ao abrir o app. <b>Trabalho:</b> fazer a pessoa se reconhecer e querer escrever.',kind:'bubble',mw:270,opts:[
+    {t:'Largou mais um no capítulo 3?',n:'atual; provoca com um detalhe que todo leitor em ressaca conhece',cur:1,rec:1},
+    {t:'Terminou um livro bom e nada mais desce?',n:'mais direto sobre a ressaca; menos específico'},
+    {t:'Qual foi o último livro que te pegou?',n:'convida a escrever um título; perde a provocação'},
+    {t:'Tá difícil engatar um livro?',n:'mais leve e curto; genérico'}]},
+  {k:'2',t:'Resultado da busca',why:'<b>Onde:</b> balão quando os livros chegam. <b>Trabalho:</b> dizer que deu certo e levar ao baralho.',kind:'bubble',mw:270,opts:[
+    {t:'Separei dez. Alguns vão doer.',n:'atual; tem personalidade, mas não diz o que fazer',cur:1},
+    {t:'Separei dez. Arrasta pra direita o que te pegar.',n:'mantém a voz e ensina o gesto do baralho',rec:1},
+    {t:'Achei dez. Começa pelo de cima.',n:'mais seco e prático'}]},
+  {k:'3',t:'Erro de rede',why:'<b>Problema:</b> "a estante caiu" usa a palavra do lugar onde ficam os seus livros; dá a entender que você perdeu a estante. Erro precisa dizer o que aconteceu e o que fazer.',kind:'bubble',mw:270,opts:[
+    {t:'A estante caiu da parede. Tenta de novo?',n:'atual; ambíguo',cur:1},
+    {t:'Perdi a conexão no meio da busca. Tenta de novo?',n:'diz o que houve, sem culpar você',rec:1},
+    {t:'A internet caiu antes de eu achar os livros. Tenta de novo?',n:'mais concreto; mais longo'},
+    {t:'Não consegui buscar agora. Confere a internet e tenta de novo.',n:'o mais claro sobre o que fazer; menos voz'}]},
+  {k:'4',t:'Onboarding, primeira tela',why:'<b>Onde:</b> título e linha da primeira visita. <b>Trabalho:</b> nomear o problema e dizer o que o app faz, em duas frases.',kind:'onb',opts:[
+    {t:'Acabou um livro bom e nada mais presta?',b:'Isso se chama ressaca literária. Eu te ajudo a sair dela.',n:'atual',cur:1},
+    {t:'Terminou um livro e nada mais te prende?',b:'É ressaca literária. Me conta o que você quer sentir e eu acho o próximo.',n:'diz como o app ajuda, não só que ajuda',rec:1},
+    {t:'Depois daquele livro, nada presta?',b:'Me conta o que você quer sentir, ou o último livro que amou. Eu acho o próximo.',n:'pula o nome do problema e vai direto ao que fazer'}]},
+  {k:'5',t:'Estante vazia',why:'<b>Problema:</b> o balão e o título dizem a mesma coisa ("Nada por aqui ainda." e "Estante vazia, por enquanto.").',kind:'empty',opts:[
+    {b:'Nada por aqui ainda.',t:'Estante vazia, por enquanto.',n:'atual; repete',cur:1},
+    {b:'Tô esperando o primeiro.',t:'Estante vazia, por enquanto.',n:'o fantasma comenta, o título informa',rec:1},
+    {b:'Espaço é o que não falta.',t:'Nenhum livro ainda.',n:'mais provocador'},
+    {b:'Nada por aqui ainda.',t:'',n:'tira o título; só a fala, a explicação e o botão'}]}
+];
+const pick={};const box=document.getElementById('blocks'),sum=document.getElementById('sum');
+B.forEach(blk=>{
+  const s=document.createElement('section');s.className='block';s.innerHTML=`<h2>${blk.k} · ${blk.t}</h2><p class="why">${blk.why}</p><div class="opts" role="group" aria-label="${blk.t}"></div>`;box.appendChild(s);
+  const g=s.querySelector('.opts');
+  blk.opts.forEach((o,i)=>{const L='ABCD'[i];const b=document.createElement('button');b.type='button';b.className='opt';
+    const sample=blk.kind==='bubble'?`<div class="bubble" style="--mw:${blk.mw}px" data-measure>${esc(o.t)}</div>`:blk.kind==='onb'?`<div class="onb"><h3 data-measure>${esc(o.t)}</h3><p>${esc(o.b)}</p></div>`:`<div class="empty"><div class="bubble" style="--mw:210px" data-measure>${esc(o.b)}</div>${o.t?`<h3>${esc(o.t)}</h3>`:''}<p>Livro que você arrastar pra direita vem morar aqui.</p><span class="btn">Buscar um livro</span></div>`;
+    b.innerHTML=`<span class="tag"><b>${L}</b>${o.cur?'<em>atual</em>':''}${o.rec?'<em class="rec">recomendo</em>':''}<span data-lines></span></span>${sample}<p class="note">${esc(o.n)}</p>`;
+    b.onclick=()=>{pick[blk.k]=L;g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));upd()};
+    b.setAttribute('aria-pressed','false');if(o.rec){pick[blk.k]=L;b.setAttribute('aria-pressed','true')}
+    g.appendChild(b)});
+});
+const BANK=[
+  ['Abrindo o app',null,['Largou mais um no capítulo 3?','Terminou um bom e nada mais desce?','Qual foi o último que te pegou de verdade?','Marcador no mesmo lugar faz uma semana?','Me fala um livro que você amou. Eu faço o resto.','Bora achar o próximo antes que a ressaca piore?']],
+  ['Ouvindo (campo em foco)',null,['Hm. Continua.','Tô ouvindo.','Vai, mais detalhe.','Isso eu consigo trabalhar.']],
+  ['Parado há 10 s','uma vez por pausa',['Sem ideia? Toca no ícone de ideia, aqui embaixo.','Pode ser só um humor. Tipo "quero chorar no ônibus".','Vale título, autor ou um sentimento meio vago.','Um livro que você amou já me diz muita coisa.']],
+  ['Prestes a dormir (17 s)','dorme aos 20 s',['Vou só descansar a vista.','Me acorda quando decidir.','Fecho um olho e fico de guarda.']],
+  ['Acordando',null,['Opa. Tô aqui.','Não tava dormindo. Tava lendo de olho fechado.','Voltei. Onde a gente parou?']],
+  ['Procurando livros',null,['Lendo as orelhas.','Folheando umas trinta orelhas aqui.','Deixa eu ver a estante dos fundos.','Separando os que valem a pena.']],
+  ['Busca demorando (2 s)',null,['Esse tá demorando. Deve ser coisa boa.','Quase. Achei um que eu gostei.','Mais um pouquinho, tô no último corredor.']],
+  ['Resultado',null,['Separei dez. Arrasta pra direita o que te pegar.','Dez na mesa. Arrasta pra direita o que te pegar.','Pronto, dez. Direita pra guardar, esquerda pra passar.']],
+  ['Curtiu (direita)','baralho',['Boa. Pra estante.','Esse eu também guardaria.','Sabia que esse ia te pegar.','Anotado. Vem mais desse tipo.']],
+  ['Rejeitou (esquerda)','baralho',['Justo. Anotado.','Esse não. Tô aprendendo.','Tudo bem, eu também não ia ler.','Próximo. Já entendi o tipo.']],
+  ['Três rejeições seguidas','baralho',['Três seguidos? Me conta de novo o que você quer.']],
+  ['Já li e amei','baralho',['Já leu e amou? A gente tem gosto parecido.','Ótimo sinal. Vou atrás de outros assim.']],
+  ['Já li e não gostei','baralho',['Já leu e não curtiu? Esse tipo sai da lista.']],
+  ['Perguntando se já leu','baralho',['Já leu esse? O que você achou?','Esse você já conhece? Gostou ou não?','Já leu? Coração se gostou, xis se não.','Leitor experiente. E aí, valeu a pena?','Já passou por esse? Me conta como foi.']],
+  ['Desistiu da pergunta','baralho',['Beleza, fica pra depois.','Ah, ainda não leu? Melhor ainda.']]
+];
+const bank=document.getElementById('bank');
+bank.innerHTML=BANK.map(([t,n,ls],i)=>`<div class="block" style="margin-top:28px"><h2 style="font-size:1.0625rem">${i+1} · ${esc(t)}${n?` <span style="font:400 .8125rem var(--f-ui);color:var(--color-text-muted)">(${esc(n)})</span>`:''}</h2><div style="display:flex;flex-wrap:wrap;gap:22px 14px;margin-top:12px">${ls.map((l,j)=>`<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="tag"><b style="width:auto;padding:0 7px;border-radius:12px">${i+1}.${j+1}</b></span><div class="bubble" style="--mw:270px">${esc(l)}</div></div>`).join('')}</div></div>`).join('');
+function upd(){sum.textContent=B.map(b=>b.k+(pick[b.k]||'?')).join(' · ')}
+upd();
+function measure(){document.querySelectorAll('.opt').forEach(o=>{const m=o.querySelector('[data-measure]'),cs=getComputedStyle(m),lh=parseFloat(cs.lineHeight),pad=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);const n=Math.round((m.getBoundingClientRect().height-pad)/lh);o.querySelector('[data-lines]').textContent=`${n} ${n===1?'linha':'linhas'} · ${Math.round(m.getBoundingClientRect().width)}px`})}
+(document.fonts?document.fonts.ready:Promise.resolve()).then(measure);addEventListener('resize',measure);
+const tb=document.getElementById('theme'),TL={system:'sistema',light:'dia',dark:'noite'};let pref='system';
+tb.onclick=()=>{pref={system:'light',light:'dark',dark:'system'}[pref];pref==='system'?delete document.documentElement.dataset.theme:document.documentElement.dataset.theme=pref;tb.textContent='Tema: '+TL[pref]};
+})();
+</script>

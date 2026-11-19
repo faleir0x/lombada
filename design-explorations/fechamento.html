@@ -1,0 +1,257 @@
+<!-- lombada · textos das telas novas e estados que faltam (sem resultado, sem conexão no baralho, capa carregando) · fonte: DESIGN.md · 2026-11-19 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Textos e estados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho com tema; bloco de textos (cartões com 3 versões cada); três blocos de estados com 3 celulares cada */
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-430:#8C2716;--marker-525:#B53A25;--marker-610:#D5523B;--marker-655:#E66048;--marker-710:#F07A64;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);
+  --color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);--color-bubble:var(--neutral-190);--color-on-bubble:var(--neutral-975);--color-accent-on-bubble:var(--marker-710);
+  --color-slot:var(--neutral-865);
+  --mascot-body:var(--marker-610);--mascot-eye:var(--neutral-190);--mascot-side:var(--marker-430);--mascot-shadow:rgba(20,20,30,.14);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+  --radius-sm:10px;--radius-md:12px;--radius-lg:14px;--radius-xl:18px;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --shadow-float:0 0 0 1px var(--color-line),0 10px 24px -14px rgba(0,0,0,.5);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);
+  --color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);--color-accent-on-bubble:var(--marker-525);
+  --color-slot:var(--neutral-300);
+  --mascot-body:var(--neutral-935);--mascot-eye:var(--neutral-190);--mascot-side:var(--neutral-670);--mascot-shadow:rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);
+  --color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);--color-bubble:var(--neutral-935);--color-on-bubble:var(--neutral-190);--color-accent-on-bubble:var(--marker-525);
+  --color-slot:var(--neutral-300);
+  --mascot-body:var(--neutral-935);--mascot-eye:var(--neutral-190);--mascot-side:var(--neutral-670);--mascot-shadow:rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.ico{width:22px;height:22px;display:block;flex:none;pointer-events:none}
+
+.wrap{max-width:1290px;margin:0 auto;padding-block:36px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:space-between;align-items:flex-end}
+.top>div{min-width:0;max-width:760px}
+h1{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em}
+.sub{margin:8px 0 0;color:var(--color-text-muted);font-size:.9375rem;max-width:72ch}
+.tbtn{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--color-line);background:var(--color-surface);font-weight:500;font-size:.875rem}
+.blk{margin-top:56px}
+.blk>h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.why{margin:4px 0 0;font-size:.875rem;color:var(--color-text-muted);max-width:72ch}
+
+/* textos */
+.tx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:12px;margin-top:20px}
+.tc{padding:16px 16px 12px;border:1px solid var(--color-line);border-radius:var(--radius-xl);background:var(--color-surface)}
+.tc h3{margin:0;font-size:.9375rem;font-weight:600}
+.tc h3 i{font-style:normal;display:inline-grid;place-items:center;min-width:26px;height:22px;margin-right:8px;padding:0 6px;border-radius:11px;background:var(--color-text);color:var(--color-bg);font-size:.75rem;font-weight:700;vertical-align:1px}
+.tc>p{margin:4px 0 10px;font-size:.8125rem;color:var(--color-text-muted)}
+.tc ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.tc li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:baseline;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-bg);font-size:.9375rem;line-height:1.4}
+.tc li b{font-size:.75rem;color:var(--color-text-muted)}
+.tc li em{font-style:normal;font-weight:500;font-size:.6875rem;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--color-accent);color:var(--color-on-accent);white-space:nowrap}
+.tc li small{display:block;font-size:.75rem;color:var(--color-text-muted)}
+
+/* celulares */
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr));gap:36px 24px;margin-top:20px}
+.opt{width:100%;max-width:390px;min-width:0;justify-self:center}
+.cap{margin:0 0 12px;min-height:66px}
+.cap b{font-size:.9375rem;font-weight:600}
+.cap b i{font-style:normal;display:inline-grid;place-items:center;width:22px;height:22px;margin-right:8px;border-radius:50%;background:var(--color-text);color:var(--color-bg);font-size:.75rem;font-weight:700;vertical-align:1px}
+.cap em{font-style:normal;font-weight:500;font-size:.6875rem;margin-left:8px;padding:2px 7px;border-radius:999px;background:var(--color-accent);color:var(--color-on-accent);vertical-align:2px}
+.cap span{display:block;margin-top:2px;font-size:.8125rem;color:var(--color-text-muted)}
+.phone{position:relative;width:100%;height:760px;border-radius:40px;overflow:hidden;background:var(--color-bg);box-shadow:0 0 0 1px var(--color-line),0 40px 70px -40px rgba(0,0,0,.35);isolation:isolate;display:flex;flex-direction:column;
+  --m-body:var(--mascot-body);--m-eye:var(--mascot-eye);--m-side:var(--mascot-side);--m-cover:var(--color-accent);--m-page:var(--neutral-975);--m-shadow:var(--mascot-shadow)}
+.replay{margin-top:10px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--color-line);background:var(--color-surface);font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.replay .ico{width:18px;height:18px}
+
+/* mascote */
+.msvg{width:100%;height:100%;display:block;overflow:visible}
+.ml{fill:var(--m-side)}.mface{fill:var(--m-body)}.mshadow{fill:var(--m-shadow)}
+.mell{fill:var(--m-eye)}.mshine{fill:var(--m-body)}
+.marc,.mbrow{fill:none;stroke:var(--m-eye);stroke-linecap:round}
+.mmouth{fill:var(--m-eye)}
+.mdl{fill:none;stroke:var(--m-side);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mdf{fill:var(--m-side)}
+.mdg{fill:none;stroke:var(--m-eye);stroke-width:1.7;stroke-linecap:round}
+.mdk{fill:none;stroke:var(--m-page);stroke-width:1.6;stroke-linecap:round}
+.mbc{fill:var(--m-cover)}.mbp{fill:var(--m-page)}
+.mbl{fill:none;stroke:var(--m-cover);stroke-width:.8;opacity:.45;stroke-linecap:round}
+.mflip{stroke:var(--m-cover);stroke-width:.4}
+.mzt{fill:var(--m-side);font:700 10px var(--f-ui)}
+
+/* home */
+.ib{width:44px;height:44px;flex:none;border:0;border-radius:var(--radius-md);background:none;color:var(--color-text);display:grid;place-items:center;position:relative}
+.h-top{display:flex;align-items:center;justify-content:space-between;padding:18px 10px 0 22px}
+.h-word{font:400 1.6875rem/1 var(--f-serif);letter-spacing:-.01em}
+.h-icons{display:flex}
+.h-scene{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;padding:0 16px}
+.h-m{width:170px;height:170px}
+.bubble{position:relative;z-index:2;max-width:270px;margin-bottom:-6px;padding:10px 14px 11px;border-radius:var(--radius-lg);background:var(--color-bubble);color:var(--color-on-bubble);font-size:.9375rem;line-height:1.4;text-wrap:pretty}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-5px;width:12px;height:12px;margin-left:-6px;transform:rotate(45deg);border-radius:0 0 3px 0;background:inherit}
+.bubble.wide{max-width:320px;width:100%}
+.b-line{margin:0;display:flex;gap:8px;align-items:flex-start}
+.b-line .ico{width:20px;height:20px;margin-top:1px;color:var(--color-accent-on-bubble)}
+.b-row{width:100%;min-height:52px;padding:7px 8px;display:flex;align-items:center;gap:10px;border:0;border-radius:var(--radius-sm);background:none;color:inherit;text-align:left}
+.b-row .ico{width:20px;height:20px;color:var(--color-accent-on-bubble)}
+.b-row b{display:block;font-weight:600;font-size:.9375rem}
+.b-row small{display:block;font-size:.8125rem;opacity:.72}
+.b-rows{margin-top:6px}
+.b-act{margin-top:8px}
+.b-btn{min-height:44px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border:0;border-radius:var(--radius-sm);background:none;color:var(--color-accent-on-bubble);font-size:.875rem;font-weight:600}
+.b-btn .ico{width:20px;height:20px}
+.h-dock{padding:0 12px 28px}
+.form{display:flex;align-items:flex-end;gap:4px;padding:6px;border-radius:var(--radius-xl);background:var(--color-surface);box-shadow:var(--shadow-float)}
+.fake{flex:1;min-height:46px;display:flex;align-items:center;padding:0 4px;font-size:17px;color:var(--color-text-muted)}
+.ask{color:var(--color-accent);height:46px}
+.send{width:46px;height:46px;flex:none;border:0;border-radius:14px;background:var(--color-accent);color:var(--color-on-accent);display:grid;place-items:center;opacity:.45}
+
+/* baralho */
+.k-top{display:flex;align-items:center;gap:6px;padding:28px 14px 0 8px}
+.k-q{flex:1;min-width:0;font:400 1.0625rem/1.25 var(--f-serif)}
+.k-count{display:flex;align-items:center;gap:6px;font-size:.8125rem;color:var(--color-text-muted);font-variant-numeric:tabular-nums;padding-right:6px;white-space:nowrap}
+.k-count .ico{width:18px;height:18px;color:var(--color-text)}
+.k-stage{position:relative;flex:1;min-height:0}
+.k-card{position:absolute;left:50%;top:56%;width:276px;height:414px;margin:-207px 0 0 -138px;border-radius:14px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.05),0 22px 40px -22px rgba(0,0,0,.55)}
+.k-card.back1{transform:translateY(12px) scale(.95);z-index:0;background:var(--color-surface);box-shadow:0 0 0 1px var(--color-line)}
+.k-card.front{z-index:2}
+.k-gen{position:absolute;inset:0;background:var(--c);padding:12% 11%;color:#EDE6D3}
+.k-gen::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:rgba(0,0,0,.18)}
+.k-gen b{display:block;font:500 1.75rem/1.1 var(--f-serif);max-width:85%}
+.k-gen small{display:block;margin-top:6px;font-size:.8125rem;opacity:.8}
+.k-img{position:absolute;inset:0;opacity:0}
+.k-img.on{opacity:1}
+.photo{position:absolute;inset:0;background:
+  radial-gradient(circle at 70% 28%,#E9C46A 0 13%,transparent 13.5%),
+  linear-gradient(180deg,#C9A15A 0 52%,#8E5E2F 52% 60%,#6C4423 60% 100%);}
+.photo::after{content:"VIDAS SECAS";position:absolute;left:0;right:0;top:9%;text-align:center;font:700 1.5rem/1 Georgia,serif;letter-spacing:.12em;color:#3B2410}
+.photo i{position:absolute;bottom:34%;width:6px;height:46px;background:#3B2410;border-radius:3px}
+.k-over{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:80px 18px 16px;color:#F8F7F4;background:linear-gradient(to top,rgba(10,10,9,.92),rgba(10,10,9,.6) 60%,rgba(10,10,9,0))}
+.k-over h3{margin:0;font:500 1.375rem/1.15 var(--f-serif)}
+.k-over p{margin:4px 0 0;font-size:.8125rem;opacity:.85}
+.skel{position:absolute;inset:0;background:color-mix(in srgb,var(--color-text) 10%,var(--color-bg));overflow:hidden}
+.skel::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--color-surface) 70%,transparent),transparent);animation:shimmer 1.3s ease-in-out infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.flat{position:absolute;inset:0;background:#B08850}
+.k-mbox{position:absolute;z-index:5;right:calc(50% - 138px - 16px);top:calc(56% - 207px - 84px);width:96px;height:96px;pointer-events:none}
+.k-bub{position:absolute;z-index:5;left:16px;right:calc(50% - 138px + 88px);bottom:calc(44% + 207px + 22px);padding:9px 12px 10px;border-radius:14px;border-bottom-right-radius:4px;background:var(--color-bubble);color:var(--color-on-bubble);font-size:.875rem;line-height:1.4}
+.k-bub .ico{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin-right:4px;color:var(--color-accent-on-bubble)}
+.k-acts{display:flex;justify-content:center;align-items:center;gap:14px;padding:6px 16px 26px;min-height:96px}
+.k-round{width:60px;height:60px;border-radius:50%;border:1px solid var(--color-line);background:var(--color-surface);color:var(--color-text);display:grid;place-items:center;box-shadow:0 8px 18px -12px rgba(0,0,0,.5)}
+.k-round.yes{background:var(--color-accent);color:var(--color-on-accent);border-color:transparent}
+.k-round .ico{width:26px;height:26px}
+.k-small{width:44px;height:44px;border-radius:50%;border:1px solid var(--color-line);background:var(--color-surface);color:var(--color-text);display:grid;place-items:center}
+.k-small .ico{width:20px;height:20px}
+.banner{display:flex;align-items:center;gap:8px;margin:12px 16px 0;padding:8px 12px;border-radius:var(--radius-md);background:var(--color-surface);box-shadow:0 0 0 1px var(--color-line);font-size:.8125rem;color:var(--color-text-muted)}
+.banner .ico{width:18px;height:18px;color:var(--color-text)}
+.k-emptycard{position:absolute;left:50%;top:50%;width:240px;height:360px;margin:-180px 0 0 -120px;border:1.5px dashed var(--color-slot);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:12px;padding:0 20px 28px;text-align:center}
+.k-emptycard p{margin:0;font:500 1.1875rem/1.25 var(--f-serif)}
+.k-emptycard .m{width:110px;height:110px;margin-bottom:auto;margin-top:40px}
+.btn-primary{min-height:48px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--radius-lg);background:var(--color-accent);color:var(--color-on-accent);font-size:.875rem;font-weight:600}
+@media (prefers-reduced-motion:reduce){.skel::after{animation:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Textos e estados que faltam</h1>
+      <p class="sub">Fechamento do design: as falas e rótulos das telas novas, e três situações que o app ainda não mostra. Cada uma tem versões; a marcada é a que eu escolheria.</p>
+    </div>
+    <button class="tbtn" id="theme" type="button">Tema: sistema</button>
+  </header>
+
+  <section class="blk" aria-labelledby="b1">
+    <h2 id="b1">1 · Textos das telas novas</h2>
+    <p class="why">Fim do baralho, página Você e o mover no detalhe do livro. Responda com o número e a letra (ex.: T1b), ou escreva a sua.</p>
+    <div class="tx" id="tx"></div>
+  </section>
+
+  <section class="blk" aria-labelledby="b2">
+    <h2 id="b2">2 · A busca não acha nada</h2>
+    <p class="why">Acontece com pedidos muito específicos. Hoje o baralho abriria vazio.</p>
+    <div class="opts" id="s1"></div>
+  </section>
+
+  <section class="blk" aria-labelledby="b3">
+    <h2 id="b3">3 · A conexão cai no meio do baralho</h2>
+    <p class="why">Os dez livros já estão no aparelho, então dá para continuar. Os ♥ e ✕ ficam guardados e sobem quando a conexão volta; só "Mais dez" precisa esperar.</p>
+    <div class="opts" id="s2"></div>
+  </section>
+
+  <section class="blk" aria-labelledby="b4">
+    <h2 id="b4">4 · A capa demora a chegar</h2>
+    <p class="why">As capas vêm da Open Library e às vezes levam um ou dois segundos. Toque em "Ver de novo" para repetir a chegada.</p>
+    <div class="opts" id="s3"></div>
+  </section>
+</div>
+
+<script src="mascote.js"></script>
+<script src="hugeicons.js"></script>
+<script>
+(()=>{
+document.documentElement.lang='pt-BR';
+const {Mascot}=window.Mascote,HUGE=window.HUGE;
+const $=(s,r=document)=>r.querySelector(s);
+const rmq=matchMedia('(prefers-reduced-motion: reduce)');
+const I=n=>{const i=HUGE[n];return`<svg class="ico" data-ico="${n}" viewBox="0 0 ${i.w} ${i.h}" aria-hidden="true">${i.b}</svg>`};
+const tb=$('#theme'),TH=['sistema','claro','escuro'];let th=0;
+tb.onclick=()=>{th=(th+1)%3;const v=['','light','dark'][th];if(v)document.documentElement.dataset.theme=v;else delete document.documentElement.dataset.theme;tb.textContent='Tema: '+TH[th]};
+
+/* 1 · textos */
+const TX=[
+ ['T1','Fim do lote, com amados','Fala do mascote quando o décimo card sai (exemplo com 4).',[['Quatro de dez. Os próximos vêm com esses na cabeça.','atual'],['Quatro ficaram. Já sei pra onde ir.'],['Quatro de dez. Seu gosto tá ficando claro.']],1],
+ ['T2','Fim do lote, nenhum amado','Quando os dez foram passados.',[['Nenhum de dez. Bora tentar outra busca?','atual'],['Zero de dez. Exigente, hein. Muda a busca?'],['Nenhum te pegou. Me conta de outro jeito?']],3],
+ ['T3','Resgatar um passado no resumo','Fala nova, quando um ✕ vira ♥ no resumo ou no histórico.',[['Mudou de ideia? Acontece.'],['Sabia que esse ia voltar.'],['Segunda chance. Gosto disso.']],2],
+ ['T4','Tirar um amado no resumo','Fala nova, quando um ♥ sai da estante pelo resumo.',[['Esfriou rápido, hein.'],['Tá, tirei.'],['Foi empolgação, né?']],1],
+ ['T5','Histórico vazio','Página Você, antes da primeira busca.',[['Nenhuma busca ainda.','atual'],['Suas buscas aparecem aqui.'],['Ainda não buscou nada. Bora?']],2],
+ ['T6','Números da página Você','Os dois rótulos embaixo dos números.',[['vistos · na estante','atual'],['cartas vistas · na estante'],['julgados · guardados']],1],
+ ['T7','Botões do fim do lote','Secundário e principal.',[['Nova busca · Mais dez','atual'],['Outra busca · Mais dez'],['Buscar outra coisa · Mais dez']],1],
+ ['T8','Botão na busca antiga','No pé da folha de uma busca do histórico.',[['Buscar de novo','atual'],['Refazer a busca'],['Mais dez desta busca']],1],
+ ['T9','Lugar do livro no detalhe','Linha com os botões ‹ › de mover.',[['3º de 40 na estante','atual'],['3º na estante'],['Lugar 3 de 40']],1]
+];
+$('#tx').innerHTML=TX.map(([n,h,d,os,rec])=>`<article class="tc"><h3><i>${n}</i>${h}</h3><p>${d}</p><ol>${os.map(([t,tag],j)=>`<li><b>${'abc'[j]}</b><span>${t}${j+1===rec?'<em>recomendo</em>':''}${tag?`<small>${tag}</small>`:''}</span></li>`).join('')}</ol></article>`).join('');
+
+const opt=(host,l,name,desc,rec)=>{const d=document.createElement('div');d.className='opt';d.innerHTML=`<p class="cap"><b><i>${l}</i>${name}</b>${rec?'<em>recomendo</em>':''}<span>${desc}</span></p><div class="phone"></div>`;host.appendChild(d);return $('.phone',d)};
+const mascot=(el,mood)=>{const m=new Mascot(el,'fantasma');if(mood)m.setMood(mood);return m};
+
+/* 2 · sem resultado */
+const homeTop=`<div class="h-top"><span class="h-word">lombada</span><span class="h-icons"><button class="ib" type="button" aria-label="Abajur">${I('lamp')}</button><button class="ib" type="button" aria-label="Estante, 3 livros">${I('shelf')}</button><button class="ib" type="button" aria-label="Você">${I('user')}</button></span></div>`;
+const dock=`<div class="h-dock"><div class="form"><button class="ib ask" type="button" aria-label="Pedir uma ideia">${I('idea')}</button><div class="fake">Conta seu humor, ou um livro</div><button class="send" type="button" aria-label="Buscar" disabled>${I('send')}</button></div></div>`;
+const S1=[
+ ['A','Fala e campo','O mascote diz que não achou e devolve o foco para a busca. Nada mais muda.',0,ph=>{ph.innerHTML=`${homeTop}<div class="h-scene"><div class="bubble"><p class="b-line"><span>Não achei nada com “vampiro no sertão”. Tenta com outras palavras?</span></p></div><div class="h-m" data-m></div></div>${dock}`;mascot($('[data-m]',ph),'doubt')}],
+ ['B','Baralho vazio','O baralho abre mesmo assim, com um lugar tracejado e "Nova busca".',0,ph=>{ph.innerHTML=`<div class="k-top"><button class="ib" type="button" aria-label="Voltar">${I('back')}</button><div class="k-q">vampiro no sertão</div><span class="k-count">0 de 0</span></div><div class="k-stage"><div class="k-emptycard"><div class="m" data-m></div><p>Nada com isso. Nem um.</p><button class="btn-primary" type="button">Nova busca</button></div></div>`;mascot($('[data-m]',ph),'doubt')}],
+ ['C','Fala com três caminhos','Fica na home e o balão traz três buscas vizinhas, no mesmo formato de "Pedir ideia".',1,ph=>{ph.innerHTML=`${homeTop}<div class="h-scene"><div class="bubble wide"><p class="b-line"><span>Vampiro no sertão eu não tenho. Chega perto?</span></p><div class="b-rows">${[['Terror brasileiro curto','assombração no interior'],['Sertão com fantasma','Pedro Páramo, Comala'],['Vampiro clássico','Drácula, Carmilla']].map(([t,w])=>`<button class="b-row" type="button">${I('book')}<span><b>${t}</b><small>${w}</small></span></button>`).join('')}</div></div><div class="h-m" data-m></div></div>${dock}`;mascot($('[data-m]',ph),'doubt')}]
+];
+S1.forEach(([l,n,d,rec,f])=>f(opt($('#s1'),l,n,d,rec)));
+
+/* 3 · sem conexão no baralho */
+const card=(extra='')=>`<div class="k-card back1"></div><div class="k-card front"><div class="k-gen" style="--c:#7A5428"><b>Vidas secas</b><small>Graciliano Ramos</small></div><div class="k-over"><h3>Vidas secas</h3><p>Graciliano Ramos · 1938 · ~180 p.</p></div>${extra}</div>`;
+const acts=`<div class="k-acts"><button class="k-small" type="button" aria-label="Desfazer">${I('refresh')}</button><button class="k-round" type="button" aria-label="Passar">${I('close')}</button><button class="k-round yes" type="button" aria-label="Guardar na estante">${I('heart')}</button><button class="k-small" type="button" aria-label="Já li esse">${I('book')}</button></div>`;
+const S2=[
+ ['A','Só o mascote avisa','Uma fala, uma vez. Depois tudo segue igual; "Mais dez" espera a conexão no fim.',0,ph=>{ph.innerHTML=`<div class="k-top"><button class="ib" type="button" aria-label="Voltar">${I('back')}</button><div class="k-q">Curto e devastador</div><span class="k-count">4 de 10</span></div><div class="k-stage">${card()}<div class="k-mbox" data-m></div><div class="k-bub">${I('offline')}Caiu a conexão. Pode seguir, eu guardo tudo aqui.</div></div>${acts}`;mascot($('[data-m]',ph),'surprise')}],
+ ['B','Faixa fixa','Uma faixa embaixo do topo enquanto estiver sem conexão.',0,ph=>{ph.innerHTML=`<div class="k-top"><button class="ib" type="button" aria-label="Voltar">${I('back')}</button><div class="k-q">Curto e devastador</div><span class="k-count">4 de 10</span></div><div class="banner" role="status">${I('offline')}<span>Sem conexão. Seus gestos ficam guardados.</span></div><div class="k-stage">${card()}<div class="k-mbox" data-m></div></div>${acts}`;mascot($('[data-m]',ph),'idle')}],
+ ['C','Ícone na contagem','O mascote avisa uma vez e fica só o ícone de sem conexão ao lado de "4 de 10" até voltar.',1,ph=>{ph.innerHTML=`<div class="k-top"><button class="ib" type="button" aria-label="Voltar">${I('back')}</button><div class="k-q">Curto e devastador</div><span class="k-count"><span role="img" aria-label="Sem conexão">${I('offline')}</span>4 de 10</span></div><div class="k-stage">${card()}<div class="k-mbox" data-m></div><div class="k-bub">${I('offline')}Caiu a conexão. Pode seguir, eu guardo tudo aqui.</div></div>${acts}`;mascot($('[data-m]',ph),'surprise')}]
+];
+S2.forEach(([l,n,d,rec,f])=>f(opt($('#s2'),l,n,d,rec)));
+
+/* 4 · capa carregando */
+const photo=`<div class="photo"><i style="left:30%"></i><i style="left:36%;height:34px"></i><i style="left:62%;height:40px"></i></div>`;
+const S3=[
+ ['A','Capa gerada, depois a foto','A capa gerada (cor e título) aparece na hora; a foto entra por cima em 200ms quando chega.',1,'gen'],
+ ['B','Esqueleto com brilho','Um bloco cinza com um brilho passando até a foto chegar.',0,'skel'],
+ ['C','Cor da capa, depois a foto','Um bloco na cor média da capa (vem junto com os dados); a foto entra por cima.',0,'flat']
+];
+S3.forEach(([l,n,d,rec,kind])=>{const ph=opt($('#s3'),l,n,d,rec);
+  const base=kind==='gen'?'':kind==='skel'?'<div class="skel"></div>':'<div class="flat"></div>';
+  const front=kind==='gen'?`<div class="k-gen" style="--c:#7A5428"><b>Vidas secas</b><small>Graciliano Ramos</small></div>`:base;
+  ph.innerHTML=`<div class="k-top"><button class="ib" type="button" aria-label="Voltar">${I('back')}</button><div class="k-q">Curto e devastador</div><span class="k-count">1 de 10</span></div><div class="k-stage"><div class="k-card back1"></div><div class="k-card front">${front}<div class="k-img">${photo}</div><div class="k-over"><h3>Vidas secas</h3><p>Graciliano Ramos · 1938 · ~180 p.</p></div></div><div class="k-mbox" data-m></div></div>${acts}`;
+  mascot($('[data-m]',ph),'idle');
+  const img=$('.k-img',ph),run=()=>{img.getAnimations().forEach(a=>a.cancel());img.classList.remove('on');setTimeout(()=>{img.classList.add('on');if(!rmq.matches)img.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'})},1400)};
+  const btn=document.createElement('button');btn.type='button';btn.className='replay';btn.innerHTML=I('refresh')+'Ver de novo';btn.onclick=run;ph.parentNode.appendChild(btn);run()});
+})();
+</script>

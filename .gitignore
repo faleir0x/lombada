@@ -1,0 +1,36 @@
+# dependências e builds
+node_modules/
+dist/
+.vite/
+coverage/
+playwright-report/
+test-results/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Android (Capacitor)
+app/android/.gradle/
+app/android/build/
+app/android/app/build/
+app/android/local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# segredos e dados locais
+.env
+.env.*
+!.env.example
+data/
+*.parquet
+*.duckdb
+
+# editor e sistema
+.DS_Store
+.idea/
+.vscode/

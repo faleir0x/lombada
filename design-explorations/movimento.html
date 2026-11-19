@@ -1,0 +1,334 @@
+<!-- lombada · fase 5: movimento · fonte: DESIGN.md §4 + skills emilkowalski/choreograph e animate · 2026-11-18 -->
+<meta charset="utf-8">
+<title>Movimento da Lombada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho com câmera lenta e tema; quatro blocos (entrada, dia/noite, fala, envio), cada um com opções à esquerda e uma tela de celular à direita; decisões tomadas sem playground no fim */
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-430:#8C2716;--marker-525:#B53A25;--marker-610:#D5523B;--marker-655:#E66048;--marker-710:#F07A64;--lamp-bulb:#FFEBC8;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);--color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+  --radius-sm:10px;--radius-md:12px;--radius-lg:14px;--radius-xl:18px;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);--ease-in-out:cubic-bezier(0.77,0,0.175,1);--ease-drawer:cubic-bezier(0.32,0.72,0,1);
+  --slow:1;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);color-scheme:dark}}
+:root[data-theme="dark"]{--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:36px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:space-between;align-items:flex-end}
+.top>div{min-width:0;max-width:720px}
+h1{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em}
+.sub{margin:8px 0 0;color:var(--color-text-muted);font-size:.9375rem;max-width:66ch}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tbtn{min-height:44px;padding:0 14px;border-radius:var(--radius-md);border:1px solid var(--color-line);background:var(--color-surface);font-weight:500;font-size:.875rem}
+.tbtn[aria-pressed="true"]{border-color:var(--color-text);box-shadow:inset 0 0 0 1px var(--color-text)}
+.block{margin-top:56px;display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:24px 40px;align-items:start}
+@media (max-width:900px){.block{grid-template-columns:minmax(0,1fr)}}
+.block h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif);letter-spacing:-.01em}
+.gate{margin:6px 0 16px;font-size:.875rem;color:var(--color-text-muted);max-width:60ch}
+.gate b{color:var(--color-text);font-weight:600}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;align-items:start;width:100%;padding:12px 14px;border:1px solid var(--color-line);border-radius:var(--radius-lg);background:var(--color-surface);text-align:left}
+.opt[aria-pressed="true"]{border-color:var(--color-text);box-shadow:inset 0 0 0 1px var(--color-text)}
+.opt .l{grid-row:span 3;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--color-text);color:var(--color-bg);font-weight:700;font-size:.8125rem}
+.opt strong{font-weight:600;font-size:.9375rem}
+.opt strong em{font-style:normal;font-weight:500;font-size:.75rem;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--color-accent);color:var(--color-on-accent);vertical-align:2px}
+.opt span{font-size:.8125rem;color:var(--color-text-muted)}
+.opt code{font-size:.75rem;color:var(--color-text-muted);font-family:ui-monospace,Menlo,monospace}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ctl .tbtn{background:none}
+.phone{position:relative;width:100%;max-width:390px;height:844px;border-radius:46px;overflow:hidden;box-shadow:0 0 0 1px var(--color-line),0 40px 70px -40px rgba(0,0,0,.35);isolation:isolate;margin:0 auto}
+.fixed{margin-top:72px;padding:24px 28px;border:1px solid var(--color-line);border-radius:22px;background:var(--color-surface)}
+.fixed h2{margin:0 0 4px;font:500 1.3125rem/1.25 var(--f-serif)}
+.fixed table{width:100%;border-collapse:collapse;font-size:.875rem;margin-top:12px}
+.fixed th,.fixed td{text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--color-line);vertical-align:top}
+.fixed th{font-weight:600}
+.fixed td:nth-child(3){color:var(--color-text-muted)}
+.tscroll{overflow-x:auto}
+
+/* tokens dentro da tela, por modo */
+.phone[data-mode="light"]{--bg:var(--neutral-935);--surf:var(--neutral-975);--ink:var(--neutral-190);--muted:var(--neutral-500);--line:var(--neutral-865);--acc:var(--marker-525);--onacc:var(--neutral-975);--bub:var(--neutral-190);--onbub:var(--neutral-975);--shade:var(--neutral-300);--bulb:var(--neutral-865);--glow:rgba(255,235,200,0);--mote:rgba(255,235,200,0);--lamp-on:0;--m-body:var(--marker-610);--m-eye:var(--neutral-190);--m-side:var(--marker-430);--m-shadow:rgba(20,20,30,.14)}
+.phone[data-mode="dark"]{--bg:var(--neutral-190);--surf:var(--neutral-240);--ink:var(--neutral-935);--muted:var(--neutral-670);--line:var(--neutral-300);--acc:var(--marker-655);--onacc:var(--neutral-190);--bub:var(--neutral-935);--onbub:var(--neutral-190);--shade:var(--neutral-300);--bulb:var(--lamp-bulb);--glow:rgba(255,235,200,.17);--mote:rgba(255,240,215,.5);--lamp-on:1;--m-body:var(--neutral-935);--m-eye:var(--neutral-190);--m-side:var(--neutral-670);--m-shadow:rgba(0,0,0,.4)}
+.phone{--m-cover:var(--acc);--m-page:var(--neutral-975);--tdur:0ms;--cdur:0ms}
+.phone[data-tv="fade"]{--tdur:600ms;--cdur:700ms}
+.phone[data-tv="quick"]{--tdur:200ms;--cdur:250ms}
+.phone[data-tv="switch"]{--tdur:0ms;--cdur:250ms}
+.phone[data-tv="wipe"]{--tdur:0ms;--cdur:0ms;view-transition-name:var(--vtn)}
+.sc,.sc .bubble,.sc .s-form,.sc .s-ib,.sc .s-ask,.sc .s-send,.sc .s-word,.sc .msvg *{transition-property:background-color,color,fill,stroke;transition-duration:calc(var(--tdur) * var(--slow));transition-timing-function:ease}
+
+/* mascote */
+.msvg{width:100%;height:100%;display:block;overflow:visible}
+.ml{fill:var(--m-side)}.mface{fill:var(--m-body)}.mshadow{fill:var(--m-shadow)}
+.mell{fill:var(--m-eye)}.mshine{fill:var(--m-body)}
+.marc,.mbrow{fill:none;stroke:var(--m-eye);stroke-linecap:round}
+.mmouth{fill:var(--m-eye)}
+.mdl{fill:none;stroke:var(--m-side);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mdf{fill:var(--m-side)}
+.mdg{fill:none;stroke:var(--m-eye);stroke-width:1.7;stroke-linecap:round}
+.mdk{fill:none;stroke:var(--m-page);stroke-width:1.6;stroke-linecap:round}
+.mbc{fill:var(--m-cover)}.mbp{fill:var(--m-page)}
+.mbl{fill:none;stroke:var(--m-cover);stroke-width:.8;opacity:.45;stroke-linecap:round}
+.mflip{stroke:var(--m-cover);stroke-width:.4}
+.mzt{fill:var(--m-side);font:700 10px var(--f-ui)}
+.ico{width:22px;height:22px;display:block;flex:none}
+
+/* cena */
+.sc{position:relative;height:100%;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--ink)}
+.s-lamp{position:absolute;top:0;left:50%;width:380px;height:600px;transform:translateX(-50%);pointer-events:none}
+.s-cone{filter:blur(7px);opacity:var(--lamp-on);transition:opacity calc(var(--cdur) * var(--slow)) var(--ease-out)}
+.s-bulb{fill:var(--bulb);transition:fill calc(var(--cdur) * var(--slow)) var(--ease-out)}
+.s-motes{position:absolute;left:50%;top:150px;width:240px;height:340px;transform:translateX(-50%);pointer-events:none;opacity:var(--lamp-on);transition:opacity calc(var(--cdur) * var(--slow)) var(--ease-out)}
+.s-motes i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--mote);animation:drift 11s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(18px,-46px)}}
+.s-top{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:18px 10px 0 22px}
+.s-word{font:400 1.6875rem/1 var(--f-serif);letter-spacing:-.01em}
+.s-icons{display:flex}
+.s-ib{position:relative;width:44px;height:44px;border:0;border-radius:var(--radius-md);background:none;color:var(--ink);display:grid;place-items:center}
+.s-badge{position:absolute;top:4px;right:3px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--acc);color:var(--onacc);font:700 .6875rem/18px var(--f-ui);text-align:center}
+.s-scene{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 14px 4px}
+.s-m{width:204px;height:204px}
+.bubble{position:relative;z-index:2;max-width:270px;margin-bottom:-8px;padding:10px 14px 11px;border-radius:var(--radius-lg);background:var(--bub);color:var(--onbub);font:400 .9375rem/1.4 var(--f-ui);text-wrap:pretty;transform-origin:50% 100%}
+.bubble::after{content:"";position:absolute;width:12px;height:12px;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;background:inherit}
+.bubble span{display:block}
+.s-dock{position:relative;z-index:3;padding:8px 14px 24px}
+.s-form{display:flex;align-items:center;gap:4px;padding:6px;border-radius:var(--radius-xl);background:var(--surf);box-shadow:0 0 0 1px var(--line),0 10px 24px -14px rgba(0,0,0,.5)}
+.s-ask{flex:none;width:44px;height:46px;border:0;border-radius:var(--radius-md);background:none;color:var(--acc);display:grid;place-items:center}
+.s-form input{flex:1;min-width:0;height:46px;padding:0 2px;border:0;background:none;outline:none;font:400 1.0625rem/1.3 var(--f-serif);color:var(--ink);transition:opacity calc(150ms * var(--slow)) ease}
+.s-form input::placeholder{color:var(--muted)}
+.s-form[data-busy="true"] input{opacity:.5}
+.s-send{flex:none;width:46px;height:46px;border:0;border-radius:var(--radius-lg);display:grid;place-items:center;background:var(--line);color:var(--muted)}
+.s-form[data-ready="true"] .s-send{background:var(--acc);color:var(--onacc)}
+.s-send:active{transform:scale(.96)}
+.fly{position:absolute;z-index:5;left:0;top:0;white-space:nowrap;font:400 1.0625rem/1.3 var(--f-serif);color:var(--ink);pointer-events:none;transform-origin:0 50%}
+::view-transition-old(*),::view-transition-new(*){animation:none;mix-blend-mode:normal}
+@media (prefers-reduced-motion:reduce){.s-motes i{animation:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Movimento</h1>
+      <p class="sub">Fase 5. Quatro animações pedem escolha; cada bloco tem as opções e uma tela que toca a escolhida. "Repetir" roda de novo. A câmera lenta (4×) ajuda a ver a ordem; o fantasma em si não desacelera. Marquei a que eu escolheria em cada uma.</p>
+    </div>
+    <div class="tools"><button class="tbtn" id="slow" type="button" aria-pressed="false">Câmera lenta 4×</button><button class="tbtn" id="theme" type="button">Tema: sistema</button></div>
+  </header>
+
+  <section class="block" data-block="enter">
+    <div>
+      <h2>1 · Entrada da tela</h2>
+      <p class="gate"><b>Quando:</b> ao abrir o app, poucas vezes por dia. <b>Para quê:</b> apresentar a cena. Como é raro, pode ter um pouco de personalidade; mesmo assim nada bloqueia o campo, que já responde no primeiro quadro.</p>
+      <div class="opts" role="group" aria-label="Opções de entrada"></div>
+      <div class="ctl"><button class="tbtn" type="button" data-run>Repetir</button><button class="tbtn" type="button" data-mode>Dia ou noite</button></div>
+    </div>
+    <div class="phone" data-phone></div>
+  </section>
+
+  <section class="block" data-block="theme">
+    <div>
+      <h2>2 · Troca dia e noite</h2>
+      <p class="gate"><b>Quando:</b> raramente, pelo ícone do abajur ou tocando no abajur. <b>Para quê:</b> mostrar que a luz mudou. O abajur da tela também troca.</p>
+      <div class="opts" role="group" aria-label="Opções de troca de tema"></div>
+      <div class="ctl"><button class="tbtn" type="button" data-run>Trocar agora</button></div>
+    </div>
+    <div class="phone" data-phone></div>
+  </section>
+
+  <section class="block" data-block="speech">
+    <div>
+      <h2>3 · Fala do mascote</h2>
+      <p class="gate"><b>Quando:</b> dezenas de vezes por uso (focar o campo, enviar, pedir ideia). <b>Para quê:</b> mostrar que ele respondeu. Como é frequente, precisa ser quase imperceptível.</p>
+      <div class="opts" role="group" aria-label="Opções de fala"></div>
+      <div class="ctl"><button class="tbtn" type="button" data-run>Próxima fala</button><button class="tbtn" type="button" data-burst>Três seguidas</button></div>
+    </div>
+    <div class="phone" data-phone></div>
+  </section>
+
+  <section class="block" data-block="send">
+    <div>
+      <h2>4 · Envio da busca</h2>
+      <p class="gate"><b>Quando:</b> a cada busca. <b>Para quê:</b> mostrar para onde foi o pedido e que o mascote está trabalhando nele. Dá para escrever e enviar na própria tela.</p>
+      <div class="opts" role="group" aria-label="Opções de envio"></div>
+      <div class="ctl"><button class="tbtn" type="button" data-run>Enviar exemplo</button></div>
+    </div>
+    <div class="phone" data-phone></div>
+  </section>
+
+  <section class="fixed" aria-labelledby="h-f">
+    <h2 id="h-f">Decididas sem opções</h2>
+    <p class="gate">Seguem a regra das skills de movimento: só <code>transform</code> e <code>opacity</code>, curvas fixas, saídas mais curtas que as entradas.</p>
+    <div class="tscroll"><table>
+      <thead><tr><th>Elemento</th><th>Movimento</th><th>Por quê</th></tr></thead>
+      <tbody>
+        <tr><td>Estante abrindo</td><td>sobe de baixo (celular) ou entra pela direita (desktop), 420ms, <code>--ease-drawer</code>; fecha em 280ms pelo mesmo caminho; fundo escurece junto</td><td>gaveta: entra e sai pelo mesmo lado; o conteúdo já vem dentro, sem cascata</td></tr>
+        <tr><td>Lista de ideias no balão</td><td>chega junto com o balão, sem cascata nos itens</td><td>uma entrada por recipiente; é pedida várias vezes</td></tr>
+        <tr><td>Onboarding, troca de tela</td><td>texto e objeto entram 24px pela direita com fade, 280ms, <code>--ease-out</code>; voltar entra pela esquerda; o mascote fica e só muda de humor</td><td>direção segue o "avançar"; o mascote é o fio entre as telas</td></tr>
+        <tr><td>Botão de enviar</td><td>cor muda em 200ms; ao apertar, encolhe para 96% em 120ms</td><td>resposta ao toque</td></tr>
+        <tr><td>Hover dos ícones</td><td>fundo aparece em 150ms, só com mouse</td><td>frequente; toque não tem hover</td></tr>
+        <tr><td>Mascote</td><td>molas próprias (mascote.js); sem duração fixa</td><td>precisa poder ser interrompido a qualquer momento</td></tr>
+        <tr><td>Movimento reduzido</td><td>sem entrada coreografada, sem poeira, sem pulos; cores trocam direto; balão só faz fade</td><td>menos e mais suave, não zero</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</div>
+
+<script src="mascote.js"></script>
+<script src="hugeicons.js"></script>
+<script>
+(()=>{
+const {Mascot}=window.Mascote,HUGE=window.HUGE;
+const I=n=>{const i=HUGE[n];return`<svg class="ico" viewBox="0 0 ${i.w} ${i.h}" aria-hidden="true">${i.b}</svg>`};
+const EO='cubic-bezier(0.23,1,0.32,1)',EIO='cubic-bezier(0.77,0,0.175,1)';
+const rm=matchMedia('(prefers-reduced-motion: reduce)');
+let SLOW=1;
+const root=document.documentElement,dq=matchMedia('(prefers-color-scheme: dark)');
+const eff=()=>root.dataset.theme||(dq.matches?'dark':'light');
+let UID=0;
+
+function scene(ph){
+  const id=++UID;ph.dataset.mode=eff();ph.style.setProperty('--vtn','ph'+id);
+  ph.innerHTML=`<div class="sc">
+    <svg class="s-lamp" viewBox="0 0 380 600" aria-hidden="true"><defs><linearGradient id="lampcone${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--glow)"/><stop offset=".7" stop-opacity=".4" style="stop-color:var(--glow)"/><stop offset="1" stop-opacity="0" style="stop-color:var(--glow)"/></linearGradient></defs>
+      <path class="s-cone" d="M146 112L234 112L360 600L20 600Z" fill="url(#lampcone${id})"/><line x1="190" y1="0" x2="190" y2="64" style="stroke:var(--shade)" stroke-width="2"/><rect x="185" y="58" width="10" height="9" rx="2" style="fill:var(--shade)"/>
+      <path d="M164 66C170 64 210 64 216 66L242 110C224 116 156 116 138 110Z" style="fill:var(--shade)"/><ellipse class="s-bulb" cx="190" cy="111" rx="46" ry="4.5"/></svg>
+    <div class="s-motes" aria-hidden="true"><i style="left:22%;top:20%"></i><i style="left:64%;top:34%;animation-duration:13s"></i><i style="left:40%;top:58%;animation-duration:9s"></i><i style="left:76%;top:70%;animation-duration:15s"></i><i style="left:12%;top:76%;animation-duration:12s"></i></div>
+    <header class="s-top"><span class="s-word">lombada</span><div class="s-icons"><button class="s-ib" type="button" data-lamp aria-label="Trocar dia e noite">${I('lamp')}</button><span class="s-ib" aria-hidden="true">${I('shelf')}<span class="s-badge">3</span></span><span class="s-ib" aria-hidden="true">${I('user')}</span></div></header>
+    <main class="s-scene"><div class="bubble" aria-live="polite"><span>Largou mais um no capítulo 3?</span></div><div class="s-m"></div></main>
+    <div class="s-dock"><form class="s-form" data-ready="false"><button class="s-ask" type="button" aria-label="Pedir uma ideia" tabindex="-1">${I('idea')}</button><input id="i${id}" type="text" autocomplete="off" placeholder="Conta seu humor, ou um livro" aria-label="Conta seu humor, ou um livro que amou"><button class="s-send" type="submit" aria-label="Buscar">${I('send')}</button></form></div></div>`;
+  const q=s=>ph.querySelector(s);
+  const S={ph,sc:q('.sc'),top:q('.s-top'),cone:q('.s-cone'),bulb:q('.s-bulb'),motes:q('.s-motes'),mhost:q('.s-m'),bub:q('.bubble'),dock:q('.s-dock'),form:q('form'),input:q('input'),word:q('.s-word')};
+  S.m=new Mascot(S.mhost,'fantasma');S.m.attn=S.input;
+  S.anims=[];S.timers=[];
+  S.stop=()=>{S.anims.forEach(a=>a.cancel());S.anims=[];S.timers.forEach(clearTimeout);S.timers=[]};
+  S.a=(el,kf,o)=>{if(!el)return;const a=el.animate(kf,{...o,duration:o.duration*SLOW,delay:(o.delay||0)*SLOW,fill:o.fill||'backwards'});S.anims.push(a);return a};
+  S.later=(f,ms)=>S.timers.push(setTimeout(f,ms*SLOW));
+  S.input.addEventListener('input',()=>S.form.dataset.ready=S.input.value.trim()?'true':'false');
+  return S;
+}
+
+/* 1 · entrada */
+const ENTER=[
+  {k:'acender',n:'Acender',d:'A lâmpada pisca e acende, a luz desce, o fantasma aparece dentro dela; depois a busca e a fala.',t:'~1,0s · lâmpada 0ms · feixe 250ms · fantasma 300ms · busca 520ms · fala 760ms',rec:1,
+   run(S){const night=S.ph.dataset.mode==='dark';
+     S.a(S.top,[{opacity:0},{opacity:1}],{duration:300,easing:'ease'});
+     if(night){S.a(S.bulb,[{opacity:0},{opacity:1,offset:.3},{opacity:.25,offset:.5},{opacity:1}],{duration:300,easing:'linear'});S.a(S.cone,[{opacity:0},{opacity:1}],{duration:450,delay:250,easing:EO});S.a(S.motes,[{opacity:0},{opacity:1}],{duration:500,delay:400,easing:EO})}
+     S.a(S.mhost,[{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'none'}],{duration:520,delay:300,easing:EO});
+     S.a(S.dock,[{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:420,delay:520,easing:EO});
+     S.a(S.bub,[{opacity:0,transform:'translateY(4px) scale(.96)'},{opacity:1,transform:'none'}],{duration:220,delay:760,easing:EO});
+     S.later(()=>S.m.talk(),760)}},
+  {k:'flutua',n:'Chega flutuando',d:'A luz já está acesa; o fantasma desce do alto até o chão da cena. Topo e busca só aparecem.',t:'~0,8s · topo e busca 0ms · fantasma 100ms · fala 600ms',
+   run(S){S.a(S.top,[{opacity:0},{opacity:1}],{duration:300,easing:'ease'});S.a(S.dock,[{opacity:0},{opacity:1}],{duration:300,easing:'ease'});
+     S.a(S.mhost,[{opacity:0,transform:'translateY(-60px)'},{opacity:1,transform:'none'}],{duration:650,delay:100,easing:EO});
+     S.a(S.bub,[{opacity:0,transform:'translateY(4px) scale(.96)'},{opacity:1,transform:'none'}],{duration:220,delay:600,easing:EO});S.later(()=>S.m.talk(),600)}},
+  {k:'junto',n:'Tudo junto',d:'Tudo aparece de uma vez; só o fantasma sobe 8px e a fala chega um pouco depois.',t:'~0,35s · tudo 0ms · fala 120ms',
+   run(S){[S.top,S.dock,S.cone,S.motes].forEach(el=>{const to=getComputedStyle(el).opacity;S.a(el,[{opacity:0},{opacity:to}],{duration:250,easing:'ease'})});
+     S.a(S.mhost,[{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:250,easing:EO});S.a(S.bub,[{opacity:0},{opacity:1}],{duration:200,delay:120,easing:EO})}},
+  {k:'nada',n:'Sem entrada',d:'A tela já abre pronta. É o que a maioria dos apps de uso diário faz.',t:'0s',run(){}}
+];
+/* 2 · dia e noite */
+const THEME=[
+  {k:'switch',n:'Interruptor',d:'As cores trocam na hora, como uma luz de verdade; a lâmpada pisca duas vezes e o feixe acende rápido.',t:'cores 0ms · lâmpada 220ms · feixe 250ms',rec:1},
+  {k:'wipe',n:'Luz que se espalha',d:'A cena nova cresce em círculo a partir do abajur até cobrir a tela.',t:'500ms, --ease-in-out; sem suporte, troca direto'},
+  {k:'quick',n:'Fade curto',d:'Cores e luz cruzam juntas, rápido.',t:'cores 200ms · feixe 250ms'},
+  {k:'fade',n:'Fade lento (atual)',d:'O que o protótipo faz hoje: cores em 600ms, feixe em 700ms.',t:'cores 600ms · feixe 700ms'}
+];
+/* 3 · fala */
+const SPEECH=[
+  {k:'bico',n:'Do bico',d:'O balão cresce de 96% a 100% a partir da ponta que aponta para o mascote.',t:'200ms · --ease-out · origem no bico',rec:1,kf:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],o:{duration:200,easing:EO}},
+  {k:'sobe',n:'Sobe curto',d:'Aparece subindo 4px, sem escala.',t:'180ms · --ease-out',kf:[{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'none'}],o:{duration:180,easing:EO}},
+  {k:'texto',n:'Só o texto',d:'O balão fica; só a frase troca com um fade.',t:'150ms · ease',text:1,kf:[{opacity:0},{opacity:1}],o:{duration:150,easing:'ease'}},
+  {k:'pop',n:'Pop com sobra (atual)',d:'O que o protótipo faz hoje: passa um pouco do tamanho e volta.',t:'320ms · curva com sobra',kf:[{opacity:0,transform:'translateY(6px) scale(.94)'},{opacity:1,transform:'none'}],o:{duration:320,easing:'cubic-bezier(.2,.9,.3,1.3)'}}
+];
+const LINES=['Hm. Continua.','Lendo as orelhas.','Separei dez. Alguns vão doer.','Escreve qualquer coisa, ou me pede uma ideia.','Largou mais um no capítulo 3?'];
+/* 4 · envio */
+const SEND=[
+  {k:'livro',n:'Vai para o livro',d:'O texto sai do campo, voa até o fantasma e entra no livro que ele abre.',t:'480ms · --ease-in-out · fantasma começa a ler aos 300ms',rec:1},
+  {k:'some',n:'Some do campo',d:'O texto desaparece do campo e o fantasma começa a ler.',t:'150ms · ease'},
+  {k:'fica',n:'Fica no campo',d:'O texto fica, mais apagado, até o resultado chegar; dá para ver o que foi pedido.',t:'150ms · campo a 50%'}
+];
+
+function speak(S,spec,text){
+  const span=S.bub.querySelector('span');span.textContent=text;S.m.talk();
+  if(rm.matches){S.a(spec.text?span:S.bub,[{opacity:0},{opacity:1}],{duration:150,easing:'ease'});return}
+  S.a(spec.text?span:S.bub,spec.kf,spec.o);
+}
+
+function block(name,list,onPick){
+  const sec=document.querySelector(`[data-block="${name}"]`),box=sec.querySelector('.opts'),S=scene(sec.querySelector('[data-phone]'));
+  let cur=list.find(o=>o.rec)||list[0];
+  list.forEach((o,i)=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed',o===cur);
+    b.innerHTML=`<span class="l">${'ABCD'[i]}</span><strong>${o.n}${o.rec?'<em>recomendo</em>':''}</strong><span>${o.d}</span><code>${o.t}</code>`;
+    b.onclick=()=>{cur=o;box.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));onPick(S,o)};box.appendChild(b)});
+  return {sec,S,get cur(){return cur}};
+}
+
+/* entrada */
+const E=block('enter',ENTER,(S,o)=>runEnter(S,o));
+function runEnter(S,o){S.stop();if(rm.matches){S.a(S.sc,[{opacity:0},{opacity:1}],{duration:200,easing:'ease'});return}o.run(S)}
+E.sec.querySelector('[data-run]').onclick=()=>runEnter(E.S,E.cur);
+E.sec.querySelector('[data-mode]').onclick=()=>{E.S.ph.dataset.mode=E.S.ph.dataset.mode==='dark'?'light':'dark';runEnter(E.S,E.cur)};
+
+/* dia e noite */
+const T=block('theme',THEME,(S,o)=>{S.ph.dataset.tv=o.k});
+T.S.ph.dataset.tv=T.cur.k;
+function toggleTheme(S,o){
+  S.stop();const next=S.ph.dataset.mode==='dark'?'light':'dark';
+  if(o.k==='wipe'&&document.startViewTransition&&!rm.matches){
+    const r=S.ph.getBoundingClientRect(),cx=r.width/2,cy=111,R=Math.hypot(Math.max(cx,r.width-cx),r.height-cy)+20;
+    const vt=document.startViewTransition(()=>{S.ph.dataset.mode=next});
+    vt.ready.then(()=>{document.documentElement.animate({clipPath:[`circle(0px at ${cx}px ${cy}px)`,`circle(${R}px at ${cx}px ${cy}px)`]},{duration:500*SLOW,easing:EIO,pseudoElement:`::view-transition-new(${getComputedStyle(S.ph).getPropertyValue('--vtn').trim()})`})}).catch(()=>{});
+  }else{
+    S.ph.dataset.mode=next;
+    if(o.k==='switch'&&next==='dark'&&!rm.matches)S.a(S.bulb,[{opacity:0},{opacity:1,offset:.25},{opacity:.2,offset:.45},{opacity:1,offset:.7},{opacity:.5,offset:.85},{opacity:1}],{duration:220,easing:'linear'});
+  }
+  S.m.setMood('surprise');speak(S,SPEECH[0],next==='dark'?'Agora sim. Clima de leitura.':'Lendo de dia? Respeito.');S.later(()=>S.m.setMood('idle'),1400);
+}
+T.sec.querySelector('[data-run]').onclick=()=>toggleTheme(T.S,T.cur);
+T.S.ph.querySelector('[data-lamp]').onclick=()=>toggleTheme(T.S,T.cur);
+E.S.ph.querySelector('[data-lamp]').onclick=()=>{E.S.ph.dataset.mode=E.S.ph.dataset.mode==='dark'?'light':'dark'};
+
+/* fala */
+const F=block('speech',SPEECH,(S,o)=>{li=0;next()});
+let li=0;const next=()=>{F.S.stop();speak(F.S,F.cur,LINES[li%LINES.length]);li++};
+F.sec.querySelector('[data-run]').onclick=next;
+F.sec.querySelector('[data-burst]').onclick=()=>{next();setTimeout(next,90*SLOW);setTimeout(next,180*SLOW)};
+
+/* envio */
+const N=block('send',SEND,()=>resetSend());
+const NS=N.S;let busy=false;
+function resetSend(){NS.stop();busy=false;NS.form.dataset.busy='false';NS.input.readOnly=false;NS.input.value='';NS.form.dataset.ready='false';NS.m.setMood('idle');speak(NS,SPEECH[0],'Largou mais um no capítulo 3?')}
+function send(){
+  const text=NS.input.value.trim();if(!text||busy)return;busy=true;NS.stop();const o=N.cur;
+  if(o.k==='livro'&&!rm.matches){
+    const sc=NS.sc.getBoundingClientRect(),ir=NS.input.getBoundingClientRect(),mr=NS.mhost.getBoundingClientRect(),k=sc.width/NS.sc.offsetWidth||1;
+    const fly=document.createElement('span');fly.className='fly';fly.textContent=text;NS.sc.appendChild(fly);
+    const x0=(ir.left-sc.left)/k+2,y0=(ir.top-sc.top+ir.height/2)/k-11,x1=(mr.left-sc.left+mr.width*.5)/k-10,y1=(mr.top-sc.top+mr.height*.72)/k;
+    NS.input.value='';NS.form.dataset.ready='false';
+    const a=fly.animate([{transform:`translate(${x0}px,${y0}px) scale(1)`,opacity:1},{transform:`translate(${(x0+x1)/2}px,${y1-60}px) scale(.7)`,opacity:1,offset:.6},{transform:`translate(${x1}px,${y1}px) scale(.3)`,opacity:0}],{duration:480*SLOW,easing:EIO,fill:'forwards'});
+    NS.anims.push(a);a.finished.then(()=>fly.remove()).catch(()=>fly.remove());
+    NS.later(()=>{NS.m.setMood('read');speak(NS,SPEECH[0],'Lendo as orelhas.')},300);
+  }else if(o.k==='fica'){NS.form.dataset.busy='true';NS.input.readOnly=true;NS.input.blur();NS.m.setMood('read');speak(NS,SPEECH[0],'Lendo as orelhas.')}
+  else{const a=NS.a(NS.input,[{opacity:1},{opacity:0}],{duration:150,easing:'ease',fill:'forwards'});a&&a.finished.then(()=>{NS.input.value='';a.cancel();NS.form.dataset.ready='false'}).catch(()=>{});NS.m.setMood('read');speak(NS,SPEECH[0],'Lendo as orelhas.')}
+  NS.later(()=>{NS.form.dataset.busy='false';NS.input.readOnly=false;if(o.k==='fica'){NS.input.value='';NS.form.dataset.ready='false'}NS.m.setMood('happy');speak(NS,SPEECH[0],'Separei dez. Alguns vão doer.')},2700);
+  NS.later(resetSend,5200);
+}
+NS.form.addEventListener('submit',e=>{e.preventDefault();send()});
+N.sec.querySelector('[data-run]').onclick=()=>{resetSend();NS.input.value='Curto e devastador';NS.form.dataset.ready='true';setTimeout(send,250)};
+
+/* controles globais */
+const slowB=document.getElementById('slow');
+slowB.onclick=()=>{SLOW=SLOW===1?4:1;root.style.setProperty('--slow',SLOW);slowB.setAttribute('aria-pressed',SLOW>1)};
+const tb=document.getElementById('theme'),TL={system:'sistema',light:'dia',dark:'noite'};let pref='system';
+tb.onclick=()=>{pref={system:'light',light:'dark',dark:'system'}[pref];pref==='system'?delete root.dataset.theme:root.dataset.theme=pref;tb.textContent='Tema: '+TL[pref];[E,T,F,N].forEach(b=>b.S.ph.dataset.mode=eff())};
+dq.addEventListener('change',()=>{if(pref==='system')[E,T,F,N].forEach(b=>b.S.ph.dataset.mode=eff())});
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting&&!en.target._seen){en.target._seen=1;runEnter(E.S,E.cur)}}),{threshold:.4});io.observe(E.S.ph);
+})();
+</script>

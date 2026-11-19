@@ -1,0 +1,119 @@
+<!-- lombada · toque no abajur: três reações · fonte: DESIGN.md §4 · 2026-11-18 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Toque no Abajur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..600&display=swap">
+<style>
+/* layout: cabeçalho; três telas lado a lado, uma por reação; cada tela é a cena da home sem a busca */
+:root{
+  --neutral-975:#F8F7F4;--neutral-935:#ECE9E4;--neutral-865:#D6D2CA;--neutral-670:#99958C;--neutral-500:#66635C;--neutral-300:#2F2E2A;--neutral-240:#201F1D;--neutral-190:#141412;
+  --marker-430:#8C2716;--marker-525:#B53A25;--marker-610:#D5523B;--marker-655:#E66048;--lamp-bulb:#FFEBC8;
+  --color-bg:var(--neutral-935);--color-surface:var(--neutral-975);--color-text:var(--neutral-190);--color-text-muted:var(--neutral-500);--color-line:var(--neutral-865);--color-accent:var(--marker-525);--color-on-accent:var(--neutral-975);
+  --f-ui:"Hanken Grotesk",system-ui,sans-serif;--f-serif:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);color-scheme:dark}}
+:root[data-theme="dark"]{--color-bg:var(--neutral-190);--color-surface:var(--neutral-240);--color-text:var(--neutral-935);--color-text-muted:var(--neutral-670);--color-line:var(--neutral-300);--color-accent:var(--marker-655);--color-on-accent:var(--neutral-190);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:1rem/1.5 var(--f-ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding-block:36px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{margin:0;font:450 1.75rem/1.15 var(--f-serif);letter-spacing:-.015em}
+.sub{margin:8px 0 0;color:var(--color-text-muted);font-size:.9375rem;max-width:70ch}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr));gap:44px 24px;margin-top:32px}
+.dir{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dir-head{display:flex;gap:12px;align-items:baseline}
+.letter{flex:none;width:32px;height:32px;border-radius:50%;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center;font-weight:700;font-size:.875rem;transform:translateY(-3px)}
+.dir-head h2{margin:0;font:500 1.3125rem/1.25 var(--f-serif)}
+.dir-head h2 em{font:500 .75rem var(--f-ui);font-style:normal;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--color-accent);color:var(--color-on-accent);vertical-align:3px}
+.dir-head p{margin:2px 0 0;font-size:.875rem;color:var(--color-text-muted)}
+.phone{position:relative;width:100%;max-width:390px;height:720px;margin:0 auto;border-radius:46px;overflow:hidden;box-shadow:0 0 0 1px var(--color-line),0 40px 70px -40px rgba(0,0,0,.35);isolation:isolate}
+.tools{display:flex;gap:8px;justify-content:center}
+.tool{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--color-line);background:none;color:var(--color-text-muted);font-size:.8125rem}
+
+.msvg{width:100%;height:100%;display:block;overflow:visible}
+.ml{fill:var(--m-side)}.mface{fill:var(--m-body)}.mshadow{fill:var(--m-shadow)}
+.mell{fill:var(--m-eye)}.mshine{fill:var(--m-body)}
+.marc,.mbrow{fill:none;stroke:var(--m-eye);stroke-linecap:round}
+.mmouth{fill:var(--m-eye)}
+.mdl{fill:none;stroke:var(--m-side);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mdf{fill:var(--m-side)}.mdg{fill:none;stroke:var(--m-eye);stroke-width:1.7;stroke-linecap:round}
+.mdk{fill:none;stroke:var(--m-page);stroke-width:1.6;stroke-linecap:round}
+.mbc{fill:var(--m-cover)}.mbp{fill:var(--m-page)}
+.mbl{fill:none;stroke:var(--m-cover);stroke-width:.8;opacity:.45;stroke-linecap:round}
+.mflip{stroke:var(--m-cover);stroke-width:.4}
+.mzt{fill:var(--m-side);font:700 10px var(--f-ui)}
+
+.sc{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 14px 40px;transition:background-color 600ms ease}
+.sc[data-mode="light"]{--bg:var(--neutral-935);--shade:var(--neutral-300);--bulb:var(--neutral-865);--glow:rgba(255,235,200,0);--lamp-on:0;--bub:var(--neutral-190);--onbub:var(--neutral-975);--m-body:var(--marker-610);--m-eye:var(--neutral-190);--m-side:var(--marker-430);--m-shadow:rgba(20,20,30,.14)}
+.sc[data-mode="dark"]{--bg:var(--neutral-190);--shade:var(--neutral-300);--bulb:var(--lamp-bulb);--glow:rgba(255,235,200,.17);--lamp-on:1;--bub:var(--neutral-935);--onbub:var(--neutral-190);--m-body:var(--neutral-935);--m-eye:var(--neutral-190);--m-side:var(--neutral-670);--m-shadow:rgba(0,0,0,.4)}
+.sc{background:var(--bg);--m-cover:var(--marker-525);--m-page:var(--neutral-975)}
+.bubble{position:relative;z-index:2;max-width:260px;margin-bottom:-8px;padding:10px 14px 11px;border-radius:14px;background:var(--bub);color:var(--onbub);font-size:.9375rem;line-height:1.4;transition:background-color 600ms ease,color 600ms ease}
+.bubble::after{content:"";position:absolute;width:12px;height:12px;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;background:inherit}
+.stage{position:relative;z-index:1}
+.m{width:204px;height:204px}
+.lampwrap{position:absolute;left:50%;top:-265px;width:380px;height:600px;margin-left:-190px;pointer-events:none;z-index:-1;will-change:transform}
+.lampwrap::before{content:"";position:absolute;left:189px;bottom:calc(100% - 60px);width:2px;height:1600px;background:var(--shade)}
+.lampwrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cone{filter:blur(7px);opacity:var(--lamp-on);transition:opacity 700ms cubic-bezier(0.23,1,0.32,1)}
+.bulb{fill:var(--bulb);transition:fill 700ms}
+.pull{position:absolute;top:56px;left:150px;width:80px;height:58px;border:0;background:none;border-radius:12px;pointer-events:auto}
+</style>
+
+<div class="wrap">
+  <h1>Toque no abajur</h1>
+  <p class="sub">Toque no abajur de cada tela: ele acende ou apaga e reage. Toque várias vezes seguidas para ver como o movimento soma. As três usam física de mola, então nada reinicia do zero; com movimento reduzido, nada balança.</p>
+  <div class="frames">
+    <article class="dir" data-kind="swing"><div class="dir-head"><span class="letter">A</span><div><h2>Balança<em>recomendo</em></h2><p>Pêndulo preso no teto, ~7°, quase parado em ~2,5s. O feixe varre o fantasma, que segue a lâmpada com os olhos.</p></div></div><div class="phone" data-phone></div><div class="tools"><button class="tool" type="button" data-tap>Tocar no abajur</button></div></article>
+    <article class="dir" data-kind="pull"><div class="dir-head"><span class="letter">B</span><div><h2>Puxou a cordinha</h2><p>Dá um tranco para baixo e volta quicando, como quando se puxa a cordinha. ~0,6s.</p></div></div><div class="phone" data-phone></div><div class="tools"><button class="tool" type="button" data-tap>Tocar no abajur</button></div></article>
+    <article class="dir" data-kind="small"><div class="dir-head"><span class="letter">C</span><div><h2>Balança curto</h2><p>O mesmo pêndulo, mais discreto: ~3°, para em ~1,2s.</p></div></div><div class="phone" data-phone></div><div class="tools"><button class="tool" type="button" data-tap>Tocar no abajur</button></div></article>
+  </div>
+</div>
+
+<script src="mascote.js"></script>
+<script>
+(()=>{
+document.documentElement.lang='pt-BR';
+const {Mascot}=window.Mascote;
+const rm=matchMedia('(prefers-reduced-motion: reduce)'),dq=matchMedia('(prefers-color-scheme: dark)');
+const KIND={
+  swing:{type:'rot',w:5.46,c:1.9,imp:.92},
+  small:{type:'rot',w:5.8,c:3.4,imp:.46},
+  pull:{type:'y',k:320,c:15,imp:440}
+};
+const FLICKER=[{opacity:0},{opacity:1,offset:.25},{opacity:.2,offset:.45},{opacity:1,offset:.7},{opacity:.5,offset:.85},{opacity:1}];
+let UID=0;
+document.querySelectorAll('[data-kind]').forEach(art=>{
+  const K=KIND[art.dataset.kind],ph=art.querySelector('[data-phone]'),id=++UID;
+  ph.innerHTML=`<div class="sc" data-mode="${dq.matches?'dark':'light'}"><div class="bubble"><span>Toca no abajur.</span></div><div class="stage"><div class="lampwrap"><svg viewBox="0 0 380 600" aria-hidden="true"><defs><linearGradient id="lg${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--glow)"/><stop offset=".7" stop-opacity=".4" style="stop-color:var(--glow)"/><stop offset="1" stop-opacity="0" style="stop-color:var(--glow)"/></linearGradient></defs><path class="cone" d="M146 112L234 112L360 600L20 600Z" fill="url(#lg${id})"/><rect x="185" y="58" width="10" height="9" rx="2" style="fill:var(--shade)"/><path d="M164 66C170 64 210 64 216 66L242 110C224 116 156 116 138 110Z" style="fill:var(--shade)"/><ellipse class="bulb" cx="190" cy="111" rx="46" ry="4.5"/></svg><button class="pull" type="button" aria-label="Acender ou apagar o abajur"></button></div><div class="m"></div></div></div>`;
+  const sc=ph.querySelector('.sc'),wrap=ph.querySelector('.lampwrap'),bulb=ph.querySelector('.bulb'),span=ph.querySelector('.bubble span');
+  const m=new Mascot(ph.querySelector('.m'),'fantasma');
+  const S={x:0,v:0,run:false,dir:1,last:0};
+  const lampPoint={getBoundingClientRect(){const r=wrap.getBoundingClientRect();return {left:r.left+r.width/2-20,top:r.top+100,width:40,height:20}},value:''};
+  function step(now){
+    const dt=Math.min(.033,(now-S.last)/1000||.016);S.last=now;
+    if(K.type==='rot'){S.v+=(-K.w*K.w*S.x-K.c*S.v)*dt;S.x+=S.v*dt}else{S.v+=(-K.k*S.x-K.c*S.v)*dt;S.x+=S.v*dt}
+    apply();
+    if(Math.abs(S.x)<(K.type==='rot'?.0008:.1)&&Math.abs(S.v)<(K.type==='rot'?.004:2)){S.x=0;S.v=0;apply();S.run=false;m.attn=null;m.setMood('idle');return}
+    requestAnimationFrame(step);
+  }
+  function apply(){
+    if(K.type==='rot'){const pivot=wrap.getBoundingClientRect().top-ph.getBoundingClientRect().top;wrap.style.transformOrigin=`50% ${-pivot}px`;wrap.style.transform=`rotate(${(S.x*180/Math.PI).toFixed(3)}deg)`}
+    else wrap.style.transform=`translateY(${S.x.toFixed(2)}px)`;
+  }
+  function tap(){
+    const next=sc.dataset.mode==='dark'?'light':'dark';sc.dataset.mode=next;
+    span.textContent=next==='dark'?'Agora sim. Clima de leitura.':'Lendo de dia? Respeito.';m.talk();
+    if(next==='dark'&&!rm.matches)bulb.animate(FLICKER,{duration:220,easing:'linear'});
+    if(rm.matches){m.setMood('surprise');setTimeout(()=>m.setMood('idle'),1200);return}
+    S.dir*=-1;S.v+=K.imp*(K.type==='rot'?S.dir:1);
+    m.setMood(K.type==='rot'?'listen':'surprise');m.attn=K.type==='rot'?lampPoint:null;
+    if(!S.run){S.run=true;S.last=performance.now();requestAnimationFrame(step)}
+  }
+  ph.querySelector('.pull').onclick=tap;art.querySelector('[data-tap]').onclick=tap;
+});
+})();
+</script>
