@@ -1,8 +1,8 @@
 import { lazy, Suspense, useMemo, useRef } from 'react';
 import { DeckPage } from './pages/deck/DeckPage';
 import { Home } from './pages/home/Home';
-import { PlaceholderPage } from './pages/Placeholder';
 import { ShelfPage } from './pages/shelf/ShelfPage';
+import { YouPage } from './pages/you/YouPage';
 import { requestSearchFocus } from './platform/handoff';
 import { goBack, type PageTransition, useLocation } from './platform/router';
 import { isPage, type Route } from './platform/routes';
@@ -13,17 +13,11 @@ const VITRINE_ON = import.meta.env.DEV || import.meta.env.VITE_VITRINE === '1';
 const Vitrine = VITRINE_ON ? lazy(() => import('./dev/Vitrine')) : null;
 
 function pageFor(route: Route, transition: PageTransition): PageSpec | null {
-  const spec = (key: string, title: string): PageSpec => ({
-    key,
-    transition,
-    onBack: goBack,
-    content: <PlaceholderPage titleId={`${key}-title`} title={title} onBack={goBack} />,
-  });
   switch (route.name) {
     case 'estante':
       return { key: 'estante', transition, onBack: goBack, content: <ShelfPage titleId="estante-title" /> };
     case 'voce':
-      return spec('voce', 'Você');
+      return { key: 'voce', transition, onBack: goBack, content: <YouPage titleId="voce-title" /> };
     case 'baralho':
       // Uma chave só: "Mais dez" troca a busca dentro da mesma página, sem reabrir.
       return {

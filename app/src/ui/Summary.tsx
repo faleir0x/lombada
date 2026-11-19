@@ -18,9 +18,12 @@ export interface SummaryItem {
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 /** "4 amados · 6 passados" */
+export const countsLine = (loved: number, passed: number) =>
+  `${plural(loved, 'amado', 'amados')} · ${plural(passed, 'passado', 'passados')}`;
+
 export function summaryHeader(items: SummaryItem[]): string {
   const loved = items.filter((i) => i.onShelf).length;
-  return `${plural(loved, 'amado', 'amados')} · ${plural(items.length - loved, 'passado', 'passados')}`;
+  return countsLine(loved, items.length - loved);
 }
 
 export function Summary({

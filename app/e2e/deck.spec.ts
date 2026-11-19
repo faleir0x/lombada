@@ -16,6 +16,13 @@ async function openDeck(page: Page, params = '') {
   await field.fill('Curto e devastador');
   await field.press('Enter');
   await expect(count(page)).toHaveText('1 de 10');
+  // A entrada "Do livro" ainda está trazendo as cartas; arrastar antes disso pega o lugar errado.
+  await expect.poll(() => page.evaluate(() => document.querySelectorAll('.k-cw').length)).toBeGreaterThan(0);
+  await expect
+    .poll(() =>
+      page.evaluate(() => [...document.querySelectorAll('.k-cw')].some((c) => c.getAnimations().length > 0)),
+    )
+    .toBe(false);
 }
 
 async function drag(page: Page, dx: number, dy: number) {

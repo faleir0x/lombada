@@ -21,6 +21,10 @@ export async function expectNoA11yViolations(page: Page) {
     .toBe(0);
   const { violations } = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+    // A capa gerada é uma imagem (aria-hidden) com o título escrito nela, e o mesmo título aparece legível
+    // ao lado. Nos livros passados ela fica apagada de propósito (DESIGN.md §6), e o texto miúdo dela cai
+    // abaixo de 4.5:1. É texto incidental de imagem, isento pela WCAG 1.4.3; o resto da tela é checado.
+    .exclude('.cover')
     .analyze();
   expect(violations.map((v) => `${v.id}: ${v.help} (${v.nodes.length})`)).toEqual([]);
 }

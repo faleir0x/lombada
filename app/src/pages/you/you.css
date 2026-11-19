@@ -1,0 +1,136 @@
+/* Página Você (DESIGN.md §6). Portado de design-explorations/prototipo.html. */
+.you {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.you .p-body {
+  padding: 0;
+}
+.y-stats {
+  display: flex;
+  gap: 32px;
+  padding: 12px 20px 0;
+}
+.y-stats div {
+  display: flex;
+  flex-direction: column;
+}
+.y-stats b {
+  font: 500 1.5rem / 1.1 var(--font-book);
+  font-variant-numeric: tabular-nums;
+}
+.y-stats span {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.y-h {
+  margin: 26px 20px 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+.y-masc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 0 20px;
+  font-size: 0.9375rem;
+}
+.y-m {
+  width: 52px;
+  height: 52px;
+  flex: none;
+}
+.slist {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 28px;
+}
+.slist li + li .s-row {
+  border-top: 1px solid var(--color-line);
+  border-radius: 0;
+}
+.s-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 70px;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  text-align: left;
+}
+.s-tx {
+  flex: 1;
+  min-width: 0;
+}
+.s-tx b {
+  display: block;
+  font: 500 1.0625rem / 1.25 var(--font-book);
+}
+.s-tx span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.s-st {
+  display: flex;
+  flex: none;
+}
+.s-st .cover + .cover {
+  margin-left: -12px;
+}
+.y-empty {
+  padding: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+/* Folha de uma busca antiga */
+.ss-h {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-right: -12px;
+}
+.ss-h div {
+  flex: 1;
+  min-width: 0;
+}
+.ss-h h3 {
+  margin: 0;
+  font: 500 1.3125rem / 1.25 var(--font-book);
+}
+.ss-h p {
+  margin: 2px 0 6px;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.ss-foot {
+  position: sticky;
+  bottom: -26px;
+  z-index: 1;
+  display: flex;
+  margin: 6px -22px -26px;
+  padding: 12px 22px 26px;
+  background: var(--color-surface);
+}
+.ss-foot .btn-primary {
+  flex: 1;
+}
+
+@container app (min-width: 900px) {
+  .y-wrap {
+    max-width: 640px;
+    margin-inline: auto;
+  }
+}
