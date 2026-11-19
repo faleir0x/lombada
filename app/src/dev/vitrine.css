@@ -1,0 +1,73 @@
+.dev {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 20px 80px;
+}
+.dev > * {
+  max-width: 880px;
+  margin-inline: auto;
+}
+.dev h1,
+.dev h2,
+.dev h3 {
+  margin: 0;
+}
+.dev section {
+  display: grid;
+  gap: 12px;
+  margin-top: 32px;
+}
+.dev-note {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+}
+.dev-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.dev-chips {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.dev-chip {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+  background: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+.dev-chip[aria-pressed="true"] {
+  color: var(--color-text);
+  border-color: var(--color-text);
+  box-shadow: inset 0 0 0 1px var(--color-text);
+}
+.dev-stage {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+.dev-m {
+  width: 160px;
+  height: 160px;
+}
+.dev-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+  padding: 8px 0 16px;
+}
+.dev-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}

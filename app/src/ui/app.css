@@ -1,0 +1,397 @@
+/* Casca, topo, balão, botões, páginas e folhas. Portado de design-explorations/prototipo.html,
+   com os nomes de tokens do DESIGN.md. */
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  overflow: hidden;
+  transition:
+    background-color var(--dur-theme),
+    color var(--dur-theme);
+}
+
+/* Casca */
+.app {
+  container: app / inline-size;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  transition:
+    background-color var(--dur-theme),
+    color var(--dur-theme);
+}
+.app-home {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.app-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Topo da home */
+.a-top {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 10px 0 22px;
+}
+.a-word {
+  margin: 0;
+}
+.a-icons {
+  display: flex;
+}
+.a-ib {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  transition: background-color var(--dur-hover) ease;
+}
+.a-ib:focus-visible {
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+.a-ib:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.a-badge {
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: 700 0.6875rem / 18px var(--font-ui);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ico {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex: none;
+}
+
+/* Cena */
+.a-scene {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 14px 4px;
+}
+.a-m {
+  width: 204px;
+  height: 204px;
+  flex: none;
+}
+
+/* Balão */
+.bubble {
+  position: relative;
+  z-index: 2;
+  max-width: 270px;
+  margin-bottom: -8px;
+  padding: 10px 14px 11px;
+  border-radius: var(--radius-lg);
+  background: var(--color-bubble);
+  color: var(--color-on-bubble);
+  font: 400 0.9375rem / 1.4 var(--font-ui);
+  text-wrap: pretty;
+  transform-origin: 50% 100%;
+  transition:
+    background-color var(--dur-theme),
+    color var(--dur-theme);
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 0 0 3px 0;
+  background: inherit;
+}
+.bubble.pop {
+  animation: speech var(--dur-speech) var(--ease-out);
+}
+@keyframes speech {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+}
+.b-line {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.b-line .ico {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--color-accent-on-bubble);
+}
+.b-btn {
+  min-height: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.b-btn .ico {
+  width: 18px;
+  height: 18px;
+}
+.b-btn:focus-visible {
+  background: color-mix(in srgb, var(--color-on-bubble) 8%, transparent);
+}
+.b-act {
+  margin: 8px -6px -4px;
+}
+.b-act .b-btn {
+  background: color-mix(in srgb, var(--color-on-bubble) 10%, transparent);
+}
+
+/* Botões de texto */
+.btn-primary {
+  min-height: 48px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-primary .ico {
+  width: 20px;
+  height: 20px;
+}
+.btn-quiet {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ♥ redondo do resumo */
+.hb {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.hb .ico {
+  width: 20px;
+  height: 20px;
+}
+.hb[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: transparent;
+}
+
+/* Hover só com mouse (DESIGN.md §4); o foco tem o mesmo fundo (R3). */
+@media (hover: hover) and (pointer: fine) {
+  .a-ib:hover {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+  .b-btn:hover {
+    background: color-mix(in srgb, var(--color-on-bubble) 8%, transparent);
+  }
+}
+
+/* Páginas por cima da home */
+.a-page {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+.a-page:focus {
+  outline: none;
+}
+.p-top {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px 4px 8px;
+  background: var(--color-bg);
+}
+.p-top h2 {
+  margin: 0;
+  font: 500 1.3125rem / 1.25 var(--font-book);
+  letter-spacing: -0.01em;
+}
+.p-top span {
+  margin-left: auto;
+  padding-right: 10px;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.p-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 16px 20px;
+}
+
+/* Folha de baixo */
+.a-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-sheet-close) var(--ease-drawer);
+}
+.a-scrim[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: var(--dur-sheet-open);
+}
+.a-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 80%;
+  overflow-y: auto;
+  padding: 10px 22px 26px;
+  border-radius: 22px 22px 0 0;
+  background: var(--color-surface);
+  box-shadow: 0 -18px 40px -20px rgb(0 0 0 / 0.5);
+  pointer-events: auto;
+  transform: translateY(102%);
+  visibility: hidden;
+  transition:
+    transform var(--dur-sheet-close) var(--ease-drawer),
+    visibility 0s var(--dur-sheet-close);
+}
+.a-sheet[data-open="true"] {
+  transform: none;
+  visibility: visible;
+  transition: transform var(--dur-sheet-open) var(--ease-drawer);
+}
+.a-sheet:focus {
+  outline: none;
+}
+
+/* Desktop: a mesma cena, mais espaço (DESIGN.md §5) */
+@container app (min-width: 900px) {
+  .a-top {
+    padding: 24px 24px 0 36px;
+  }
+  .a-m {
+    width: 244px;
+    height: 244px;
+  }
+  .p-top {
+    padding: 24px 24px 4px 24px;
+  }
+  .a-sheet {
+    left: 50%;
+    right: auto;
+    width: 480px;
+    transform: translate(-50%, 102%);
+  }
+  .a-sheet[data-open="true"] {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble.pop {
+    animation-name: fadein;
+  }
+  body,
+  .app,
+  .bubble,
+  .a-sheet,
+  .a-scrim,
+  .hb {
+    transition: none;
+  }
+}

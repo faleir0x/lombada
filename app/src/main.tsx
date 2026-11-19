@@ -3,16 +3,23 @@ import '@fontsource-variable/hanken-grotesk/wght.css';
 import './ui/tokens.css';
 import './ui/typography.css';
 import './ui/base.css';
+import './ui/app.css';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { AnnouncerProvider } from './ui/a11y/Announcer';
+import { installSpringButtons } from './ui/springButtons';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Elemento #root não encontrado em index.html.');
 
+installSpringButtons();
+
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <AnnouncerProvider>
+      <App />
+    </AnnouncerProvider>
   </StrictMode>,
 );

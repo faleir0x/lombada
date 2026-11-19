@@ -1,0 +1,82 @@
+/* Cores e traços do motor (classes geradas por engine.js). Copiado do protótipo. */
+.mascot {
+  --m-body: var(--mascot-body);
+  --m-eye: var(--mascot-eye);
+  --m-side: var(--mascot-side);
+  --m-cover: var(--color-accent);
+  --m-page: var(--neutral-975);
+  --m-shadow: var(--mascot-shadow);
+}
+.msvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.ml {
+  fill: var(--m-side);
+}
+.mface {
+  fill: var(--m-body);
+}
+.mshadow {
+  fill: var(--m-shadow);
+}
+.mell {
+  fill: var(--m-eye);
+}
+.mshine {
+  fill: var(--m-body);
+}
+.marc,
+.mbrow {
+  fill: none;
+  stroke: var(--m-eye);
+  stroke-linecap: round;
+}
+.mmouth {
+  fill: var(--m-eye);
+}
+.mdl {
+  fill: none;
+  stroke: var(--m-side);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mdf {
+  fill: var(--m-side);
+}
+.mdg {
+  fill: none;
+  stroke: var(--m-eye);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+.mdk {
+  fill: none;
+  stroke: var(--m-page);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.mbc {
+  fill: var(--m-cover);
+}
+.mbp {
+  fill: var(--m-page);
+}
+.mbl {
+  fill: none;
+  stroke: var(--m-cover);
+  stroke-width: 0.8;
+  opacity: 0.45;
+  stroke-linecap: round;
+}
+.mflip {
+  stroke: var(--m-cover);
+  stroke-width: 0.4;
+}
+.mzt {
+  fill: var(--m-side);
+  font: 700 10px var(--font-ui);
+}

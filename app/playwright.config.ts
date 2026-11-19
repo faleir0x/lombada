@@ -26,7 +26,8 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
   ],
   webServer: {
-    command: 'pnpm build && pnpm preview --host 127.0.0.1 --port 4173 --strictPort',
+    // A vitrine (/vitrine) entra no build dos testes.
+    command: 'VITE_VITRINE=1 pnpm build && pnpm preview --host 127.0.0.1 --port 4173 --strictPort',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !CI,
     timeout: 120_000,

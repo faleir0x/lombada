@@ -43,7 +43,7 @@ Tudo isso é DOM, CSS e WAAPI. Nenhuma parte do design precisa de renderização
 
 ### C · React + Vite (SPA) como PWA instalável agora; Capacitor quando quiser as lojas
 
-- **Web:** igual à A no que importa. Sem servidor no front: build estático, `react-router` em modo SPA, o FastAPI como única API.
+- **Web:** igual à A no que importa. Sem servidor no front: build estático, roteamento no próprio cliente, o FastAPI como única API.
 - **Mascote, gestos, FLIP, WAAPI, `inert`, `aria-live`:** rodam como estão no protótipo, dentro de componentes. Sem porte.
 - **Offline:** Service Worker (Workbox via `vite-plugin-pwa`) guarda o app e as fontes; IndexedDB guarda o lote atual e a fila de escritas. O mesmo código roda dentro do Capacitor.
 - **Mobile depois:** em dois degraus. (1) PWA instalável na tela inicial, já com offline. (2) Capacitor empacota o mesmo build num app Android/iOS, com plugins para vibração, compartilhar e rede. O código do app não muda.
@@ -85,8 +85,9 @@ Regras que acompanham a escolha:
 1. **Núcleo sem framework.** Tipos do contrato, cliente da API, fila offline e regras do baralho ficam em `src/core/`, em TypeScript puro, sem importar React nem DOM. É o que seria compartilhado se um dia vier um app React Native.
 2. **Animação sem biblioteca.** WAAPI e os tokens de `DESIGN.md` §4 num módulo `motion`, com a checagem de movimento reduzido num lugar só. `mascote.js` entra como módulo, com tipos por cima, sem reescrever o motor.
 3. **Componentes do design.** Um componente por item de §6; diálogo único que aplica R7 (`inert`, foco, Esc); hook para a região anunciada de R9.
-4. **API falsa no próprio front.** Um `fakeApi` em `src/core/` implementa o contrato do `ROADMAP.md` com dados de exemplo e latência simulada; trocar pela real é mudar a URL base.
-5. **Fontes servidas pelo próprio app** (os mesmos arquivos do Google Fonts), para funcionar offline e no Capacitor. O `DESIGN.md` diz "carregadas do Google Fonts": a família e os pesos não mudam, só a origem. Avisar a sessão de design.
+4. **Roteador próprio, sem biblioteca** (mudança de 2026-11-19, fase A2). São quatro rotas, e as páginas abrem por cima da home com a Paralaxe; um roteador de ~80 linhas sobre o History API (`src/platform/router.ts`) deixa a transição inteira com o app e tira o `react-router` da lista de dependências. O voltar do navegador e do Android continua fechando a página.
+5. **API falsa no próprio front.** Um `fakeApi` em `src/core/` implementa o contrato do `ROADMAP.md` com dados de exemplo e latência simulada; trocar pela real é mudar a URL base.
+6. **Fontes servidas pelo próprio app** (os mesmos arquivos do Google Fonts), para funcionar offline e no Capacitor. O `DESIGN.md` diz "carregadas do Google Fonts": a família e os pesos não mudam, só a origem. Avisar a sessão de design.
 
 Versões (as mais altas publicadas até 2026-11-05, pelo menos duas semanas antes desta data; conferir de novo no dia do `pnpm add`):
 
@@ -96,7 +97,6 @@ Versões (as mais altas publicadas até 2026-11-05, pelo menos duas semanas ante
 | `vite` | 8.3.5 |
 | `@vitejs/plugin-react` | 6.2.1 |
 | `typescript` | 7.0.2 |
-| `react-router` | 8.5.1 |
 | `vite-plugin-pwa` | 2.0.0 |
 | `idb` | 8.0.4 |
 | `@capacitor/core`, `@capacitor/cli` (depois) | 8.6.0 |

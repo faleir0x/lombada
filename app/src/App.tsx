@@ -1,15 +1,46 @@
-import './App.css';
+import { lazy, Suspense, useMemo, useRef } from 'react';
+import { Home } from './pages/Home';
+import { PlaceholderPage } from './pages/Placeholder';
+import { goBack, type PageTransition, useLocation } from './platform/router';
+import { isPage, type Route } from './platform/routes';
+import { type PageSpec, Shell } from './ui/shell/Shell';
 
-/* Casca da fase A0: só prova tokens, fontes e idioma. A home de verdade chega na fase A3. */
+const VITRINE_ON = import.meta.env.DEV || import.meta.env.VITE_VITRINE === '1';
+// Fora do desenvolvimento e dos testes, a vitrine nem entra no build.
+const Vitrine = VITRINE_ON ? lazy(() => import('./dev/Vitrine')) : null;
+
+function pageFor(route: Route, transition: PageTransition): PageSpec | null {
+  const spec = (key: string, title: string): PageSpec => ({
+    key,
+    transition,
+    onBack: goBack,
+    content: <PlaceholderPage titleId={`${key}-title`} title={title} onBack={goBack} />,
+  });
+  switch (route.name) {
+    case 'estante':
+      return spec('estante', 'Sua estante');
+    case 'voce':
+      return spec('voce', 'Você');
+    case 'baralho':
+      return spec(`baralho-${route.sessionId}`, 'Baralho');
+    default:
+      return null;
+  }
+}
+
 export function App() {
-  return (
-    <>
-      <header className="a0-top">
-        <h1 className="t-brand">lombada</h1>
-      </header>
-      <main className="a0-main">
-        <p className="t-speech">Largou mais um no capítulo 3?</p>
-      </main>
-    </>
-  );
+  const { route, transition } = useLocation();
+  // O que fica embaixo das páginas: a home, ou a vitrine quando foi dela que a página abriu.
+  const base = useRef<'home' | 'vitrine'>('home');
+  if (!isPage(route)) base.current = route.name === 'vitrine' && VITRINE_ON ? 'vitrine' : 'home';
+  const page = useMemo(() => pageFor(route, transition), [route, transition]);
+  const home =
+    base.current === 'vitrine' && Vitrine ? (
+      <Suspense fallback={null}>
+        <Vitrine />
+      </Suspense>
+    ) : (
+      <Home />
+    );
+  return <Shell home={home} page={page} />;
 }

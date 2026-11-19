@@ -39,6 +39,8 @@
   --mascot-body: var(--marker-610);
   --mascot-eye: var(--neutral-190);
   --mascot-side: var(--marker-430);
+  /* Sombra no chão do mascote: está no protótipo, ainda não no DESIGN.md §2. */
+  --mascot-shadow: rgb(20 20 30 / 0.14);
 
   /* Tipografia */
   --font-book: "Newsreader Variable", Georgia, serif;
@@ -107,6 +109,7 @@
     --mascot-body: var(--neutral-935);
     --mascot-eye: var(--neutral-190);
     --mascot-side: var(--neutral-670);
+    --mascot-shadow: rgb(0 0 0 / 0.4);
   }
 }
 
@@ -131,4 +134,5 @@
   --mascot-body: var(--neutral-935);
   --mascot-eye: var(--neutral-190);
   --mascot-side: var(--neutral-670);
+  --mascot-shadow: rgb(0 0 0 / 0.4);
 }
