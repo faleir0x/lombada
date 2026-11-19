@@ -14,8 +14,8 @@ import { layoutShelf, moveItem, placeLine, shelfLine, spineHeight, spineWidth } 
 import { createVoice } from '../../core/voice';
 import { api } from '../../platform/appApi';
 import { requestSearch, requestSearchFocus } from '../../platform/handoff';
+import { enqueueWrite, writesSettled } from '../../platform/outbox';
 import { goBack } from '../../platform/router';
-import { enqueueWrite, writesSettled } from '../../platform/writes';
 import { useAnnounce } from '../../ui/a11y/Announcer';
 import { Lamp } from '../../ui/Lamp';
 import { Mascot, type MascotMood } from '../../ui/mascot/Mascot';
@@ -232,7 +232,7 @@ export function ShelfPage({ titleId }: { titleId: string }) {
       const target = Math.max(0, Math.min(list.length - 1, to));
       if (from === target) return null;
       reorder(moveItem(list, from, target));
-      if (persist) enqueueWrite(() => api.updateShelfBook(id, { position: target + 1 }));
+      if (persist) enqueueWrite({ kind: 'updateShelfBook', bookId: id, patch: { position: target + 1 } });
       return target;
     },
     [reorder],
@@ -377,7 +377,8 @@ export function ShelfPage({ titleId }: { titleId: string }) {
     dragEnd.current = performance.now();
     if (book) {
       announce(placeLine(book.title, index + 1));
-      if (index !== d.startIndex) enqueueWrite(() => api.updateShelfBook(d.id, { position: index + 1 }));
+      if (index !== d.startIndex)
+        enqueueWrite({ kind: 'updateShelfBook', bookId: d.id, patch: { position: index + 1 } });
     }
     setMood('happy');
     later(() => setMood('idle'), 1200);
@@ -459,7 +460,7 @@ export function ShelfPage({ titleId }: { titleId: string }) {
     if (!current) return;
     const rating: Rating = current.rating === value ? null : value;
     setBooks(booksRef.current.map((b) => (b.id === current.id ? { ...b, rating } : b)));
-    enqueueWrite(() => api.updateShelfBook(current.id, { rating }));
+    enqueueWrite({ kind: 'updateShelfBook', bookId: current.id, patch: { rating } });
     if (rating)
       sayFor(voice.pick(rating === 'up' ? 'rateUp' : 'rateDown'), rating === 'up' ? 'happy' : 'doubt', 3000);
   };
@@ -469,7 +470,7 @@ export function ShelfPage({ titleId }: { titleId: string }) {
     const i = books.indexOf(current);
     const next = books.filter((b) => b.id !== current.id);
     focusAfterRemove.current = next[i]?.id ?? next[i - 1]?.id ?? 'empty';
-    enqueueWrite(() => api.removeFromShelf(current.id));
+    enqueueWrite({ kind: 'removeFromShelf', bookId: current.id });
     setOpenId(null);
     setBooks(next);
     setLine(shelfLine(next.length));

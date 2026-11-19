@@ -50,6 +50,8 @@ export interface FakeApiOptions {
   random?: () => number;
   /** URL de uma foto de capa de exemplo para todos os livros; sem ela, só a capa gerada. */
   coverPhoto?: string;
+  /** Há conexão? No app, a do navegador; sem conexão, tudo falha como erro de rede. */
+  online?: () => boolean;
 }
 
 export interface FakeApi extends Api {
@@ -183,6 +185,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
       : b;
   };
   let scenario: FakeScenario = options.scenario ?? 'normal';
+  const online = options.online ?? (() => true);
   let state = load();
 
   function load(): FakeState {
@@ -204,7 +207,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
 
   async function run<T>(op: FakeOperation, fn: () => T): Promise<T> {
     await wait(latency(op, scenario));
-    if (scenario === 'offline' || (scenario === 'erro' && op === 'createSession')) {
+    if (scenario === 'offline' || !online() || (scenario === 'erro' && op === 'createSession')) {
       throw new ApiError('network', 'Sem conexão.');
     }
     return fn();

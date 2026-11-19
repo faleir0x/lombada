@@ -53,6 +53,16 @@
   z-index: 2;
 }
 
+/* Sem conexão: o ícone ao lado da contagem */
+.k-off {
+  display: inline-flex;
+}
+.k-off .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--color-text);
+}
+
 /* Card */
 .k-cw {
   position: absolute;

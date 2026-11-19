@@ -16,8 +16,8 @@ import {
 import { createVoice, endOfBatchLine, noResultLine, type VoiceKey } from '../../core/voice';
 import { api, newIdempotencyKey, recallDeck, rememberDeck } from '../../platform/appApi';
 import { requestSearchFocus, takeDeckOrigin } from '../../platform/handoff';
+import { enqueueWrite, useOnline, writesSettled } from '../../platform/outbox';
 import { goBack, navigate } from '../../platform/router';
-import { enqueueWrite } from '../../platform/writes';
 import { useAnnounce } from '../../ui/a11y/Announcer';
 import { useEscape } from '../../ui/a11y/escape';
 import { Icon, type IconName } from '../../ui/icons/Icon';
@@ -48,6 +48,7 @@ const voice = createVoice();
 
 export function DeckPage({ sessionId }: { sessionId: SessionId }) {
   const announce = useAnnounce();
+  const online = useOnline();
   const [deck, setDeck] = useState<Loaded | null>(null);
   const [state, setState] = useState<DeckState | null>(null);
   const [flipped, setFlipped] = useState(false);
@@ -276,6 +277,11 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
   const react = useCallback(
     (reaction: Reaction, next: DeckState, loaded: Loaded, shelf: Record<string, boolean>) => {
       if (isFinished(next)) {
+        // Sem conexão, o fim do lote avisa que os próximos dez esperam a conexão.
+        if (!navigator.onLine) {
+          say(voice.pick('offEnd'), { mood: 'idle', icon: 'offline' });
+          return;
+        }
         const loved = loaded.books.filter((b) => shelf[b.id]).length;
         const summary = summaryHeader(summaryItems(loaded, next, shelf));
         say(endOfBatchLine(loved), { mood: 'happy', extra: summary });
@@ -318,7 +324,13 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
         release.current = true;
         const shelf = goesToShelf(step.judged.result) ? { ...deck.onShelf, [book.id]: true } : deck.onShelf;
         const result = step.judged.result;
-        enqueueWrite(() => api.judge(deck.sessionId, book.id, result, new Date().toISOString()));
+        enqueueWrite({
+          kind: 'judge',
+          sessionId: deck.sessionId,
+          bookId: book.id,
+          result,
+          judgedAt: new Date().toISOString(),
+        });
         if (isFinished(step.state)) {
           mascotFrom.current = mbox.current?.getBoundingClientRect() ?? null;
           if (lostFocus || cardHadFocus) focusAfter.current = 'summary';
@@ -378,7 +390,7 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
     if (!step) return;
     const book = deck.books[step.undone.index];
     if (!book) return;
-    enqueueWrite(() => api.unjudge(deck.sessionId, book.id));
+    enqueueWrite({ kind: 'unjudge', sessionId: deck.sessionId, bookId: book.id });
     const shelf = goesToShelf(step.undone.result) ? { ...deck.onShelf, [book.id]: false } : deck.onShelf;
     const r = step.undone.result;
     const sign = r === 'love' || r === 'read_loved' ? 1 : -1;
@@ -514,13 +526,36 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
     (item: SummaryItem) => {
       if (!deck) return;
       const on = !item.onShelf;
-      enqueueWrite(() => (on ? api.addToShelf(item.id, deck.sessionId) : api.removeFromShelf(item.id)));
+      enqueueWrite(
+        on
+          ? { kind: 'addToShelf', bookId: item.id, fromSession: deck.sessionId }
+          : { kind: 'removeFromShelf', bookId: item.id },
+      );
       setDeck({ ...deck, onShelf: { ...deck.onShelf, [item.id]: on } });
       sayKey(on ? 'rescue' : 'unlove', { mood: on ? 'happy' : 'doubt' });
       settle(1200);
     },
     [deck, sayKey, settle],
   );
+
+  /* Sem conexão no baralho (DESIGN.md §7): os dez já estão no aparelho, então tudo continua; ♥ e ✕ ficam
+     na fila e sobem quando a conexão volta. O mascote avisa uma vez ao cair e de novo ao voltar. */
+  const wasOnline = useRef(online);
+  useEffect(() => {
+    if (wasOnline.current === online || !state) return;
+    wasOnline.current = online;
+    if (!online) {
+      say(voice.pick(isFinished(state) ? 'offEnd' : 'offline'), { mood: 'surprise', icon: 'offline' });
+      settle(1400);
+      return;
+    }
+    // "Já subi tudo": só depois que a fila subiu.
+    writesSettled().then(() => {
+      if (!navigator.onLine) return;
+      sayKey('online', { mood: 'happy' });
+      settle(1400);
+    });
+  }, [online, state, say, sayKey, settle]);
 
   const back = () => {
     requestSearchFocus();
@@ -566,7 +601,14 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
           Baralho
         </h2>
         <p className="k-q">{deck?.query ?? ''}</p>
-        <span className="k-count">{state && !finished ? `${state.index + 1} de ${state.size}` : ''}</span>
+        <span className="k-count">
+          {!online && (
+            <span className="k-off" role="img" aria-label="Sem conexão">
+              <Icon name="offline" />
+            </span>
+          )}
+          {state && !finished ? `${state.index + 1} de ${state.size}` : ''}
+        </span>
       </header>
 
       <div className="k-stage">
@@ -601,7 +643,7 @@ export function DeckPage({ sessionId }: { sessionId: SessionId }) {
               <button className="btn-quiet" type="button" onClick={back}>
                 Nova busca
               </button>
-              <button className="btn-primary" type="button" onClick={more} disabled={loadingMore}>
+              <button className="btn-primary" type="button" onClick={more} disabled={loadingMore || !online}>
                 Mais dez
               </button>
             </div>

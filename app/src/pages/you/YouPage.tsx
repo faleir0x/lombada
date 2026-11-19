@@ -3,8 +3,8 @@ import type { SessionDetail, SessionId, SessionSummary } from '../../core/api/ty
 import { api } from '../../platform/appApi';
 import { requestSearch } from '../../platform/handoff';
 import { useMascotKind } from '../../platform/mascot';
+import { enqueueWrite, writesSettled } from '../../platform/outbox';
 import { goBack, navigate } from '../../platform/router';
-import { enqueueWrite, writesSettled } from '../../platform/writes';
 import { useAnnounce } from '../../ui/a11y/Announcer';
 import { GeneratedCover } from '../../ui/Cover';
 import { Icon } from '../../ui/icons/Icon';
@@ -220,7 +220,11 @@ export function YouPage({ titleId, mascotOpen = false }: { titleId: string; masc
       if (!detail) return;
       const on = !item.onShelf;
       const sessionId = detail.session_id;
-      enqueueWrite(() => (on ? api.addToShelf(item.id, sessionId) : api.removeFromShelf(item.id)));
+      enqueueWrite(
+        on
+          ? { kind: 'addToShelf', bookId: item.id, fromSession: sessionId }
+          : { kind: 'removeFromShelf', bookId: item.id },
+      );
       const next = {
         ...detail,
         books: detail.books.map((b) => (b.id === item.id ? { ...b, on_shelf: on } : b)),
@@ -263,7 +267,7 @@ export function YouPage({ titleId, mascotOpen = false }: { titleId: string; masc
     setConfirming(false);
   };
   const erase = () => {
-    enqueueWrite(() => api.deleteSessions());
+    enqueueWrite({ kind: 'deleteSessions' });
     setSessions([]);
     setConfirming(false);
     setErased(true);

@@ -12,6 +12,8 @@ export function createAppApi(search: string = location.search): FakeApi {
     scenario: params.scenario,
     ...(params.instant ? { latency: () => 0 } : {}),
     ...(params.coverPhoto ? { coverPhoto: '/capa-exemplo.svg' } : {}),
+    // A API falsa mora no aparelho; sem isto, ela "funcionaria" sem internet.
+    online: () => navigator.onLine,
   });
   if (params.resetTo) {
     api.reset(params.resetTo);

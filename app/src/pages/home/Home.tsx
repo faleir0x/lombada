@@ -4,10 +4,10 @@ import type { CreatedSession, Idea } from '../../core/api/types';
 import { ANNOUNCED, createVoice, noResultLine, type VoiceKey } from '../../core/voice';
 import { api, newIdempotencyKey, rememberDeck } from '../../platform/appApi';
 import { setDeckOrigin, takePendingSearch, takeSearchFocus } from '../../platform/handoff';
+import { useOnline, writesSettled } from '../../platform/outbox';
 import { navigate } from '../../platform/router';
 import { useTheme } from '../../platform/theme';
 import { firstOpenOfSession, markOnboardingSeen, onboardingSeen } from '../../platform/visit';
-import { writesSettled } from '../../platform/writes';
 import { useAnnounce } from '../../ui/a11y/Announcer';
 import { Bubble } from '../../ui/Bubble';
 import { Icon, type IconName } from '../../ui/icons/Icon';
@@ -37,6 +37,7 @@ export function Home({ covered }: { covered: boolean }) {
   const announce = useAnnounce();
   const { theme, toggle } = useTheme();
   const { returnFocus } = useShell();
+  const online = useOnline();
 
   const [showOnboarding, setShowOnboarding] = useState(() => !onboardingSeen());
   const voice = useRef(createVoice({ firstVisit: showOnboarding })).current;
@@ -148,7 +149,9 @@ export function Home({ covered }: { covered: boolean }) {
     };
   }, []);
 
-  // Contador da estante: atualiza sempre que a home volta a ficar à vista, depois das escritas pendentes.
+  // Contador da estante: atualiza quando a home volta a ficar à vista e quando a conexão volta, depois das
+  // escritas pendentes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a conexão voltar é gatilho para ler de novo.
   useEffect(() => {
     if (covered) return;
     // A home ainda está inerte enquanto a página sai; a casca põe o foco quando puder.
@@ -161,7 +164,7 @@ export function Home({ covered }: { covered: boolean }) {
     return () => {
       live = false;
     };
-  }, [covered, returnFocus]);
+  }, [covered, online, returnFocus]);
 
   /* Entrada "Acender" (DESIGN.md §4): só na primeira abertura da sessão, depois que o navegador desenha
      um quadro (R6). fill: 'backwards' segura cada peça escondida só até o atraso dela. */
