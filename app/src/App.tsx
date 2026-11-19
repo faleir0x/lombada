@@ -1,6 +1,8 @@
 import { lazy, Suspense, useMemo, useRef } from 'react';
+import { DeckPage } from './pages/deck/DeckPage';
 import { Home } from './pages/home/Home';
 import { PlaceholderPage } from './pages/Placeholder';
+import { requestSearchFocus } from './platform/handoff';
 import { goBack, type PageTransition, useLocation } from './platform/router';
 import { isPage, type Route } from './platform/routes';
 import { type PageSpec, Shell } from './ui/shell/Shell';
@@ -22,7 +24,16 @@ function pageFor(route: Route, transition: PageTransition): PageSpec | null {
     case 'voce':
       return spec('voce', 'Você');
     case 'baralho':
-      return spec(`baralho-${route.sessionId}`, 'Baralho');
+      // Uma chave só: "Mais dez" troca a busca dentro da mesma página, sem reabrir.
+      return {
+        key: 'baralho',
+        transition,
+        onBack: () => {
+          requestSearchFocus();
+          goBack();
+        },
+        content: <DeckPage sessionId={route.sessionId} />,
+      };
     default:
       return null;
   }

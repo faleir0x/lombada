@@ -1,0 +1,92 @@
+/* Resumo em lista e capas (fim do baralho, buscas antigas, estante). */
+.gl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gl li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.gl li:last-child {
+  border-bottom: 0;
+}
+.gl .cover {
+  transition:
+    filter 200ms ease,
+    opacity 200ms ease;
+}
+.gl li.off .cover {
+  filter: saturate(0.25);
+  opacity: 0.55;
+}
+.gl .lt {
+  flex: 1;
+  min-width: 0;
+}
+.gl .lt b {
+  display: block;
+  font: 500 1rem / 1.25 var(--font-book);
+  text-wrap: pretty;
+  transition: color 200ms ease;
+}
+.gl .lt span {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.gl li.off .lt b {
+  color: var(--color-text-muted);
+}
+
+/* Capa gerada (e a foto por cima) */
+.cover {
+  position: relative;
+  width: var(--w, 48px);
+  aspect-ratio: 2 / 3;
+  flex: none;
+  border-radius: 2px 5px 5px 2px;
+  background: var(--c);
+  color: var(--t);
+  padding: calc(var(--w, 48px) * 0.1) calc(var(--w, 48px) * 0.09);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow:
+    inset 3px 0 0 rgb(0 0 0 / 0.2),
+    0 6px 14px -8px rgb(0 0 0 / 0.55);
+  overflow: hidden;
+}
+.cover b {
+  font: 500 calc(var(--w, 48px) * 0.16) / 1.1 var(--font-book);
+  overflow-wrap: break-word;
+}
+.cover small {
+  font-size: calc(var(--w, 48px) * 0.085);
+  line-height: 1.2;
+  opacity: 0.8;
+}
+.cover-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+.cover-photo[data-state="in"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl .cover,
+  .gl .lt b,
+  .cover-photo {
+    transition: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { GeneratedCover } from '../../ui/Cover';
+import '../../ui/summary.css';
 import { Icon } from '../../ui/icons/Icon';
 import { Lamp } from '../../ui/Lamp';
 import { Mascot, type MascotHandle, type MascotMood } from '../../ui/mascot/Mascot';

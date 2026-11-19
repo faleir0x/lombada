@@ -11,8 +11,15 @@ export function createAppApi(search: string = location.search): FakeApi {
     storage: localStore(),
     scenario: params.scenario,
     ...(params.instant ? { latency: () => 0 } : {}),
+    ...(params.coverPhoto ? { coverPhoto: '/capa-exemplo.svg' } : {}),
   });
-  if (params.resetTo) api.reset(params.resetTo);
+  if (params.resetTo) {
+    api.reset(params.resetTo);
+    // Recomeça uma vez só: recarregar a página não apaga de novo.
+    const url = new URL(location.href);
+    url.searchParams.delete('estado');
+    history.replaceState(history.state, '', url);
+  }
   return api;
 }
 

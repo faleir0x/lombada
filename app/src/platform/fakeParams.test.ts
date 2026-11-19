@@ -7,6 +7,7 @@ describe('parâmetros da URL', () => {
       scenario: 'sem-resultado',
       resetTo: 'vazio',
       instant: true,
+      coverPhoto: false,
     });
   });
 
@@ -15,6 +16,7 @@ describe('parâmetros da URL', () => {
       scenario: 'normal',
       resetTo: null,
       instant: false,
+      coverPhoto: false,
     });
   });
 });

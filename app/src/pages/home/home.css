@@ -262,33 +262,6 @@
   transform-origin: 0 50%;
 }
 
-/* Capa gerada */
-.cover {
-  width: var(--w, 48px);
-  aspect-ratio: 2 / 3;
-  flex: none;
-  border-radius: 2px 5px 5px 2px;
-  background: var(--c);
-  color: var(--t);
-  padding: calc(var(--w, 48px) * 0.1) calc(var(--w, 48px) * 0.09);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow:
-    inset 3px 0 0 rgb(0 0 0 / 0.2),
-    0 6px 14px -8px rgb(0 0 0 / 0.55);
-  overflow: hidden;
-}
-.cover b {
-  font: 500 calc(var(--w, 48px) * 0.16) / 1.1 var(--font-book);
-  overflow-wrap: break-word;
-}
-.cover small {
-  font-size: calc(var(--w, 48px) * 0.085);
-  line-height: 1.2;
-  opacity: 0.8;
-}
-
 /* Onboarding */
 .a-onb {
   position: absolute;

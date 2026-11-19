@@ -99,7 +99,8 @@ export function Shell({ home, page }: { home: ReactNode; page: PageSpec | null }
     // Se quem abriu a página sumiu, o foco vai para a home (R12).
     const back = opener.current;
     opener.current = null;
-    pendingFocus.current = back?.isConnected
+    // Quem já pediu foco (a home, para o campo de busca) tem a vez.
+    pendingFocus.current ??= back?.isConnected
       ? back
       : (homeRef.current?.querySelector<HTMLElement>('main') ?? null);
   }, []);
@@ -120,6 +121,12 @@ export function Shell({ home, page }: { home: ReactNode; page: PageSpec | null }
   useEffect(() => {
     const el = pendingFocus.current;
     if (!el || el.closest('[inert]')) return;
+    // Se a própria home já pôs o foco num lugar dela (o campo de busca), não tira de lá.
+    const active = document.activeElement;
+    if (active && active !== document.body && homeRef.current?.contains(active) && !shown) {
+      pendingFocus.current = null;
+      return;
+    }
     pendingFocus.current = null;
     if (el.isConnected) el.focus({ preventScroll: true });
   }, [sheetOpen, shown, closing]);

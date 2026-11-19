@@ -3,15 +3,18 @@ import { isApiError } from '../../core/api/errors';
 import type { CreatedSession, Idea } from '../../core/api/types';
 import { ANNOUNCED, createVoice, noResultLine, type VoiceKey } from '../../core/voice';
 import { api, newIdempotencyKey, rememberDeck } from '../../platform/appApi';
+import { setDeckOrigin, takeSearchFocus } from '../../platform/handoff';
 import { navigate } from '../../platform/router';
 import { useTheme } from '../../platform/theme';
 import { firstOpenOfSession, markOnboardingSeen, onboardingSeen } from '../../platform/visit';
+import { writesSettled } from '../../platform/writes';
 import { useAnnounce } from '../../ui/a11y/Announcer';
 import { Bubble } from '../../ui/Bubble';
 import { Icon, type IconName } from '../../ui/icons/Icon';
 import { Lamp, type LampHandle } from '../../ui/Lamp';
 import { Mascot, type MascotHandle, type MascotMood } from '../../ui/mascot/Mascot';
 import { DUR, EASE, reducedMotion } from '../../ui/motion';
+import { useShell } from '../../ui/shell/Shell';
 import { Onboarding } from './Onboarding';
 import './home.css';
 
@@ -33,6 +36,7 @@ const isFocused = (el: Element | null) => el !== null && document.activeElement 
 export function Home({ covered }: { covered: boolean }) {
   const announce = useAnnounce();
   const { theme, toggle } = useTheme();
+  const { returnFocus } = useShell();
 
   const [showOnboarding, setShowOnboarding] = useState(() => !onboardingSeen());
   const voice = useRef(createVoice({ firstVisit: showOnboarding })).current;
@@ -144,18 +148,20 @@ export function Home({ covered }: { covered: boolean }) {
     };
   }, []);
 
-  // Contador da estante: atualiza sempre que a home volta a ficar à vista.
+  // Contador da estante: atualiza sempre que a home volta a ficar à vista, depois das escritas pendentes.
   useEffect(() => {
     if (covered) return;
+    // A home ainda está inerte enquanto a página sai; a casca põe o foco quando puder.
+    if (takeSearchFocus()) returnFocus(input.current);
     let live = true;
-    api
-      .getShelf()
+    writesSettled()
+      .then(() => api.getShelf())
       .then((s) => live && setShelfCount(s.books.length))
       .catch(() => {});
     return () => {
       live = false;
     };
-  }, [covered]);
+  }, [covered, returnFocus]);
 
   /* Entrada "Acender" (DESIGN.md §4): só na primeira abertura da sessão, depois que o navegador desenha
      um quadro (R6). fill: 'backwards' segura cada peça escondida só até o atraso dela. */
@@ -317,6 +323,9 @@ export function Home({ covered }: { covered: boolean }) {
     (session: CreatedSession) => {
       S.current.busy = false;
       rememberDeck(session);
+      // As cartas saem do livro que o mascote segura ("Do livro").
+      const m = mascotWrap.current?.getBoundingClientRect();
+      setDeckOrigin(m ? { x: m.left + m.width * 0.5, y: m.top + m.height * 0.72 } : null);
       announce(voice.pick('result'));
       // O balão some antes do baralho abrir, para não aparecer por baixo do fade ("Do livro").
       setHidden(true);

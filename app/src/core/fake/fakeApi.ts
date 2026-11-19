@@ -46,6 +46,8 @@ export interface FakeApiOptions {
   latency?: (op: FakeOperation, scenario: FakeScenario) => number;
   now?: () => Date;
   random?: () => number;
+  /** URL de uma foto de capa de exemplo para todos os livros; sem ela, só a capa gerada. */
+  coverPhoto?: string;
 }
 
 export interface FakeApi extends Api {
@@ -156,6 +158,12 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
   const now = options.now ?? (() => new Date());
   const random = options.random ?? Math.random;
   const latency = options.latency ?? defaultLatency(random);
+  const book = (id: BookId) => {
+    const b = publicBook(id);
+    return options.coverPhoto
+      ? { ...b, cover: { ...b.cover, url: options.coverPhoto, source: 'openlibrary' as const } }
+      : b;
+  };
   let scenario: FakeScenario = options.scenario ?? 'normal';
   let state = load();
 
@@ -225,7 +233,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
       query: s.query,
       created_at: s.created_at,
       books: s.books.map((id, i) => ({
-        ...publicBook(id),
+        ...book(id),
         why: i < WHY_READY ? (catalogBook(id)?.why ?? null) : null,
       })),
       nearby: s.books.length ? [] : NEARBY.map((n) => ({ ...n })),
@@ -241,7 +249,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
       created_at: s.created_at,
       loved: loved.length,
       passed: judged.length - loved.length,
-      loved_preview: loved.slice(0, 3).map(publicBook),
+      loved_preview: loved.slice(0, 3).map(book),
     };
   }
 
@@ -359,7 +367,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
           created_at: s.created_at,
           continues: s.continues,
           books: s.books.map((id) => ({
-            ...publicBook(id),
+            ...book(id),
             result: s.judgments[id]?.result ?? null,
             on_shelf: onShelf(id),
           })),
@@ -369,7 +377,7 @@ export function createFakeApi(options: FakeApiOptions = {}): FakeApi {
     getShelf: () =>
       run('getShelf', () => ({
         books: state.shelf.map((e, i) => ({
-          ...publicBook(e.book_id),
+          ...book(e.book_id),
           position: i + 1,
           rating: e.rating,
           added_at: e.added_at,
